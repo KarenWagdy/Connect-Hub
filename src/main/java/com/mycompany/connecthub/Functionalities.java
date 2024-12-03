@@ -28,10 +28,11 @@ import javax.mail.internet.InternetAddress;
  * @author karen
  */
 public class Functionalities {
+
     static ArrayList<User> usersArray = new ArrayList<>();
 
     public static ArrayList<User> readUsers() {
-       // ArrayList<User> usersArray = new ArrayList<>();
+        // ArrayList<User> usersArray = new ArrayList<>();
         try {
             String jsonLines = new String(Files.readAllBytes(Paths.get("users.json")));
             JSONArray users = new JSONArray(jsonLines);
@@ -45,7 +46,7 @@ public class Functionalities {
                 LocalDate dateOfBirth = LocalDate.parse(user.getString("dateOfBirth"), formatter);
                 String password = user.getString("password");
                 String status = user.getString("status");
-                usersArray.add(new User( email, username, password, dateOfBirth));
+                usersArray.add(new User(email, username, password, dateOfBirth));
             }
 
         } catch (IOException e) {
@@ -125,15 +126,15 @@ public class Functionalities {
         return hasCapital && hasLower && hasDigit && hasChar;
 
     }
-    public static boolean isValidDOB(LocalDate dob)
-    {
+
+    public static boolean isValidDOB(LocalDate dob) {
         if (dob.isAfter(LocalDate.now())) {
-                return false;
-            }
+            return false;
+        }
 
-            int age = Period.between(dob, LocalDate.now()).getYears();
+        int age = Period.between(dob, LocalDate.now()).getYears();
 
-            return age >= 13;
+        return age >= 13;
     }
 
     public static int signup(String email, String userName, String password, LocalDate dateOfBirth) {
@@ -152,16 +153,14 @@ public class Functionalities {
         if (!isValidPassword(password)) {
             return 4; //password is not  valid
         }
-        if(!isValidDOB(dateOfBirth))
-        {
+        if (!isValidDOB(dateOfBirth)) {
             return 5; //invalid date of birth
         }
-        User user = new User( email,  userName,  password,  dateOfBirth);
+        User user = new User(email, userName, password, dateOfBirth);
         usersArray.add(user);
         saveUsers(usersArray);
-        
+
         return 6;
-        
 
     }
 
