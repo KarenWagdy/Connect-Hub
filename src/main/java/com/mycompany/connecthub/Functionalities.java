@@ -29,57 +29,6 @@ import javax.mail.internet.InternetAddress;
  */
 public class Functionalities {
 
-    static ArrayList<User> usersArray = new ArrayList<>();
-
-    public static ArrayList<User> readUsers() {
-        // ArrayList<User> usersArray = new ArrayList<>();
-        try {
-            String jsonLines = new String(Files.readAllBytes(Paths.get("users.json")));
-            JSONArray users = new JSONArray(jsonLines);
-
-            DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE;
-            for (int i = 0; i < users.length(); i++) {
-                JSONObject user = users.getJSONObject(i);
-                String email = user.getString("email");
-                String username = user.getString("username");
-                int id = user.getInt("userId");
-                LocalDate dateOfBirth = LocalDate.parse(user.getString("dateOfBirth"), formatter);
-                String password = user.getString("password");
-                String status = user.getString("status");
-                usersArray.add(new User(email, username, password, dateOfBirth));
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return usersArray;
-    }
-
-    public static void saveUsers(ArrayList<User> user) {
-        JSONArray usersArray = new JSONArray();
-        for (User i : user) {
-            JSONObject obj = new JSONObject();
-            obj.put("userId", i.getUserId());
-            obj.put("email", i.getEmail());
-            obj.put("username", i.getUsername());
-            obj.put("dateOfBirth", i.getDateOfBirth());
-            obj.put("status", i.getStatus());
-            try {
-                obj.put("password", passwordHashing(i.getPassword()));
-            } catch (NoSuchAlgorithmException ex) {
-                ex.printStackTrace();
-            }
-
-        }
-        try {
-            FileWriter file = new FileWriter("users.json");
-            file.write(usersArray.toString(4));
-            file.close();
-        } catch (IOException e) {
-            System.out.println("Error");
-        }
-    }
-
     public static String passwordHashing(String password) throws NoSuchAlgorithmException {
 
         MessageDigest md = MessageDigest.getInstance("SHA-256");
@@ -90,6 +39,8 @@ public class Functionalities {
 
     public static boolean isValidEmail(String email) {
         InternetAddress emailAddress = null;
+        if(email.endsWith(".com"))
+        {
 
         try {
             emailAddress = new InternetAddress(email);
@@ -98,6 +49,9 @@ public class Functionalities {
         } catch (AddressException e) {
             return false;
         }
+        }
+        else 
+            return false;
     }
 
     public static boolean isValidPassword(String pass) {
@@ -138,10 +92,12 @@ public class Functionalities {
     }
 
     public static int signup(String email, String userName, String password, LocalDate dateOfBirth) {
+        
         if (!(isValidEmail(email))) {
-            return 1; //email is not valid
+            return 1;
+            //email is not valid
         }
-        ArrayList<User> users = readUsers();
+        ArrayList<User> users = UsersDatabase.readUsers();
         for (User u : users) {
             if (u.getEmail().equalsIgnoreCase(email)) {
                 return 2; // email already exists
@@ -157,11 +113,31 @@ public class Functionalities {
             return 5; //invalid date of birth
         }
         User user = new User(email, userName, password, dateOfBirth);
-        usersArray.add(user);
-        saveUsers(usersArray);
+        UsersDatabase.usersArray.add(user);
+        UsersDatabase.saveUsers(UsersDatabase.usersArray);
 
         return 6;
 
+    }
+    public static int login(String email,String password)
+    {
+        ArrayList<User> loginUsers= UsersDatabase.readUsers();
+        for(User u:loginUsers)
+        {
+            if(u.getEmail().equalsIgnoreCase(email))
+            {
+                try {
+                    if(u.getPassword().equals(passwordHashing(password)))
+                        u.setStatus("Online");
+                    UsersDatabase.saveUsers(loginUsers);
+                        return 1;  // success login 
+                        
+                } catch (NoSuchAlgorithmException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        }
+        return 2; // incorrect pass or email
     }
 
 }

@@ -5,6 +5,8 @@
 package com.mycompany.connecthub;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 import javax.swing.JOptionPane;
 
 /**
@@ -39,7 +41,13 @@ public class SignupWindow extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         dobText = new com.toedter.calendar.JDateChooser();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("SignUp");
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                formWindowClosed(evt);
+            }
+        });
 
         emailText.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -47,8 +55,7 @@ public class SignupWindow extends javax.swing.JFrame {
             }
         });
 
-        passwordText.setText("jPasswordField1");
-
+        signupButton2.setBackground(new java.awt.Color(0, 153, 255));
         signupButton2.setText("Sign Up");
         signupButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -56,13 +63,21 @@ public class SignupWindow extends javax.swing.JFrame {
             }
         });
 
+        jLabel2.setBackground(new java.awt.Color(51, 153, 255));
         jLabel2.setText("Email");
+        jLabel2.setOpaque(true);
 
+        jLabel3.setBackground(new java.awt.Color(0, 153, 255));
         jLabel3.setText("Username");
+        jLabel3.setOpaque(true);
 
+        jLabel4.setBackground(new java.awt.Color(0, 153, 255));
         jLabel4.setText("Password");
+        jLabel4.setOpaque(true);
 
+        jLabel5.setBackground(new java.awt.Color(0, 153, 255));
         jLabel5.setText("Date of Birth");
+        jLabel5.setOpaque(true);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -72,131 +87,114 @@ public class SignupWindow extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(44, 44, 44)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel2)
-                                    .addComponent(jLabel3))
-                                .addGap(84, 84, 84)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(usernameText, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(emailText, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                    .addComponent(jLabel5)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(dobText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                    .addComponent(jLabel4)
-                                    .addGap(72, 72, 72)
-                                    .addComponent(passwordText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, 82, Short.MAX_VALUE))
+                        .addGap(61, 61, 61)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(emailText)
+                            .addComponent(usernameText)
+                            .addComponent(passwordText)
+                            .addComponent(dobText, javax.swing.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE)))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(149, 149, 149)
-                        .addComponent(signupButton2)))
-                .addContainerGap(143, Short.MAX_VALUE))
+                        .addGap(91, 91, 91)
+                        .addComponent(signupButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(98, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(37, 37, 37)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(emailText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(26, 26, 26)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(usernameText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(27, 27, 27)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(passwordText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(23, 23, 23)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel5)
-                    .addComponent(dobText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 70, Short.MAX_VALUE)
-                .addComponent(signupButton2)
-                .addContainerGap())
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(dobText, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
+                .addComponent(signupButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(30, 30, 30))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void signupButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_signupButton2ActionPerformed
-String email = emailText.getText();
+    String email = emailText.getText();
     String username = usernameText.getText();
     String password= passwordText.getText();
-    LocalDate locatDate= LocalDate.parse(dobText.getDateFormatString());
-    int flag=Functionalities.signup(email, username, password, locatDate);
-    switch(flag)
-    {
+    
+    if (email.isEmpty() || username.isEmpty() || password.isEmpty() || dobText.getDate() == null) {
+        JOptionPane.showMessageDialog(this, "All fields are required. Please fill them in.", "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+    
+    LocalDate locatDate = dobText.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+   
+
+    int flag = Functionalities.signup(email, username, password, locatDate);
+
+    switch (flag) {
         case 1:
-            JOptionPane.showMessageDialog(this," Invalid Email ","Error" ,JOptionPane.ERROR_MESSAGE);
-            this.emailText.setText("");
+            JOptionPane.showMessageDialog(this, "Invalid Email", "Error", JOptionPane.ERROR_MESSAGE);
+            emailText.setText("");
+            break;
         case 2:
-            JOptionPane.showMessageDialog(this," This Email already exists ","Error" ,JOptionPane.ERROR_MESSAGE);
-            this.emailText.setText("");
+            JOptionPane.showMessageDialog(this, "This Email already exists", "Error", JOptionPane.ERROR_MESSAGE);
+            emailText.setText("");
+            break;
         case 3:
-            JOptionPane.showMessageDialog(this," This Username already exists ","Error" ,JOptionPane.ERROR_MESSAGE);
-            this.usernameText.setText("");
+            JOptionPane.showMessageDialog(this, "This Username already exists", "Error", JOptionPane.ERROR_MESSAGE);
+            usernameText.setText("");
+            break;
         case 4:
-            JOptionPane.showMessageDialog(this," Invalid Password ","Error" ,JOptionPane.ERROR_MESSAGE);
-            this.passwordText.setText("");
+            JOptionPane.showMessageDialog(this, "Password should be a minimum of 8 characters and include at least 1 uppercase letter , 1 symbol and 1 digit .", "Weak Password", JOptionPane.ERROR_MESSAGE);
+            passwordText.setText("");
+            break;
         case 5:
-            JOptionPane.showMessageDialog(this," Invalid Date Of Birth(Age must be greater than 13 Years Old)","Error" ,JOptionPane.ERROR_MESSAGE);
-            this.dobText.setDate(null);
-        
-           // JOptionPane.showMessageDialog(this,"Successfully Signed Up","Success" ,JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Invalid Date Of Birth (Age must be greater than 13 years old)", "Error", JOptionPane.ERROR_MESSAGE);
+            dobText.setDate(null);
+            break;
+        case 6:
+            JOptionPane.showMessageDialog(this, "Successfully Signed Up", "Success", JOptionPane.INFORMATION_MESSAGE);
+            this.setVisible(false);
+            SignupLoginWindow signupLoginWindow = SignupLoginWindow.getInstance();
+            signupLoginWindow.setVisible(true);
+            break;
+        default:
+            JOptionPane.showMessageDialog(this, "Unexpected error occurred. Please try again.", "Error", JOptionPane.ERROR_MESSAGE);
+            break;
     }
-    if(flag==6)
-    {
-        if(emailText.equals("")||usernameText.equals("")||passwordText.equals("")||dobText.getDate()==null)
-            JOptionPane.showMessageDialog(this," Some fields are empty ","Error" ,JOptionPane.ERROR_MESSAGE);
-        else 
-        {
-            JOptionPane.showMessageDialog(this,"Successfully Signed Up","Success" ,JOptionPane.INFORMATION_MESSAGE);
-        }
-    }
+    
+
+    
     }//GEN-LAST:event_signupButton2ActionPerformed
 
     private void emailTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_emailTextActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_emailTextActionPerformed
 
+    private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
+        // TODO add your handling code here:
+        SignupLoginWindow signupLoginWindow = SignupLoginWindow.getInstance();
+        signupLoginWindow.setVisible(true);
+    }//GEN-LAST:event_formWindowClosed
+
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(SignupWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(SignupWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(SignupWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(SignupWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new SignupWindow().setVisible(true);
-            }
-        });
-    }
+   
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.toedter.calendar.JDateChooser dobText;
@@ -206,8 +204,6 @@ String email = emailText.getText();
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JPasswordField passwordText;
-    private javax.swing.JButton signupButton;
-    private javax.swing.JButton signupButton1;
     private javax.swing.JButton signupButton2;
     private javax.swing.JTextField usernameText;
     // End of variables declaration//GEN-END:variables

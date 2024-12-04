@@ -9,12 +9,24 @@ package com.mycompany.connecthub;
  * @author nouri
  */
 public class SignupLoginWindow extends javax.swing.JFrame {
+    //singleton design pattern implementation
+    
+    private static SignupLoginWindow signupLoginWindow = null;
 
     /**
      * Creates new form SignupLoginWindow
      */
-    public SignupLoginWindow() {
+    private SignupLoginWindow() {
         initComponents();
+    }
+    
+    public static SignupLoginWindow getInstance()
+    {
+        if(signupLoginWindow==null)
+        {
+            signupLoginWindow= new SignupLoginWindow();
+        }
+        return signupLoginWindow;  // if window is null make an object of it else return the same object
     }
 
     /**
@@ -30,7 +42,9 @@ public class SignupLoginWindow extends javax.swing.JFrame {
         loginButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Signup or Login");
 
+        signupButton.setBackground(new java.awt.Color(51, 153, 255));
         signupButton.setText("Sign up");
         signupButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -38,6 +52,7 @@ public class SignupLoginWindow extends javax.swing.JFrame {
             }
         });
 
+        loginButton.setBackground(new java.awt.Color(0, 153, 255));
         loginButton.setText("Login");
         loginButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -50,20 +65,20 @@ public class SignupLoginWindow extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(152, 152, 152)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(loginButton)
-                    .addComponent(signupButton))
-                .addContainerGap(176, Short.MAX_VALUE))
+                .addGap(113, 113, 113)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(loginButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(signupButton, javax.swing.GroupLayout.DEFAULT_SIZE, 159, Short.MAX_VALUE))
+                .addContainerGap(130, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(58, 58, 58)
-                .addComponent(signupButton)
-                .addGap(66, 66, 66)
-                .addComponent(loginButton)
-                .addContainerGap(130, Short.MAX_VALUE))
+                .addComponent(signupButton, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 64, Short.MAX_VALUE)
+                .addComponent(loginButton, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(83, 83, 83))
         );
 
         pack();
@@ -71,12 +86,14 @@ public class SignupLoginWindow extends javax.swing.JFrame {
 
     private void signupButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_signupButtonActionPerformed
         SignupWindow signup = new SignupWindow();
+        signup.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_signupButtonActionPerformed
 
     private void loginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginButtonActionPerformed
         // TODO add your handling code here:
         LoginWindow login = new LoginWindow();
+        login.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_loginButtonActionPerformed
 
