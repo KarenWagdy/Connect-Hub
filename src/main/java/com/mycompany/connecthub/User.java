@@ -4,14 +4,18 @@
  */
 package com.mycompany.connecthub;
 
+import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author karen
  */
 public class User {
-    private int userId=0;
+    private int userId=1;
     private String email;
     private String username;
     private String password;
@@ -19,12 +23,24 @@ public class User {
     private String status;
 
     public User( String email, String username, String password, LocalDate dateOfBirth) {
-        this.userId ++ ;
+        this.userId = getMaxId()+1;
         this.email = email;
         this.username = username;
         this.password = password;
         this.dateOfBirth = dateOfBirth;
         this.setStatus("offline");
+    }
+    public static int getMaxId()
+    {
+        ArrayList<User> user=UsersDatabase.usersArray;
+        if(user.size()==0)
+        {
+            return 0;
+        }
+        else 
+        {
+            return user.get(user.size()-1).getUserId();
+        }
     }
 
     public void setUserId(int userId) {
@@ -47,7 +63,7 @@ public class User {
         this.status = status;
     }
 
-    public int getUserId() {
+    public  int getUserId() {
         return userId;
     }
 
