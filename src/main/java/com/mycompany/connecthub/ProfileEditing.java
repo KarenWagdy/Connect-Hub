@@ -9,7 +9,7 @@ package com.mycompany.connecthub;
  * @author X1
  */
 import static com.mycompany.connecthub.Functionalities.passwordHashing;
-import static com.mycompany.connecthub.Functionalities.usersArray;
+import static com.mycompany.connecthub.UsersDatabase.usersArray;
 import java.awt.Image;
 import java.io.File;
 import java.io.FileWriter;

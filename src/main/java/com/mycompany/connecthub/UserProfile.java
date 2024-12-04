@@ -5,6 +5,7 @@
 package com.mycompany.connecthub;
 
 import java.io.File;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
@@ -16,41 +17,40 @@ import javax.swing.JOptionPane;
  * @author X1
  */
 public class UserProfile extends javax.swing.JFrame {
-User user;
-ArrayList<Post> p=PostDatabase.readPostsforUser(user.getUserId());
-ArrayList<User> friends=Functionalities.readUsers();
+
+    User user;
+
+//ArrayList<User> friends=UsersDatabase.readUsers();
     /**
      * Creates new form UserProfile
-     */
+     */   
+    ArrayList<Post> p ;
+
     public UserProfile(User user) {
         initComponents();
-        this.user=user;
-        LoadPosts();//nes2al sami
+        this.user = user;
+        p= PostDatabase.readPostsforUser(2);
+        LoadPosts();
     }
-    
-    public void LoadPosts()
-    { 
+
+    public void LoadPosts() {
+
+        DefaultListModel<String> listModel = new DefaultListModel<>();
         
-        //ArrayList<Post> p=PostDatabase.readPostsforUser(user.getUserId()); (nes2al sami)
-        DefaultListModel<String> listModel =new DefaultListModel<>();
-        
-        for(Post post:p)
-        {
+        for (Post post : p) {
             listModel.addElement(post.getContent());
         }
-        postsList.setModel(listModel); 
+        postsList.setModel(listModel);
     }
-    
-    public void LoadFriends()
-    {
-         DefaultListModel<String> listModel =new DefaultListModel<>();
-        
-        for(Post post:p)
-        {
+
+    public void LoadFriends() {
+        DefaultListModel<String> listModel = new DefaultListModel<>();
+
+        for (Post post : p) {
             listModel.addElement(post.getContent());
         }
-        postsList.setModel(listModel); 
-        
+        postsList.setModel(listModel);
+
     }
 
     /**
@@ -216,82 +216,109 @@ ArrayList<User> friends=Functionalities.readUsers();
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
-        
-         JFileChooser file = new JFileChooser();
-        File f = file.getSelectedFile();
-       // ImageIcon coverPicture = new ImageIcon(f.getAbsolutePath());
+
+        JFileChooser file = new JFileChooser();
+        int value=file.showOpenDialog(this);
+        if(value==JFileChooser.APPROVE_OPTION)
+        { File f = file.getSelectedFile();
+        // ImageIcon coverPicture = new ImageIcon(f.getAbsolutePath());
         //Image coverPic = coverPicture.getImage();
         //Image scaledCoverPicture = coverPic.getScaledInstance(700, 200, Image.SCALE_SMOOTH);
         //ImageIcon scaledIcon = new ImageIcon(scaledCoverPicture);
-        ProfileEditing p=new ProfileEditing();
-        ImageIcon scaledIcon=p.changeCoverPhoto(f,user);
-       
-       // coverJLabel.setIcon(scaledIcon); 
-       coverJLabel.setIcon(scaledIcon);
+        ProfileEditing p = new ProfileEditing();
+        ImageIcon scaledIcon = p.changeCoverPhoto(f, user);
+
+        // coverJLabel.setIcon(scaledIcon); 
+        coverJLabel.setIcon(scaledIcon);
+        }
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-         String password=JOptionPane.showInputDialog(this,"change password");
-       // ProfileEditing p=new ProfileEditing();
-        
-        ProfileEditing pf=new ProfileEditing();
-        if(Functionalities.isValidPassword(password))
-        {
-           pf.changePassword(password, user);
-  }
-        
-        else{
+        String password = JOptionPane.showInputDialog(this, "change password");
+        // ProfileEditing p=new ProfileEditing();
+
+        ProfileEditing pf = new ProfileEditing();
+        if (Functionalities.isValidPassword(password)) {
+            pf.changePassword(password, user);
+        } else {
             JOptionPane.showMessageDialog(this, "Please Enter a valid password", "Warning", JOptionPane.WARNING_MESSAGE);
         }
-    
+
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void bioTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bioTextActionPerformed
         // TODO add your handling code here:
-        
+
         String bio = bioText.getText();
-        ProfileEditing p=new ProfileEditing();
+        ProfileEditing p = new ProfileEditing();
         p.changeBio(bio, user);
 
     }//GEN-LAST:event_bioTextActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
-        
-         JFileChooser file = new JFileChooser();
+
+        JFileChooser file = new JFileChooser();
         File f = file.getSelectedFile();
-       // ImageIcon profilePicture = new ImageIcon(f.getAbsolutePath());
+        // ImageIcon profilePicture = new ImageIcon(f.getAbsolutePath());
         //Image pfp = profilePicture.getImage();
         //Image scaledPFP = pfp.getScaledInstance(300, 200, Image.SCALE_SMOOTH);
         //ImageIcon scaledIcon = new ImageIcon(scaledPFP);
-        ProfileEditing p=new ProfileEditing();
-        ImageIcon scaledIcon=p.changePFP(f,user);
+        ProfileEditing p = new ProfileEditing();
+        ImageIcon scaledIcon = p.changePFP(f, user);
         pfpJLabel.setIcon(scaledIcon);
 
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void viewPostActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewPostActionPerformed
         // TODO add your handling code here:
-        int index=postsList.getSelectedIndex();
-        if(index==-1)
-        {
-            JOptionPane.showMessageDialog(this,"Choose post");
-        }
-        else{
-            Post post=p.get(index);
-            ViewPosts view=new ViewPosts(post);
+        int index = postsList.getSelectedIndex();
+        if (index == -1) {
+            JOptionPane.showMessageDialog(this, "Choose post");
+        } else {
+            Post post = p.get(index);
+            ViewPosts view = new ViewPosts(post);
             view.setVisible(true);
         }
-        
-        
+
+
     }//GEN-LAST:event_viewPostActionPerformed
 
     /**
      * @param args the command line arguments
      */
-   
+ public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(SignupLoginWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(SignupLoginWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(SignupLoginWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(SignupLoginWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
 
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new UserProfile(new User("c@c.com","cc","1234",LocalDate.now())).setVisible(true);
+            }
+        });
+ }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JList<String> FriendsList;
     private javax.swing.JTextField bioText;

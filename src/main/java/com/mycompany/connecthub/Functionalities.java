@@ -29,6 +29,8 @@ import javax.mail.internet.InternetAddress;
  */
 public class Functionalities {
 
+    static User currentUser;
+
     public static String passwordHashing(String password) throws NoSuchAlgorithmException {
 
         MessageDigest md = MessageDigest.getInstance("SHA-256");
@@ -39,19 +41,18 @@ public class Functionalities {
 
     public static boolean isValidEmail(String email) {
         InternetAddress emailAddress = null;
-        if(email.endsWith(".com"))
-        {
+        if (email.endsWith(".com")) {
 
-        try {
-            emailAddress = new InternetAddress(email);
-            emailAddress.validate();
-            return true;
-        } catch (AddressException e) {
+            try {
+                emailAddress = new InternetAddress(email);
+                emailAddress.validate();
+                return true;
+            } catch (AddressException e) {
+                return false;
+            }
+        } else {
             return false;
         }
-        }
-        else 
-            return false;
     }
 
     public static boolean isValidPassword(String pass) {
@@ -92,7 +93,7 @@ public class Functionalities {
     }
 
     public static int signup(String email, String userName, String password, LocalDate dateOfBirth) {
-        
+
         if (!(isValidEmail(email))) {
             return 1;
             //email is not valid
@@ -112,6 +113,7 @@ public class Functionalities {
         if (!isValidDOB(dateOfBirth)) {
             return 5; //invalid date of birth
         }
+        
         User user = new User(email, userName, password, dateOfBirth);
         UsersDatabase.usersArray.add(user);
         UsersDatabase.saveUsers(UsersDatabase.usersArray);
@@ -119,19 +121,18 @@ public class Functionalities {
         return 6;
 
     }
-    public static int login(String email,String password)
-    {
-        ArrayList<User> loginUsers= UsersDatabase.readUsers();
-        for(User u:loginUsers)
-        {
-            if(u.getEmail().equalsIgnoreCase(email))
-            {
+
+    public static int login(String email, String password) {
+        ArrayList<User> loginUsers = UsersDatabase.readUsers();
+        for (User u : loginUsers) {
+            if (u.getEmail().equalsIgnoreCase(email)) {
                 try {
-                    if(u.getPassword().equals(passwordHashing(password)))
+                    if (u.getPassword().equals(passwordHashing(password))) {
                         u.setStatus("Online");
-                    UsersDatabase.saveUsers(loginUsers);
+                        currentUser = u;
+                        UsersDatabase.saveUsers(loginUsers);
                         return 1;  // success login 
-                        
+                    }
                 } catch (NoSuchAlgorithmException ex) {
                     ex.printStackTrace();
                 }
@@ -140,4 +141,17 @@ public class Functionalities {
         return 2; // incorrect pass or email
     }
 
+    
+    public static User getUser(int userId)
+    {
+       ArrayList<User>users= UsersDatabase.readUsers();
+       for(int i=0;i<users.size();i++)
+       {
+           if(users.get(i).getUserId()==userId)
+           {
+               return users.get(i);
+           }
+       }
+       return null;
+    }
 }

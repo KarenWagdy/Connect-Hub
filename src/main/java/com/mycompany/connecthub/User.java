@@ -26,14 +26,18 @@ public class User {
         this.userId = getMaxId()+1;
         this.email = email;
         this.username = username;
-        this.password = password;
+        try {
+            this.password = Functionalities.passwordHashing(password);
+        } catch (NoSuchAlgorithmException ex) {
+            Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+        }
         this.dateOfBirth = dateOfBirth;
         this.setStatus("offline");
     }
     public static int getMaxId()
     {
         ArrayList<User> user=UsersDatabase.usersArray;
-        if(user.size()==0)
+        if(user.isEmpty())
         {
             return 0;
         }
