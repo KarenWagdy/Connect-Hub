@@ -33,7 +33,7 @@ public class User {
     public static int getMaxId()
     {
         ArrayList<User> user=UsersDatabase.usersArray;
-        if(user.size()==0)
+        if(user.isEmpty())
         {
             return 0;
         }

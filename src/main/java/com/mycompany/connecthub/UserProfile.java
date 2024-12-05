@@ -5,6 +5,7 @@
 package com.mycompany.connecthub;
 
 import java.io.File;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
@@ -16,41 +17,44 @@ import javax.swing.JOptionPane;
  * @author X1
  */
 public class UserProfile extends javax.swing.JFrame {
-User user;
-ArrayList<Post> p=PostDatabase.readPostsforUser(user.getUserId());
-ArrayList<User> friends=Functionalities.readUsers();
+
+    User user;
+    String Bio;
+
+//ArrayList<User> friends=UsersDatabase.readUsers();
     /**
      * Creates new form UserProfile
-     */
+     */   
+    ArrayList<Post> p ;
+    ArrayList<User> friends;
+
     public UserProfile(User user) {
         initComponents();
-        this.user=user;
-        LoadPosts();//nes2al sami
+        this.user = user;
+        p= PostDatabase.readPostsforUser(user.getUserId());
+        friends=FriendDatabase.readFriends(user.getUserId());
+        LoadPosts();
+         LoadFriends();
     }
-    
-    public void LoadPosts()
-    { 
+
+    public void LoadPosts() {
+
+        DefaultListModel<String> listModel = new DefaultListModel<>();
         
-        //ArrayList<Post> p=PostDatabase.readPostsforUser(user.getUserId()); (nes2al sami)
-        DefaultListModel<String> listModel =new DefaultListModel<>();
-        
-        for(Post post:p)
-        {
+        for (Post post : p) {
             listModel.addElement(post.getContent());
         }
-        postsList.setModel(listModel); 
+        postsList.setModel(listModel);
     }
-    
-    public void LoadFriends()
-    {
-         DefaultListModel<String> listModel =new DefaultListModel<>();
-        
-        for(Post post:p)
-        {
+
+    public void LoadFriends() {
+        DefaultListModel<String> listModel = new DefaultListModel<>();
+
+        for (Post post : p) {
             listModel.addElement(post.getContent());
         }
-        postsList.setModel(listModel); 
-        
+        postsList.setModel(listModel);
+
     }
 
     /**
@@ -76,6 +80,7 @@ ArrayList<User> friends=Functionalities.readUsers();
         jLabel3 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         postsList = new javax.swing.JList<>();
+        changeBio = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -129,6 +134,13 @@ ArrayList<User> friends=Functionalities.readUsers();
 
         jScrollPane2.setViewportView(postsList);
 
+        changeBio.setText("change Bio");
+        changeBio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                changeBioActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -154,8 +166,9 @@ ArrayList<User> friends=Functionalities.readUsers();
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(26, 26, 26)
                         .addComponent(bioText, javax.swing.GroupLayout.PREFERRED_SIZE, 432, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 42, Short.MAX_VALUE)
-                        .addComponent(jButton1))
+                        .addGap(41, 41, 41)
+                        .addComponent(changeBio)
+                        .addGap(0, 35, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(viewPost)
@@ -164,11 +177,15 @@ ArrayList<User> friends=Functionalities.readUsers();
                         .addGap(50, 50, 50)))
                 .addGap(40, 40, 40))
             .addGroup(layout.createSequentialGroup()
-                .addGap(88, 88, 88)
+                .addGap(101, 101, 101)
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(139, 139, 139))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(244, 244, 244)
+                .addComponent(jButton1)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addGap(55, 55, 55)
@@ -190,17 +207,19 @@ ArrayList<User> friends=Functionalities.readUsers();
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(bioText, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1)
-                    .addComponent(jButton1))
+                    .addComponent(changeBio))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jButton1)
+                        .addGap(14, 14, 14)
+                        .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(viewPost)
                         .addGap(23, 23, 23))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(37, 37, 37)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel3))
+                        .addComponent(jLabel3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap(32, Short.MAX_VALUE))))
@@ -216,85 +235,100 @@ ArrayList<User> friends=Functionalities.readUsers();
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
-        
-         JFileChooser file = new JFileChooser();
-        File f = file.getSelectedFile();
-       // ImageIcon coverPicture = new ImageIcon(f.getAbsolutePath());
+
+        JFileChooser file = new JFileChooser();
+        int value=file.showOpenDialog(this);
+        if(value==JFileChooser.APPROVE_OPTION)
+        { File f = file.getSelectedFile();
+        // ImageIcon coverPicture = new ImageIcon(f.getAbsolutePath());
         //Image coverPic = coverPicture.getImage();
         //Image scaledCoverPicture = coverPic.getScaledInstance(700, 200, Image.SCALE_SMOOTH);
         //ImageIcon scaledIcon = new ImageIcon(scaledCoverPicture);
-        ProfileEditing p=new ProfileEditing();
-        ImageIcon scaledIcon=p.changeCoverPhoto(f,user);
-       
-       // coverJLabel.setIcon(scaledIcon); 
-       coverJLabel.setIcon(scaledIcon);
+        ProfileEditing p = new ProfileEditing();
+        ImageIcon scaledIcon = p.changeCoverPhoto(f, user);
+
+        // coverJLabel.setIcon(scaledIcon); 
+        coverJLabel.setIcon(scaledIcon);
+        }
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-         String password=JOptionPane.showInputDialog(this,"change password");
-       // ProfileEditing p=new ProfileEditing();
-        
-        ProfileEditing pf=new ProfileEditing();
-        if(Functionalities.isValidPassword(password))
-        {
-           pf.changePassword(password, user);
-  }
-        
-        else{
+        String password = JOptionPane.showInputDialog(this, "change password");
+        // ProfileEditing p=new ProfileEditing();
+
+        ProfileEditing pf = new ProfileEditing();
+        if (Functionalities.isValidPassword(password)) {
+            pf.changePassword(password, user);
+        } else {
             JOptionPane.showMessageDialog(this, "Please Enter a valid password", "Warning", JOptionPane.WARNING_MESSAGE);
         }
-    
+
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void bioTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bioTextActionPerformed
         // TODO add your handling code here:
-        
-        String bio = bioText.getText();
-        ProfileEditing p=new ProfileEditing();
-        p.changeBio(bio, user);
+       /* if(Bio==null)
+        {
+           bioText.setText("j"); 
+        }
+        else{
+         bioText.setText(Bio);
+        }*/
 
     }//GEN-LAST:event_bioTextActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
-        
-         JFileChooser file = new JFileChooser();
-        File f = file.getSelectedFile();
-       // ImageIcon profilePicture = new ImageIcon(f.getAbsolutePath());
+
+        JFileChooser file = new JFileChooser();
+        int value=file.showOpenDialog(this);
+        if(value==JFileChooser.APPROVE_OPTION)
+        { File f = file.getSelectedFile();
+        // ImageIcon profilePicture = new ImageIcon(f.getAbsolutePath());
         //Image pfp = profilePicture.getImage();
         //Image scaledPFP = pfp.getScaledInstance(300, 200, Image.SCALE_SMOOTH);
         //ImageIcon scaledIcon = new ImageIcon(scaledPFP);
-        ProfileEditing p=new ProfileEditing();
-        ImageIcon scaledIcon=p.changePFP(f,user);
+        ProfileEditing p = new ProfileEditing();
+        ImageIcon scaledIcon = p.changePFP(f, user);
         pfpJLabel.setIcon(scaledIcon);
+        }
 
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void viewPostActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewPostActionPerformed
         // TODO add your handling code here:
-        int index=postsList.getSelectedIndex();
-        if(index==-1)
-        {
-            JOptionPane.showMessageDialog(this,"Choose post");
-        }
-        else{
-            Post post=p.get(index);
-            ViewPosts view=new ViewPosts(post);
+        int index = postsList.getSelectedIndex();
+        if (index == -1) {
+            JOptionPane.showMessageDialog(this, "Choose post");
+        } else {
+            Post post = p.get(index);
+            ViewPosts view = new ViewPosts(post);
             view.setVisible(true);
         }
-        
-        
+
+
     }//GEN-LAST:event_viewPostActionPerformed
+
+    private void changeBioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changeBioActionPerformed
+        // TODO add your handling code here:
+         Bio= JOptionPane.showInputDialog("Enter Bio.");
+        ProfileEditing p = new ProfileEditing();
+        p.changeBio(Bio, user);
+        bioText.setText(Bio);
+        
+        
+        
+    }//GEN-LAST:event_changeBioActionPerformed
 
     /**
      * @param args the command line arguments
      */
-   
-
+ 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JList<String> FriendsList;
     private javax.swing.JTextField bioText;
+    private javax.swing.JButton changeBio;
     private javax.swing.JLabel coverJLabel;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
