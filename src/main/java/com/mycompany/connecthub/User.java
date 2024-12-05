@@ -26,11 +26,7 @@ public class User {
         this.userId = getMaxId()+1;
         this.email = email;
         this.username = username;
-        try {
-            this.password = Functionalities.passwordHashing(password);
-        } catch (NoSuchAlgorithmException ex) {
-            Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        this.password = password;
         this.dateOfBirth = dateOfBirth;
         this.setStatus("offline");
     }

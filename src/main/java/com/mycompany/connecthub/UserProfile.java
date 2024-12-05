@@ -31,7 +31,7 @@ public class UserProfile extends javax.swing.JFrame {
     public UserProfile(User user) {
         initComponents();
         this.user = user;
-        p= PostDatabase.readPostsforUser(2);
+        p= PostDatabase.readPostsforUser(user.getUserId());
         friends=FriendDatabase.readFriends(user.getUserId());
         LoadPosts();
          LoadFriends();

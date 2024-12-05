@@ -127,12 +127,12 @@ public class Functionalities {
         for (User u : loginUsers) {
             if (u.getEmail().equalsIgnoreCase(email)) {
                 try {
-                    if (u.getPassword().equals(passwordHashing(password))) {
+                    if (u.getPassword().equals(passwordHashing(password))) 
                         u.setStatus("Online");
                         currentUser = u;
                         UsersDatabase.saveUsers(loginUsers);
                         return 1;  // success login 
-                    }
+                    
                 } catch (NoSuchAlgorithmException ex) {
                     ex.printStackTrace();
                 }

@@ -76,9 +76,12 @@ public class UsersDatabase {
             obj.put("username", i.getUsername());
             obj.put("dateOfBirth", i.getDateOfBirth());
             obj.put("status", i.getStatus());
-            
-                obj.put("password",i.getPassword());
-            
+            try{
+                obj.put("password",passwordHashing(i.getPassword()));
+            }catch(NoSuchAlgorithmException ex)
+            {
+                ex.printStackTrace();
+            }
             usersArray.put(obj);
 
         }
