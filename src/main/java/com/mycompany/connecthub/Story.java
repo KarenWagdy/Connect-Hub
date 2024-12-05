@@ -4,38 +4,36 @@
  */
 package com.mycompany.connecthub;
 
-import java.time.LocalDate;
+import static com.mycompany.connecthub.Post.getMaxId;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 /**
  *
- * @author X1
+ * @author Alex
  */
-public class Post extends Content {
+//story class is subclass of content class
+public class Story extends Content {
     private int contentId=1;
-    //subclass of content parent class
-    public Post(){
+    public Story(){
         
     }
     
-    public Post( int authorId, String content, String imagePath, LocalDateTime timeStamp) {
-       
+    public Story( int authorId, String content, String imagePath, LocalDateTime timeStamp) {
         super( authorId, content, imagePath, timeStamp);
-         this.contentId = getMaxId()+1;
+        this.contentId = getMaxId()+1;
     }
-    //method to increment contentId in Json file once a post is created
+    //method to increment content id once a story created
      public static int getMaxId()
     {
-        ArrayList<Post> post=PostDatabase.postsArray;
-        if(post.isEmpty())
+        ArrayList<Story> story=StoryDatabase.storiesArray;
+        if(story.isEmpty())
         {
             return 0;
         }
         else 
         {
-            return post.get(post.size()-1).getContentId();
+            return story.get(story.size()-1).getContentId();
         }
     }
-    
 }
