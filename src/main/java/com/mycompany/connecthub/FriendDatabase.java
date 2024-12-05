@@ -14,6 +14,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -42,6 +44,32 @@ public class FriendDatabase {
         return FD;
     }
 
+    public static ArrayList<User> readFriendsFile() {
+        FriendsArray.clear();
+
+        try {
+
+            String jsonLines = new String(Files.readAllBytes(Paths.get("Friends.json")));
+            JSONArray Friends = new JSONArray(jsonLines);
+
+            for (int i = 0; i < Friends.length(); i++) {
+                JSONObject user = Friends.getJSONObject(i);
+                int user1Id = user.getInt("user1Id");
+                int user2Id = user.getInt("user2Id");
+
+                User user2 = Functionalities.getUser(user2Id);
+                FriendsArray.add(user2);
+
+                User user1 = Functionalities.getUser(user1Id);
+                FriendsArray.add(user1);
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return FriendsArray;
+    }
+
     public static ArrayList<User> readFriends(int userId) {
         FriendsArray.clear();
 
@@ -50,8 +78,6 @@ public class FriendDatabase {
             String jsonLines = new String(Files.readAllBytes(Paths.get("Friends.json")));
             JSONArray Friends = new JSONArray(jsonLines);
 
-            //DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE;
-            // DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
             for (int i = 0; i < Friends.length(); i++) {
                 JSONObject user = Friends.getJSONObject(i);
                 int user1Id = user.getInt("user1Id");
@@ -74,22 +100,29 @@ public class FriendDatabase {
         return FriendsArray;
     }
 
-    
     public static void saveFriends(int userId) {
-            JSONArray FriendsSaveArray = new JSONArray();
-        
-            JSONObject obj = new JSONObject();
-            obj.put("user1Id", Functionalities.currentUser.getUserId());
-            obj.put("user2Id", userId);
-           
-            FriendsSaveArray.put(obj);
-            
+        JSONArray Friends = new JSONArray();
+        try {
+            String jsonLines = new String(Files.readAllBytes(Paths.get("Friends.json")));
+            Friends = new JSONArray(jsonLines);
+        } catch (IOException e) {
+        }
+
+        JSONObject obj = new JSONObject();
+        obj.put("user1Id", Functionalities.currentUser.getUserId());
+        obj.put("user2Id", userId);
+
+        Friends.put(obj);
+
         try {
             FileWriter file = new FileWriter("Friends.json");
-            file.write(FriendsSaveArray.toString(2));
+            file.write(Friends.toString(2));
             file.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
+
     }
+    
+
 }

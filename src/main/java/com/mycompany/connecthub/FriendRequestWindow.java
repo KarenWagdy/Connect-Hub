@@ -246,7 +246,14 @@ public class FriendRequestWindow extends javax.swing.JFrame {
         } else {
             User u = users.get(index);
             FriendRequestDatabase.saveFriendRequest(Functionalities.currentUser.getUserId(), u.getUserId()); //get static user
+            //listModel1 = (DefaultListModel<String>) friendRequestList.getModel();
+            //listModel1.removeElementAt(index);
+            
+            
+            
+  
         }
+
     }//GEN-LAST:event_sendFriendRequestButtonActionPerformed
 
 
@@ -261,19 +268,17 @@ public class FriendRequestWindow extends javax.swing.JFrame {
 
     private void acceptButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_acceptButtonActionPerformed
 
-        //ArrayList<User> friendsArray = new ArrayList<>();
         ArrayList<User> everyone = UsersDatabase.readUsers();
 
-        String selectedRequest = friendRequestList.getSelectedValue();
+        String selectedRequest = manageRequestsList.getSelectedValue();
         if (selectedRequest != null) {
-            //FriendRequestManagement.acceptFriendRequest(Functionalities.currentUser.getUserId(), Functionalities.getUserId(selectedRequest));
-            //friendsArray.add(Functionalities.currentUser);
             for (User u : everyone) {
                 if (selectedRequest.equals(u.getUsername())) {
                     FriendDatabase.saveFriends(u.getUserId());
+                    FriendRequestDatabase.removeFriendRequestFromFile(u.getUserId());
                 }
             }
-            
+            listModel2 = (DefaultListModel<String>) manageRequestsList.getModel();
             listModel2.removeElement(selectedRequest);
         }
 
@@ -281,11 +286,21 @@ public class FriendRequestWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_acceptButtonActionPerformed
 
     private void rejectButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rejectButtonActionPerformed
-        String selectedRequest = friendRequestList.getSelectedValue();
-        if (selectedRequest != null) {
-            //FriendRequestManagement.manageFriendRequest(Functionalities.currentUser.getUserId(), Functionalities.getUserId(selectedRequest), "rejected");
-            listModel2.removeElement(selectedRequest);
+        ArrayList<User> everyone = UsersDatabase.readUsers();
+
+    String selectedRequest = manageRequestsList.getSelectedValue();
+
+    if (selectedRequest != null) {
+        for (User user : everyone) {
+            if (selectedRequest.equals(user.getUsername())) {
+                FriendRequestDatabase.removeFriendRequestFromFile(user.getUserId());
+                break;
+            }
         }
+
+        listModel2 = (DefaultListModel<String>) manageRequestsList.getModel();
+        listModel2.removeElement(selectedRequest);
+    }
     }//GEN-LAST:event_rejectButtonActionPerformed
 
     private void requestSuggestedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_requestSuggestedActionPerformed

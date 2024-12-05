@@ -75,7 +75,6 @@ public static void acceptFriendRequest(int senderId, int receiverId) {
         }
 
         if (!requestFound) {
-            System.out.println("Friend request not found!");
             return;
         }
 
@@ -91,11 +90,12 @@ public static void acceptFriendRequest(int senderId, int receiverId) {
 
         Files.write(Paths.get("friend.json"), existingFriends.toString().getBytes());
 
-        System.out.println("Friend request accepted and moved to friends list!");
     } catch (IOException e) {
         e.printStackTrace();
     }
 }
+
+    
     
     public static void removeFriend(int userId, int friendId) {
         try {

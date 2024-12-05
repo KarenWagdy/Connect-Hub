@@ -21,7 +21,7 @@ import org.json.JSONObject;
  */
 public class FriendRequestDatabase {
 
-    private static FriendRequestDatabase frd = null;
+    public static FriendRequestDatabase frd;
 
     public FriendRequestDatabase() {
     }
@@ -33,7 +33,6 @@ public class FriendRequestDatabase {
         return frd;
     }
 
-   
     public static void updateFriendRequest(int senderId, int receiverId) {
         try {
 
@@ -55,6 +54,7 @@ public class FriendRequestDatabase {
         }
     }
 
+    
     public static ArrayList<User> readFriendRequests(int userId) {
         ArrayList<User> friendRequests = new ArrayList<>();
 
@@ -166,5 +166,33 @@ public class FriendRequestDatabase {
             System.out.println("Error processing friend request.");
         }
     }
+
+    
+    public static void removeFriendRequestFromFile(int selectedUserId) {
+    try {
+        String jsonLines = new String(Files.readAllBytes(Paths.get("friendRequest.json")));
+        JSONArray friendRequests = new JSONArray(jsonLines);
+
+        JSONArray updatedRequests = new JSONArray();
+
+        for (int i = 0; i < friendRequests.length(); i++) {
+            JSONObject request = friendRequests.getJSONObject(i);
+            int senderId = request.getInt("senderId");
+            int receiverId = request.getInt("receiverId");
+
+            if (!(senderId == Functionalities.currentUser.getUserId() && receiverId == selectedUserId) &&
+                !(receiverId == Functionalities.currentUser.getUserId() && senderId == selectedUserId)) {
+                updatedRequests.put(request);
+            }
+        }
+
+        Files.write(Paths.get("friendRequest.json"), updatedRequests.toString(2).getBytes());
+
+    } catch (IOException e) {
+        e.printStackTrace();
+        System.out.println("Error while removing friend request.");
+    }
+}
+
 
 }

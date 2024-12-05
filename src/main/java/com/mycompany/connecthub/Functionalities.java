@@ -152,4 +152,14 @@ public class Functionalities {
         }
         return 0;
     }
+    
+    public static User getUser(String username) {
+        ArrayList<User> users = UsersDatabase.readUsers();
+        for (int i = 0; i < users.size(); i++) {
+            if (users.get(i).getUsername() == username) {
+                return users.get(i);
+            }
+        }
+        return null;
+    }
 }
