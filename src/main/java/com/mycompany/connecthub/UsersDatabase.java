@@ -21,30 +21,25 @@ import org.json.JSONObject;
  * @author karen
  */
 public class UsersDatabase {
-    
-    //singleton design pattern implementation
-    
-    private static UsersDatabase usersDatabase = null;
 
+    //singleton design pattern implementation
+    private static UsersDatabase usersDatabase = null;
 
     private UsersDatabase() {
     }
-    
-    public static UsersDatabase getInstance()
-    {
-        if(usersDatabase==null)
-        {
-            usersDatabase= new UsersDatabase();
+
+    public static UsersDatabase getInstance() {
+        if (usersDatabase == null) {
+            usersDatabase = new UsersDatabase();
         }
         return usersDatabase;  // if users JSon File database is null make an object of it else return the same object
     }
-    
-    
-     static ArrayList<User> usersArray = new ArrayList<>();
+
+    static ArrayList<User> usersArray = new ArrayList<>();
 
     public static ArrayList<User> readUsers() {
         usersArray.clear();
-        
+
         try {
             String jsonLines = new String(Files.readAllBytes(Paths.get("users.json")));
             JSONArray users = new JSONArray(jsonLines);
@@ -58,7 +53,7 @@ public class UsersDatabase {
                 LocalDate dateOfBirth = LocalDate.parse(user.getString("dateOfBirth"), formatter);
                 String password = user.getString("password");
                 String status = user.getString("status");
-                usersArray.add(new User(email, username, password, dateOfBirth));
+                usersArray.add(new User(email, username, password, dateOfBirth, false));
             }
 
         } catch (IOException e) {
@@ -76,12 +71,9 @@ public class UsersDatabase {
             obj.put("username", i.getUsername());
             obj.put("dateOfBirth", i.getDateOfBirth());
             obj.put("status", i.getStatus());
-            try{
-                obj.put("password",passwordHashing(i.getPassword()));
-            }catch(NoSuchAlgorithmException ex)
-            {
-                ex.printStackTrace();
-            }
+
+            obj.put("password", i.getPassword());
+
             usersArray.put(obj);
 
         }
@@ -90,11 +82,8 @@ public class UsersDatabase {
             file.write(usersArray.toString(4));
             file.close();
         } catch (IOException e) {
-            
+
         }
     }
-    
-    
 
-    
 }

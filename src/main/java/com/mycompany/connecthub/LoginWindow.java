@@ -112,6 +112,8 @@ public class LoginWindow extends javax.swing.JFrame {
        JOptionPane.showMessageDialog(this, "Successfully Loggedin.", "Success", JOptionPane.INFORMATION_MESSAGE);
        this.setVisible(false);
        //set visisble true to news feed
+       FriendRequestWindow frw = new FriendRequestWindow();
+       frw.setVisible(true);
 
     }
     else if(flag==2)

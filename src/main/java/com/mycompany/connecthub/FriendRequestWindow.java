@@ -17,31 +17,42 @@ public class FriendRequestWindow extends javax.swing.JFrame {
     /**
      * Creates new form FriendRequestWindow
      */
+    ArrayList<User> requests;
+
     public FriendRequestWindow() {
         initComponents();
+        requests = FriendRequestDatabase.readFriendRequests(Functionalities.currentUser.getUserId());
+        loadFriendRequests();
+
     }
 
-    ArrayList<User> users = UsersDatabase.readUsers();
+    ArrayList<User> users;
+
+    DefaultListModel<String> listModel1;
+    DefaultListModel<String> listModel2;
 
     public void loadAllUsers() {
-        DefaultListModel<String> listModel = new DefaultListModel<>();
+        listModel1 = new DefaultListModel<>();
         for (User user : users) {
-            listModel.addElement(user.getUsername());
+            listModel1.addElement(user.getUsername());
         }
-        friendRequestList.setModel(listModel);
+        friendRequestList.setModel(listModel1);
     }
-    
-    /*
+
     public void loadFriendRequests() {
-        DefaultListModel<String> listModel = new DefaultListModel<>();
-        ArrayList<String> fr = FriendRequestDatabase.readFriendRequests(1); //static user
-        for (String request : fr) {
-            listModel.addElement();
+        DefaultListModel<String> model = new DefaultListModel<>();
+
+        for (User user : requests) {
+            model.addElement(user.getUsername());
         }
-        friendRequestList.setModel(listModel);
+
+        manageRequestsList.setModel(model);
     }
-    
-    */
+
+    public void loadSuggestedFriends() {
+        DefaultListModel<String> model = new DefaultListModel<>();
+
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -55,9 +66,9 @@ public class FriendRequestWindow extends javax.swing.JFrame {
         sendFriendRequestButton = new javax.swing.JButton();
         usernameTextField = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList<>();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        manageRequestsList = new javax.swing.JList<>();
+        acceptButton = new javax.swing.JButton();
+        requestSuggested = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         friendRequestList = new javax.swing.JList<>();
@@ -70,10 +81,16 @@ public class FriendRequestWindow extends javax.swing.JFrame {
         allFreinds = new javax.swing.JList<>();
         jButton4 = new javax.swing.JButton();
         searchButton = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
+        rejectButton = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Friend Management");
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                formWindowClosed(evt);
+            }
+        });
 
         sendFriendRequestButton.setText("Send friend request");
         sendFriendRequestButton.addActionListener(new java.awt.event.ActionListener() {
@@ -82,11 +99,21 @@ public class FriendRequestWindow extends javax.swing.JFrame {
             }
         });
 
-        jScrollPane1.setViewportView(jList1);
+        jScrollPane1.setViewportView(manageRequestsList);
 
-        jButton2.setText("Accept");
+        acceptButton.setText("Accept");
+        acceptButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                acceptButtonActionPerformed(evt);
+            }
+        });
 
-        jButton3.setText("Send friend request");
+        requestSuggested.setText("Send friend request");
+        requestSuggested.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                requestSuggestedActionPerformed(evt);
+            }
+        });
 
         jLabel1.setText("User name");
 
@@ -116,7 +143,12 @@ public class FriendRequestWindow extends javax.swing.JFrame {
             }
         });
 
-        jButton1.setText("Reject");
+        rejectButton.setText("Reject");
+        rejectButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rejectButtonActionPerformed(evt);
+            }
+        });
 
         jButton5.setText("Remove");
 
@@ -131,7 +163,7 @@ public class FriendRequestWindow extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel3)
-                            .addComponent(jButton3))
+                            .addComponent(requestSuggested))
                         .addGap(74, 74, 74)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addGroup(layout.createSequentialGroup()
@@ -154,9 +186,9 @@ public class FriendRequestWindow extends javax.swing.JFrame {
                         .addGap(77, 77, 77)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jButton2)
+                                .addComponent(acceptButton)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton1))
+                                .addComponent(rejectButton))
                             .addComponent(jLabel2)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(172, Short.MAX_VALUE))
@@ -184,8 +216,8 @@ public class FriendRequestWindow extends javax.swing.JFrame {
                         .addGap(13, 13, 13))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jButton2)
-                            .addComponent(jButton1))
+                            .addComponent(acceptButton)
+                            .addComponent(rejectButton))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
@@ -193,7 +225,7 @@ public class FriendRequestWindow extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jScrollPane3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton3)
+                        .addComponent(requestSuggested)
                         .addGap(32, 32, 32))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -213,7 +245,7 @@ public class FriendRequestWindow extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Choose user", "Error", JOptionPane.ERROR_MESSAGE);
         } else {
             User u = users.get(index);
-            FriendRequestDatabase.saveFriendRequest(1, u.getUserId()); //get static user and replace 1
+            FriendRequestDatabase.saveFriendRequest(Functionalities.currentUser.getUserId(), u.getUserId()); //get static user
         }
     }//GEN-LAST:event_sendFriendRequestButtonActionPerformed
 
@@ -226,6 +258,45 @@ public class FriendRequestWindow extends javax.swing.JFrame {
         users = FriendRequestManagement.search(usernameTextField.getText());
         loadAllUsers();
     }//GEN-LAST:event_searchButtonActionPerformed
+
+    private void acceptButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_acceptButtonActionPerformed
+
+        //ArrayList<User> friendsArray = new ArrayList<>();
+        ArrayList<User> everyone = UsersDatabase.readUsers();
+
+        String selectedRequest = friendRequestList.getSelectedValue();
+        if (selectedRequest != null) {
+            //FriendRequestManagement.acceptFriendRequest(Functionalities.currentUser.getUserId(), Functionalities.getUserId(selectedRequest));
+            //friendsArray.add(Functionalities.currentUser);
+            for (User u : everyone) {
+                if (selectedRequest.equals(u.getUsername())) {
+                    FriendDatabase.saveFriends(u.getUserId());
+                }
+            }
+            
+            listModel2.removeElement(selectedRequest);
+        }
+
+
+    }//GEN-LAST:event_acceptButtonActionPerformed
+
+    private void rejectButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rejectButtonActionPerformed
+        String selectedRequest = friendRequestList.getSelectedValue();
+        if (selectedRequest != null) {
+            //FriendRequestManagement.manageFriendRequest(Functionalities.currentUser.getUserId(), Functionalities.getUserId(selectedRequest), "rejected");
+            listModel2.removeElement(selectedRequest);
+        }
+    }//GEN-LAST:event_rejectButtonActionPerformed
+
+    private void requestSuggestedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_requestSuggestedActionPerformed
+
+    }//GEN-LAST:event_requestSuggestedActionPerformed
+
+    private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
+        //newsfeed instead
+        SignupLoginWindow signupLoginWindow = SignupLoginWindow.getInstance();
+        signupLoginWindow.setVisible(true);
+    }//GEN-LAST:event_formWindowClosed
 
     /**
      * @param args the command line arguments
@@ -263,23 +334,23 @@ public class FriendRequestWindow extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton acceptButton;
     private javax.swing.JList<String> allFreinds;
     private javax.swing.JList<String> friendRequestList;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JList<String> jList1;
     private javax.swing.JList<String> jList3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JList<String> manageRequestsList;
+    private javax.swing.JButton rejectButton;
+    private javax.swing.JButton requestSuggested;
     private javax.swing.JButton searchButton;
     private javax.swing.JButton sendFriendRequestButton;
     private javax.swing.JTextField usernameTextField;

@@ -4,22 +4,12 @@
  */
 package com.mycompany.connecthub;
 
-import java.time.LocalDate;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
 import java.time.Period;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Base64;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 
@@ -113,8 +103,8 @@ public class Functionalities {
         if (!isValidDOB(dateOfBirth)) {
             return 5; //invalid date of birth
         }
-        
-        User user = new User(email, userName, password, dateOfBirth);
+
+        User user = new User(email, userName, password, dateOfBirth, true);
         UsersDatabase.usersArray.add(user);
         UsersDatabase.saveUsers(UsersDatabase.usersArray);
 
@@ -127,12 +117,14 @@ public class Functionalities {
         for (User u : loginUsers) {
             if (u.getEmail().equalsIgnoreCase(email)) {
                 try {
-                    if (u.getPassword().equals(passwordHashing(password))) 
+                    if (u.getPassword().equals(passwordHashing(password))) {
+                        System.out.println("In func "+ passwordHashing(password));
                         u.setStatus("Online");
                         currentUser = u;
+                        System.out.println(currentUser.getUsername());
                         UsersDatabase.saveUsers(loginUsers);
                         return 1;  // success login 
-                    
+                    }
                 } catch (NoSuchAlgorithmException ex) {
                     ex.printStackTrace();
                 }
@@ -141,17 +133,23 @@ public class Functionalities {
         return 2; // incorrect pass or email
     }
 
-    
-    public static User getUser(int userId)
-    {
-       ArrayList<User>users= UsersDatabase.readUsers();
-       for(int i=0;i<users.size();i++)
-       {
-           if(users.get(i).getUserId()==userId)
-           {
-               return users.get(i);
-           }
-       }
-       return null;
+    public static User getUser(int userId) {
+        ArrayList<User> users = UsersDatabase.readUsers();
+        for (int i = 0; i < users.size(); i++) {
+            if (users.get(i).getUserId() == userId) {
+                return users.get(i);
+            }
+        }
+        return null;
+    }
+
+    public static int getUserId(String username) {
+        ArrayList<User> users = UsersDatabase.readUsers();
+        for (int i = 0; i < users.size(); i++) {
+            if (users.get(i).getUsername() == username) {
+                return users.get(i).getUserId();
+            }
+        }
+        return 0;
     }
 }
