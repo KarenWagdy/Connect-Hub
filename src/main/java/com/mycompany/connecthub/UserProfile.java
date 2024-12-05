@@ -18,7 +18,6 @@ import javax.swing.JOptionPane;
  */
 public class UserProfile extends javax.swing.JFrame {
 
-    User user;
     String Bio;
 
 //ArrayList<User> friends=UsersDatabase.readUsers();
@@ -28,17 +27,17 @@ public class UserProfile extends javax.swing.JFrame {
     ArrayList<Post> p ;
     ArrayList<User> friends;
 
-    public UserProfile(User user) {
+    public UserProfile() {
         initComponents();
-        this.user = user;
-        p= PostDatabase.readPostsforUser(user.getUserId());
-        friends=FriendDatabase.readFriends(user.getUserId());
+        //get lists of posts and friends of current user
+        p= PostDatabase.readPostsforUser(Functionalities.currentUser.getUserId());
+        friends=FriendDatabase.readFriends(Functionalities.currentUser.getUserId());
         LoadPosts();
          LoadFriends();
     }
 
     public void LoadPosts() {
-
+        //view posts in postsList
         DefaultListModel<String> listModel = new DefaultListModel<>();
         
         for (Post post : p) {
@@ -48,12 +47,13 @@ public class UserProfile extends javax.swing.JFrame {
     }
 
     public void LoadFriends() {
+        //view friends in FriendList
         DefaultListModel<String> listModel = new DefaultListModel<>();
 
-        for (Post post : p) {
-            listModel.addElement(post.getContent());
+        for (User friend : friends) {
+            listModel.addElement(friend.getUsername());
         }
-        postsList.setModel(listModel);
+        FriendsList.setModel(listModel);
 
     }
 
@@ -82,11 +82,13 @@ public class UserProfile extends javax.swing.JFrame {
         postsList = new javax.swing.JList<>();
         changeBio = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("user profile");
 
         coverJLabel.setBackground(new java.awt.Color(255, 255, 255));
         coverJLabel.setOpaque(true);
 
+        jButton1.setBackground(new java.awt.Color(51, 153, 255));
         jButton1.setText("Change Password");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -94,6 +96,7 @@ public class UserProfile extends javax.swing.JFrame {
             }
         });
 
+        jButton2.setBackground(new java.awt.Color(51, 153, 255));
         jButton2.setText("Change Profile Picture");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -101,6 +104,7 @@ public class UserProfile extends javax.swing.JFrame {
             }
         });
 
+        jButton3.setBackground(new java.awt.Color(51, 153, 255));
         jButton3.setText("Change Cover Photo");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -123,6 +127,7 @@ public class UserProfile extends javax.swing.JFrame {
 
         jScrollPane1.setViewportView(FriendsList);
 
+        viewPost.setBackground(new java.awt.Color(51, 153, 255));
         viewPost.setText("View Post");
         viewPost.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -134,6 +139,7 @@ public class UserProfile extends javax.swing.JFrame {
 
         jScrollPane2.setViewportView(postsList);
 
+        changeBio.setBackground(new java.awt.Color(51, 153, 255));
         changeBio.setText("change Bio");
         changeBio.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -235,31 +241,28 @@ public class UserProfile extends javax.swing.JFrame {
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
-
+        
+        //change coverphoto of current user
         JFileChooser file = new JFileChooser();
         int value=file.showOpenDialog(this);
         if(value==JFileChooser.APPROVE_OPTION)
         { File f = file.getSelectedFile();
-        // ImageIcon coverPicture = new ImageIcon(f.getAbsolutePath());
-        //Image coverPic = coverPicture.getImage();
-        //Image scaledCoverPicture = coverPic.getScaledInstance(700, 200, Image.SCALE_SMOOTH);
-        //ImageIcon scaledIcon = new ImageIcon(scaledCoverPicture);
+        
         ProfileEditing p = new ProfileEditing();
-        ImageIcon scaledIcon = p.changeCoverPhoto(f, user);
+        ImageIcon scaledIcon = p.changeCoverPhoto(f, Functionalities.currentUser);
 
-        // coverJLabel.setIcon(scaledIcon); 
         coverJLabel.setIcon(scaledIcon);
         }
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
+        //change password of currentuser
         String password = JOptionPane.showInputDialog(this, "change password");
-        // ProfileEditing p=new ProfileEditing();
-
+     
         ProfileEditing pf = new ProfileEditing();
         if (Functionalities.isValidPassword(password)) {
-            pf.changePassword(password, user);
+            pf.changePassword(password, Functionalities.currentUser);
         } else {
             JOptionPane.showMessageDialog(this, "Please Enter a valid password", "Warning", JOptionPane.WARNING_MESSAGE);
         }
@@ -268,29 +271,19 @@ public class UserProfile extends javax.swing.JFrame {
 
     private void bioTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bioTextActionPerformed
         // TODO add your handling code here:
-       /* if(Bio==null)
-        {
-           bioText.setText("j"); 
-        }
-        else{
-         bioText.setText(Bio);
-        }*/
-
+     
     }//GEN-LAST:event_bioTextActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
-
+         //change profile picture of current user
         JFileChooser file = new JFileChooser();
         int value=file.showOpenDialog(this);
         if(value==JFileChooser.APPROVE_OPTION)
         { File f = file.getSelectedFile();
-        // ImageIcon profilePicture = new ImageIcon(f.getAbsolutePath());
-        //Image pfp = profilePicture.getImage();
-        //Image scaledPFP = pfp.getScaledInstance(300, 200, Image.SCALE_SMOOTH);
-        //ImageIcon scaledIcon = new ImageIcon(scaledPFP);
+       
         ProfileEditing p = new ProfileEditing();
-        ImageIcon scaledIcon = p.changePFP(f, user);
+        ImageIcon scaledIcon = p.changePFP(f, Functionalities.currentUser);
         pfpJLabel.setIcon(scaledIcon);
         }
 
@@ -298,6 +291,7 @@ public class UserProfile extends javax.swing.JFrame {
 
     private void viewPostActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewPostActionPerformed
         // TODO add your handling code here:
+        //view post details of a choosen post
         int index = postsList.getSelectedIndex();
         if (index == -1) {
             JOptionPane.showMessageDialog(this, "Choose post");
@@ -312,9 +306,10 @@ public class UserProfile extends javax.swing.JFrame {
 
     private void changeBioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changeBioActionPerformed
         // TODO add your handling code here:
+        //change bio of current user
          Bio= JOptionPane.showInputDialog("Enter Bio.");
         ProfileEditing p = new ProfileEditing();
-        p.changeBio(Bio, user);
+        p.changeBio(Bio, Functionalities.currentUser);
         bioText.setText(Bio);
         
         

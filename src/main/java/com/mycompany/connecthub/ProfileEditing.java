@@ -79,7 +79,7 @@ public class ProfileEditing {
                 String imagePath=post.getString("image");
                 LocalDateTime timeStamp = LocalDateTime.parse(post.getString("timestamp"), formatter);
                
-                postsArray.add(new Post(contentId, authortId, content,imagePath,timeStamp));
+                postsArray.add(new Post( authortId, content,imagePath,timeStamp));
                 
             }
 

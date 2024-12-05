@@ -4,6 +4,8 @@
  */
 package com.mycompany.connecthub;
 
+import java.awt.Image;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -11,6 +13,7 @@ import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import javax.swing.ImageIcon;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -39,7 +42,7 @@ public class PostDatabase {
         return PD;
     }
     
-    
+    //read posts found in post.json
     public static ArrayList<Post> readPosts() 
     {
         postsArray.clear();
@@ -49,7 +52,7 @@ public class PostDatabase {
             String jsonLines = new String(Files.readAllBytes(Paths.get("Posts.json")));
             JSONArray Posts = new JSONArray(jsonLines);
 
-            //DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE;
+            
             DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
 
             for (int i = 0; i < Posts.length(); i++) {
@@ -59,8 +62,8 @@ public class PostDatabase {
                 String content=post.getString("content");
                 String imagePath=post.getString("image");
                 LocalDateTime timeStamp = LocalDateTime.parse(post.getString("timestamp"), formatter);
-               
-                postsArray.add(new Post(contentId, authortId, content,imagePath,timeStamp));
+               //add an object of type post to the arraylist
+                postsArray.add(new Post( authortId, content,imagePath,timeStamp));
                 
             }
 
@@ -71,9 +74,10 @@ public class PostDatabase {
     }
     
  
-    
+    //save objects of type post
     public static void savePosts(ArrayList<Post> post) {
         JSONArray postsArray = new JSONArray();
+        //write the attributes of post object in post.json file
         for (Post i : post) {
             JSONObject obj = new JSONObject();
             obj.put("contentId", i.getContentId());
@@ -92,7 +96,7 @@ public class PostDatabase {
             System.out.println("Error");
         }
     }
-    
+    //read all posts for specific user using userId
     public static ArrayList<Post> readPostsforUser(int userId)
     {
        ArrayList<Post> Allposts=readPosts(); 
@@ -106,6 +110,14 @@ public class PostDatabase {
        }
        return userPosts;
     }
-    
-    
+    //method to select an image from specific file and add it to the post
+    public ImageIcon choosePostImage(File f,User u)
+    {
+        ImageIcon postPicture = new ImageIcon(f.getAbsolutePath());
+        Image postPic = postPicture.getImage();
+        Image scaledPostPicture = postPic.getScaledInstance(700, 200, Image.SCALE_SMOOTH);
+        ImageIcon scaledIcon = new ImageIcon(scaledPostPicture);
+      
+        return scaledIcon;
+    }
 }
