@@ -25,8 +25,7 @@ public class NewsFeed extends javax.swing.JFrame {
         stories=StoryDatabase.readStories();
         posts=PostDatabase.readPosts();
         friends=FriendDatabase.readFriends(Functionalities.currentUser.getUserId());
-        //posts=FriendsPosts.getPostsByFriendId();
-        //friends=FriendsPosts.friends;
+      
         LoadFriendsPosts();
         LoadFriends();
         LoadFriendsStories();
@@ -50,9 +49,8 @@ public class NewsFeed extends javax.swing.JFrame {
         DefaultListModel<String> listModel = new DefaultListModel<>();
 
         for (User friend : friends) {
-           //if(FriendDatabase.isFriends(Functionalities.currentUser.getUserId())){
-            listModel.addElement(friend.getUsername());
-            //}
+            listModel.addElement(friend.getUsername()+" ("+ friend.getStatus() + ") ");
+            
         }
         friendsList.setModel(listModel);
 
@@ -212,22 +210,22 @@ public class NewsFeed extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(viewProfileButton)
                         .addGap(30, 30, 30)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 92, Short.MAX_VALUE)
+                        .addComponent(logoutButton, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(183, 183, 183)
-                                .addComponent(manageFriendsButton))
+                                .addGap(175, 175, 175)
+                                .addComponent(jLabel2))
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 92, Short.MAX_VALUE)
-                                .addComponent(logoutButton, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(175, 175, 175)
-                        .addComponent(jLabel2))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(146, 146, 146)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(refreshButton, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(viewStoriesButton))))
+                                .addGap(146, 146, 146)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(refreshButton, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(viewStoriesButton))
+                                .addGap(30, 30, 30)
+                                .addComponent(manageFriendsButton)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addGap(49, 49, 49))
         );
         layout.setVerticalGroup(
@@ -316,33 +314,10 @@ public class NewsFeed extends javax.swing.JFrame {
 
     private void refreshButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshButtonActionPerformed
    
-    /*DefaultListModel<String> model1 = (DefaultListModel<String>) postsList.getModel();
-    DefaultListModel<String> model2 = (DefaultListModel<String>) storiesList.getModel();
-    DefaultListModel<String> model3 = (DefaultListModel<String>) friendsList.getModel();
-    
-    StoryDatabase.deleteStories();
-    
-    if (model1.getSize() > 0) {
-        model1.removeAllElements(); //Clear from postslist
-    } if (model2.getSize() > 0) {
-        model2.removeAllElements(); //Clear from storiesslist
-    }
-    if (model3.getSize() > 0) {
-        model3.removeAllElements(); //Clear from friendslist
-    }
-
-    
-    // Reload posts and stories and friends
-    LoadFriendsPosts();
-    LoadFriendsStories();
-    LoadFriends() ;
-    
-    */
-    
     // Clear current lists
-    ((DefaultListModel<String>) postsList.getModel()).clear();
-    ((DefaultListModel<String>) storiesList.getModel()).clear();
-    ((DefaultListModel<String>) friendsList.getModel()).clear();
+    ((DefaultListModel<String>) postsList.getModel()).removeAllElements();
+    ((DefaultListModel<String>) storiesList.getModel()).removeAllElements();
+    ((DefaultListModel<String>) friendsList.getModel()).removeAllElements();
 
     // Reload posts, stories, and friends
     LoadFriendsPosts();
@@ -365,7 +340,18 @@ public class NewsFeed extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowClosed
 
     private void logoutButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logoutButtonActionPerformed
+         ArrayList<User> userStatus = UsersDatabase.readUsers();
+    
         Functionalities.currentUser.setStatus("offline");
+    for (int i = 0; i < userStatus.size(); i++) {
+        if (userStatus.get(i).getUserId()==(Functionalities.currentUser.getUserId())) {
+            userStatus.set(i, Functionalities.currentUser); 
+            break;
+        }
+    }
+
+    UsersDatabase.saveUsers(userStatus);
+       
         this.setVisible(false);
         SignupLoginWindow slw = SignupLoginWindow.getInstance();
         slw.setVisible(true);

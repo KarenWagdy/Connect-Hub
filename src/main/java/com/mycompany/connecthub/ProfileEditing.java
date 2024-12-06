@@ -15,69 +15,93 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class ProfileEditing {
 
-    /*public ImageIcon changePFP(File f) {
-        ImageIcon profilePicture = new ImageIcon(f.getAbsolutePath());
-        Image pfp = profilePicture.getImage();
-        Image scaledPFP = pfp.getScaledInstance(300, 200, Image.SCALE_SMOOTH);
-        ImageIcon scaledIcon = new ImageIcon(scaledPFP);
-        
-        ArrayList<User> pfpChange = UsersDatabase.readUsers();
-        Functionalities.currentUser.setProfilePicture(f.getAbsolutePath());
-        
-        
-        UsersDatabase.saveUsers(pfpChange);
-        
-        return scaledIcon;
-    }*/
-    
     public ImageIcon changePFP(File f) {
     ImageIcon profilePicture = new ImageIcon(f.getAbsolutePath());
     Image pfp = profilePicture.getImage();
     Image scaledPFP = pfp.getScaledInstance(300, 200, Image.SCALE_SMOOTH);
     ImageIcon scaledIcon = new ImageIcon(scaledPFP);
     
-    // Read the users from the JSON file
     ArrayList<User> pfpChange = UsersDatabase.readUsers();
     
-    // Find and update the current user's profile picture
     for (User user : pfpChange) {
         if (user.getUserId() == Functionalities.currentUser.getUserId()) {
             user.setProfilePicture(f.getAbsolutePath());
-            break; // Exit the loop once the user is updated
+            break; 
         }
     }
     
-    // Save the updated users back to the JSON file
     UsersDatabase.saveUsers(pfpChange);
     
     return scaledIcon;
 }
 
     public ImageIcon changeCoverPhoto(File f) {
-        ImageIcon coverPicture = new ImageIcon(f.getAbsolutePath());
-        Image coverPic = coverPicture.getImage();
-        Image scaledCoverPicture = coverPic.getScaledInstance(700, 200, Image.SCALE_SMOOTH);
-        ImageIcon scaledIcon = new ImageIcon(scaledCoverPicture);
-        Functionalities.currentUser.setCoverPicture(f.getAbsolutePath());
-        return scaledIcon;
+   
+      ImageIcon coverPicture = new ImageIcon(f.getAbsolutePath());
+    Image cover = coverPicture.getImage();
+    Image scaledCF = cover.getScaledInstance(300, 200, Image.SCALE_SMOOTH);
+    ImageIcon scaledIcon = new ImageIcon(scaledCF);
+    
+    ArrayList<User> coverChange = UsersDatabase.readUsers();
+    
+    for (User user : coverChange) {
+        if (user.getUserId() == Functionalities.currentUser.getUserId()) {
+            user.setCoverPicture(f.getAbsolutePath());
+            break;
+        }
+    }
+    
+    UsersDatabase.saveUsers(coverChange);
+    
+    return scaledIcon;
     }
 
     public void changePassword(String password) {
+        try {
+            Functionalities.currentUser.setPassword(Functionalities.passwordHashing(password));
+        } catch (NoSuchAlgorithmException ex) {
+            ex.printStackTrace();
+        }
+    
+    ArrayList<User> userBio = UsersDatabase.readUsers();
 
-        Functionalities.currentUser.setPassword(password);
+    for (int i = 0; i < userBio.size(); i++) {
+        if (userBio.get(i).getUserId()==(Functionalities.currentUser.getUserId())) {
+            userBio.set(i, Functionalities.currentUser);  
+            break;
+        }
+    }
+
+    UsersDatabase.saveUsers(userBio);
+
     }
 
     public void changeBio(String bio) {
-        Functionalities.currentUser.setBio(bio);
+       
+ ArrayList<User> userBio = UsersDatabase.readUsers();
+    
+    Functionalities.currentUser.setBio(bio);
+
+    for (int i = 0; i < userBio.size(); i++) {
+        if (userBio.get(i).getUserId()==(Functionalities.currentUser.getUserId())) {
+            userBio.set(i, Functionalities.currentUser); 
+            break;
+        }
+    }
+
+    UsersDatabase.saveUsers(userBio);
     }
 
     static ArrayList<Post> postsArray = new ArrayList<>();
@@ -90,7 +114,6 @@ public class ProfileEditing {
             String jsonLines = new String(Files.readAllBytes(Paths.get("Posts.json")));
             JSONArray Posts = new JSONArray(jsonLines);
 
-            //DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE;
             DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
 
             for (int i = 0; i < Posts.length(); i++) {
@@ -143,27 +166,4 @@ public class ProfileEditing {
         return userPosts;
     }
 
-    /* public static void main(String args[])
-    {
-        ArrayList<Post> postsArray = new ArrayList<>();
-       Post p1=  new Post(1,2,"HII","IMAGE 1.PNG",LocalDateTime.now());
-       Post  p2=new Post(3,4,"hello","image 2.png");
-        postsArray.add(p1);
-        postsArray.add(p2);
-        savePosts(postsArray);
-        ArrayList<Post> p=readPostsforUser(5);
-        
-        for(int i=0;i<p.size();i++)
-        {
-            
-            System.out.println(p.get(i).getContentId()+","+p.get(i).getAuthorId()+","
-                    +p.get(i).getContent()+","+p.get(i).getImagePath()+","+p.get(i).getTimeStamp());
-            
-        }
-        
-        
-        
-        
-        
-    }*/
 }

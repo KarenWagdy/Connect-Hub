@@ -4,6 +4,7 @@
  */
 package com.mycompany.connecthub;
 
+import java.awt.Image;
 import java.io.File;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -20,13 +21,13 @@ public class UserProfile extends javax.swing.JFrame {
 
     String Bio;
 
-//ArrayList<User> friends=UsersDatabase.readUsers();
     /**
      * Creates new form UserProfile
      */   
     ArrayList<Post> p ;
     ArrayList<User> friends;
     ArrayList<Story> stories;
+    ArrayList<User> users;
 
     public UserProfile() {
         initComponents();
@@ -34,9 +35,13 @@ public class UserProfile extends javax.swing.JFrame {
         p= PostDatabase.readPostsforUser(Functionalities.currentUser.getUserId());
         friends=FriendDatabase.readFriends(Functionalities.currentUser.getUserId());
         stories=StoryDatabase.readStoriesforUser(Functionalities.currentUser.getUserId());
+        users=UsersDatabase.readUsers();
         LoadPosts();
          LoadFriends();
          LoadStories();
+         Loadpfp();
+         LoadcoverPhoto();
+         LoadBio();
     }
 
     public void LoadPosts() {
@@ -69,6 +74,68 @@ public class UserProfile extends javax.swing.JFrame {
         }
         storiesList.setModel(listModel);
     }
+     
+     public void Loadpfp()
+     {
+         String filepath=null;
+         for(int i=0;i<users.size();i++)
+         {
+             if(users.get(i).getUserId()==Functionalities.currentUser.getUserId())
+             {
+                  filepath=users.get(i).getProfilePicture();
+             }
+         }
+         
+         if(filepath!=null)
+         {
+           ImageIcon profilePicture = new ImageIcon(filepath);
+    Image pfp = profilePicture.getImage();
+    Image scaledPFP = pfp.getScaledInstance(300, 200, Image.SCALE_SMOOTH);
+    ImageIcon scaledIcon = new ImageIcon(scaledPFP);
+    pfpJLabel.setIcon(scaledIcon);
+         }
+         
+         
+     }
+     public void LoadcoverPhoto()
+     {
+         String filepath=null;
+         for(int i=0;i<users.size();i++)
+         {
+             if(users.get(i).getUserId()==Functionalities.currentUser.getUserId())
+             {
+                  filepath=users.get(i).getCoverPicture();
+             }
+         }
+         
+         if(filepath!=null)
+         {
+           ImageIcon coverPhoto = new ImageIcon(filepath);
+    Image cover = coverPhoto.getImage();
+    Image scaledPFP = cover.getScaledInstance(300, 200, Image.SCALE_SMOOTH);
+    ImageIcon scaledIcon = new ImageIcon(scaledPFP);
+    coverJLabel.setIcon(scaledIcon);
+         }
+         
+         
+     }
+     
+     public void LoadBio()
+     {
+         String newBio=null;
+         for(int i=0;i<users.size();i++)
+         {
+             if(users.get(i).getUserId()==Functionalities.currentUser.getUserId())
+             {
+                  newBio=users.get(i).getBio();
+             }
+         }
+         
+         bioText.setText(newBio);
+         
+         
+     }
+     
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -81,8 +148,8 @@ public class UserProfile extends javax.swing.JFrame {
 
         coverJLabel = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        profilepicButton = new javax.swing.JButton();
+        coverpicButton = new javax.swing.JButton();
         pfpJLabel = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         bioText = new javax.swing.JTextField();
@@ -118,19 +185,19 @@ public class UserProfile extends javax.swing.JFrame {
             }
         });
 
-        jButton2.setBackground(new java.awt.Color(51, 153, 255));
-        jButton2.setText("Change Profile Picture");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        profilepicButton.setBackground(new java.awt.Color(51, 153, 255));
+        profilepicButton.setText("Change Profile Picture");
+        profilepicButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                profilepicButtonActionPerformed(evt);
             }
         });
 
-        jButton3.setBackground(new java.awt.Color(51, 153, 255));
-        jButton3.setText("Change Cover Photo");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        coverpicButton.setBackground(new java.awt.Color(51, 153, 255));
+        coverpicButton.setText("Change Cover Photo");
+        coverpicButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                coverpicButtonActionPerformed(evt);
             }
         });
 
@@ -191,7 +258,7 @@ public class UserProfile extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(43, 43, 43)
-                                .addComponent(jButton2))
+                                .addComponent(profilepicButton))
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(31, 31, 31)
                                 .addComponent(pfpJLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -199,7 +266,7 @@ public class UserProfile extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(coverJLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(jButton3)
+                                .addComponent(coverpicButton)
                                 .addGap(50, 50, 50))))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addGap(15, 15, 15)
@@ -249,8 +316,8 @@ public class UserProfile extends javax.swing.JFrame {
                     .addComponent(pfpJLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton2)
-                    .addComponent(jButton3))
+                    .addComponent(profilepicButton)
+                    .addComponent(coverpicButton))
                 .addGap(31, 31, 31)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(bioText, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -285,8 +352,7 @@ public class UserProfile extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
+    private void coverpicButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_coverpicButtonActionPerformed
         
         //change coverphoto of current user
         JFileChooser file = new JFileChooser();
@@ -299,10 +365,9 @@ public class UserProfile extends javax.swing.JFrame {
 
         coverJLabel.setIcon(scaledIcon);
         }
-    }//GEN-LAST:event_jButton3ActionPerformed
+    }//GEN-LAST:event_coverpicButtonActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
         //change password of currentuser
         String password = JOptionPane.showInputDialog(this, "change password");
      
@@ -320,7 +385,7 @@ public class UserProfile extends javax.swing.JFrame {
      
     }//GEN-LAST:event_bioTextActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void profilepicButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_profilepicButtonActionPerformed
         // TODO add your handling code here:
          //change profile picture of current user
         JFileChooser file = new JFileChooser();
@@ -333,7 +398,7 @@ public class UserProfile extends javax.swing.JFrame {
         pfpJLabel.setIcon(scaledIcon);
         }
 
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_profilepicButtonActionPerformed
 
     private void viewPostActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewPostActionPerformed
         // TODO add your handling code here:
@@ -388,9 +453,8 @@ public class UserProfile extends javax.swing.JFrame {
     private javax.swing.JTextField bioText;
     private javax.swing.JButton changeBio;
     private javax.swing.JLabel coverJLabel;
+    private javax.swing.JButton coverpicButton;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -400,6 +464,7 @@ public class UserProfile extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JLabel pfpJLabel;
     private javax.swing.JList<String> postsList;
+    private javax.swing.JButton profilepicButton;
     private javax.swing.JList<String> storiesList;
     private javax.swing.JButton viewPost;
     private javax.swing.JButton viewStories;
