@@ -150,6 +150,25 @@ public class FriendDatabase {
     }
 }
 
-    
+    public static boolean isFriend(int otherUserId) {
+    try {
+        String jsonLines = new String(Files.readAllBytes(Paths.get("Friends.json")));
+        JSONArray friends = new JSONArray(jsonLines);
 
+        for (int i = 0; i < friends.length(); i++) {
+            JSONObject friend = friends.getJSONObject(i);
+            int user1Id = friend.getInt("user1Id");
+            int user2Id = friend.getInt("user2Id");
+
+            if ((user1Id == Functionalities.currentUser.getUserId() && user2Id == otherUserId) ||
+                (user2Id == Functionalities.currentUser.getUserId() && user1Id == otherUserId)) {
+                return true; 
+            }
+        }
+    } catch (IOException e) {
+        e.printStackTrace();
+        System.out.println("Error while checking friendship.");
+    }
+    return false; 
+}
 }
