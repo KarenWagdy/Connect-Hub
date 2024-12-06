@@ -43,14 +43,17 @@ public class LoginWindow extends javax.swing.JFrame {
         });
 
         jLabel1.setBackground(new java.awt.Color(0, 153, 255));
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("Email");
         jLabel1.setOpaque(true);
 
         jLabel2.setBackground(new java.awt.Color(51, 153, 255));
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("Password");
         jLabel2.setOpaque(true);
 
         loginButton.setBackground(new java.awt.Color(51, 153, 255));
+        loginButton.setForeground(new java.awt.Color(255, 255, 255));
         loginButton.setText("Login");
         loginButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
