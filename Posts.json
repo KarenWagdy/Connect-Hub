@@ -1,16 +1,16 @@
 [
   {
-    "image": "post.png",
+    "image": "D:\\My Data\\My Documents\\NetBeansProjects\\Connect-Hub1\\post.png",
     "contentId": 0,
-    "authorId": 2,
-    "content": "HII",
-    "timestamp": "2024-12-05T22:32:32.678472100"
+    "authorId": 3,
+    "content": "im nour",
+    "timestamp": "2024-12-06T11:26:26.789896"
   },
   {
-    "image": "image 2.png",
-    "contentId": 0,
-    "authorId": 2,
-    "content": "hello",
-    "timestamp": "2024-12-05T22:32:32.680459600"
+    "image": "D:\\My Data\\My Documents\\NetBeansProjects\\Connect-Hub1\\post.png",
+    "contentId": 2,
+    "authorId": 3,
+    "content": "im nour",
+    "timestamp": "2024-12-06T11:27:08.522810700"
   }
 ]

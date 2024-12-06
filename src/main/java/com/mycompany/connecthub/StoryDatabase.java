@@ -4,6 +4,7 @@
  */
 package com.mycompany.connecthub;
 
+import static com.mycompany.connecthub.PostDatabase.readPosts;
 import java.awt.Image;
 import java.io.File;
 import java.io.FileWriter;
@@ -118,5 +119,18 @@ public class StoryDatabase {
         //u.setCoverPhoto(f.getAbsoluteFile());
         
         return scaledIcon;
+    }
+    public static ArrayList<Story> readStoriesforUser(int userId)
+    {
+       ArrayList<Story> Allstories=readStories(); 
+       ArrayList<Story>userStories=new ArrayList<>();
+       for(Story story:Allstories)
+       {
+           if(story.getAuthorId()==userId)
+           {
+               userStories.add(story);
+           }
+       }
+       return userStories;
     }
 }

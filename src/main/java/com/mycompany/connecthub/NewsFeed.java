@@ -24,10 +24,11 @@ public class NewsFeed extends javax.swing.JFrame {
         initComponents();
         stories=StoryDatabase.readStories();
         posts=PostDatabase.readPosts();
+        friends=FriendDatabase.readFriends(Functionalities.currentUser.getUserId());
         //posts=FriendsPosts.getPostsByFriendId();
         //friends=FriendsPosts.friends;
         LoadFriendsPosts();
-       // LoadFriends();
+        LoadFriends();
         LoadFriendsStories();
         
     }
@@ -41,7 +42,7 @@ public class NewsFeed extends javax.swing.JFrame {
         }
         postsList.setModel(listModel);
     }
-     /* public void LoadFriends() {
+      public void LoadFriends() {
         //view friends in FriendList
         DefaultListModel<String> listModel = new DefaultListModel<>();
 
@@ -50,8 +51,12 @@ public class NewsFeed extends javax.swing.JFrame {
         }
         friendsList.setModel(listModel);
 
-    }*/
+    }
     public void LoadFriendsStories() {
+        StoryDatabase.deleteStories();
+
+    // Refresh the stories list
+        stories = StoryDatabase.readStories();
         //view posts in postsList
         DefaultListModel<String> listModel = new DefaultListModel<>();
         StoryDatabase.deleteStories();
@@ -83,10 +88,12 @@ public class NewsFeed extends javax.swing.JFrame {
         viewStoriesButton = new javax.swing.JButton();
         viewProfileButton = new javax.swing.JButton();
         deleteButton = new javax.swing.JButton();
+        viewFriends = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("NewsFeed");
 
+        createPostButton.setBackground(new java.awt.Color(51, 153, 255));
         createPostButton.setText("Create Post");
         createPostButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -94,6 +101,7 @@ public class NewsFeed extends javax.swing.JFrame {
             }
         });
 
+        createStoriesButton.setBackground(new java.awt.Color(51, 153, 255));
         createStoriesButton.setText("Create Story");
         createStoriesButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -113,6 +121,7 @@ public class NewsFeed extends javax.swing.JFrame {
 
         jLabel3.setText("Friends List");
 
+        refreshButton.setBackground(new java.awt.Color(51, 153, 255));
         refreshButton.setText("Refresh");
         refreshButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -120,6 +129,7 @@ public class NewsFeed extends javax.swing.JFrame {
             }
         });
 
+        viewPosts.setBackground(new java.awt.Color(51, 153, 255));
         viewPosts.setText("View Posts");
         viewPosts.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -127,6 +137,7 @@ public class NewsFeed extends javax.swing.JFrame {
             }
         });
 
+        viewStoriesButton.setBackground(new java.awt.Color(51, 153, 255));
         viewStoriesButton.setText("View Stories");
         viewStoriesButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -134,6 +145,7 @@ public class NewsFeed extends javax.swing.JFrame {
             }
         });
 
+        viewProfileButton.setBackground(new java.awt.Color(51, 153, 255));
         viewProfileButton.setText("View profile");
         viewProfileButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -141,12 +153,16 @@ public class NewsFeed extends javax.swing.JFrame {
             }
         });
 
+        deleteButton.setBackground(new java.awt.Color(51, 153, 255));
         deleteButton.setText("Delete");
         deleteButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 deleteButtonActionPerformed(evt);
             }
         });
+
+        viewFriends.setBackground(new java.awt.Color(51, 153, 255));
+        viewFriends.setText("View Friends");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -157,43 +173,47 @@ public class NewsFeed extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(createStoriesButton, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(createPostButton)
-                                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(26, 26, 26)
+                                .addComponent(jLabel3)
+                                .addGap(86, 86, 86)
+                                .addComponent(jLabel1))
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(19, 19, 19)
-                                .addComponent(jLabel3)))
+                                .addGap(16, 16, 16)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(viewFriends)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(viewPosts))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(48, 48, 48)
+                                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(createPostButton)
+                        .addGap(18, 18, 18)
+                        .addComponent(createStoriesButton, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(viewProfileButton)
+                        .addGap(30, 30, 30)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(42, 42, 42)
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(197, 197, 197))
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(60, 60, 60)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(viewProfileButton)
-                                    .addComponent(viewPosts)))))
+                                .addComponent(deleteButton)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(refreshButton)
+                                .addGap(153, 153, 153))))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(171, 171, 171)
-                        .addComponent(jLabel1)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 153, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                            .addComponent(jLabel2)
-                            .addGap(112, 112, 112))
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(66, 66, 66))
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(viewStoriesButton)
-                            .addContainerGap()))
+                        .addGap(154, 154, 154)
+                        .addComponent(viewStoriesButton))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(deleteButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(refreshButton)
-                        .addGap(41, 41, 41))))
+                        .addGap(175, 175, 175)
+                        .addComponent(jLabel2))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -201,36 +221,30 @@ public class NewsFeed extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jLabel1))
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel3))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(2, 2, 2)
-                        .addComponent(createPostButton)
-                        .addGap(18, 18, 18)
-                        .addComponent(createStoriesButton)
-                        .addGap(25, 25, 25)
-                        .addComponent(jLabel3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(viewFriends)
+                            .addComponent(viewPosts))
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(viewPosts))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(14, 14, 14)
-                                .addComponent(viewStoriesButton)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
-                        .addComponent(viewProfileButton)
-                        .addGap(9, 9, 9)
+                        .addComponent(viewStoriesButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(refreshButton)
-                            .addComponent(deleteButton))
+                            .addComponent(deleteButton)
+                            .addComponent(viewProfileButton)
+                            .addComponent(createStoriesButton)
+                            .addComponent(createPostButton))
                         .addGap(67, 67, 67))))
         );
 
@@ -281,12 +295,15 @@ public class NewsFeed extends javax.swing.JFrame {
 
     private void refreshButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshButtonActionPerformed
     DefaultListModel<String> model1 = (DefaultListModel<String>) postsList.getModel();
-    DefaultListModel<String> model2 = (DefaultListModel<String>) storiesList.getModel();   
+    DefaultListModel<String> model2 = (DefaultListModel<String>) storiesList.getModel();
+    DefaultListModel<String> model3 = (DefaultListModel<String>) friendsList.getModel();
    
     
-    // Reload posts and stories
+    // Reload posts and stories and friends
     LoadFriendsPosts();
     LoadFriendsStories();
+    LoadFriends() ;
+    
     
 
     
@@ -356,6 +373,7 @@ public class NewsFeed extends javax.swing.JFrame {
     private javax.swing.JList<String> postsList;
     private javax.swing.JButton refreshButton;
     private javax.swing.JList<String> storiesList;
+    private javax.swing.JButton viewFriends;
     private javax.swing.JButton viewPosts;
     private javax.swing.JButton viewProfileButton;
     private javax.swing.JButton viewStoriesButton;

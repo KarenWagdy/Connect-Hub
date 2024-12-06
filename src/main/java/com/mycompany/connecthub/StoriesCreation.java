@@ -146,6 +146,8 @@ public class StoriesCreation extends javax.swing.JFrame {
         ArrayList<Story> stories = StoryDatabase.readStories();
         stories.add(s);
         StoryDatabase.saveStories(stories);
+        NewsFeed newsfeed=new NewsFeed();
+       newsfeed.setVisible(true);
 
     }//GEN-LAST:event_storyButtonActionPerformed
 
