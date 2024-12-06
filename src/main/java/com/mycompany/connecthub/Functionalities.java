@@ -118,10 +118,8 @@ public class Functionalities {
             if (u.getEmail().equalsIgnoreCase(email)) {
                 try {
                     if (u.getPassword().equals(passwordHashing(password))) {
-                        System.out.println("In func "+ passwordHashing(password));
                         u.setStatus("Online");
                         currentUser = u;
-                        System.out.println(currentUser.getUsername());
                         UsersDatabase.saveUsers(loginUsers);
                         return 1;  // success login 
                     }

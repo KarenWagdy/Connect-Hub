@@ -124,5 +124,32 @@ public class FriendDatabase {
 
     }
     
+    public static void removeFriendFromFile(int userId) {
+    try {
+        String jsonLines = new String(Files.readAllBytes(Paths.get("Friends.json")));
+        JSONArray friends = new JSONArray(jsonLines);
+
+        JSONArray updatedFriends = new JSONArray();
+
+        for (int i = 0; i < friends.length(); i++) {
+            JSONObject friend = friends.getJSONObject(i);
+            int user1Id = friend.getInt("user1Id");
+            int user2Id = friend.getInt("user2Id");
+
+            if (!((user1Id == Functionalities.currentUser.getUserId() && user2Id == userId) ||
+                  (user2Id == Functionalities.currentUser.getUserId() && user1Id == userId))) {
+                updatedFriends.put(friend);
+            }
+        }
+
+        Files.write(Paths.get("Friends.json"), updatedFriends.toString(2).getBytes()); // Pretty-print with indentation
+
+    } catch (IOException e) {
+        e.printStackTrace();
+        System.out.println("Error while removing friend.");
+    }
+}
+
+    
 
 }
