@@ -18,18 +18,23 @@ public class FriendRequestWindow extends javax.swing.JFrame {
      * Creates new form FriendRequestWindow
      */
     ArrayList<User> requests;
+    ArrayList<User> users;
+    ArrayList<User> friends;
 
     public FriendRequestWindow() {
         initComponents();
         requests = FriendRequestDatabase.readFriendRequests(Functionalities.currentUser.getUserId());
         loadFriendRequests();
+        friends=FriendDatabase.readFriends(Functionalities.currentUser.getUserId());
+        loadFriends();
+        
 
     }
 
-    ArrayList<User> users;
-
     DefaultListModel<String> listModel1;
     DefaultListModel<String> listModel2;
+    DefaultListModel<String> listModel3;
+
 
     public void loadAllUsers() {
         listModel1 = new DefaultListModel<>();
@@ -53,6 +58,16 @@ public class FriendRequestWindow extends javax.swing.JFrame {
         DefaultListModel<String> model = new DefaultListModel<>();
 
     }
+     public void loadFriends() {
+        DefaultListModel<String> model = new DefaultListModel<>();
+
+        for (User user : friends) {
+            model.addElement(user.getUsername());
+        }
+
+        allFriends.setModel(model);
+    }
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -78,11 +93,11 @@ public class FriendRequestWindow extends javax.swing.JFrame {
         jList3 = new javax.swing.JList<>();
         jLabel4 = new javax.swing.JLabel();
         jScrollPane4 = new javax.swing.JScrollPane();
-        allFreinds = new javax.swing.JList<>();
-        jButton4 = new javax.swing.JButton();
+        allFriends = new javax.swing.JList<>();
+        blockButton = new javax.swing.JButton();
         searchButton = new javax.swing.JButton();
         rejectButton = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
+        removeButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Friend Management");
@@ -127,12 +142,12 @@ public class FriendRequestWindow extends javax.swing.JFrame {
 
         jLabel4.setText("Friend List");
 
-        jScrollPane4.setViewportView(allFreinds);
+        jScrollPane4.setViewportView(allFriends);
 
-        jButton4.setText("Block");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
+        blockButton.setText("Block");
+        blockButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
+                blockButtonActionPerformed(evt);
             }
         });
 
@@ -150,7 +165,12 @@ public class FriendRequestWindow extends javax.swing.JFrame {
             }
         });
 
-        jButton5.setText("Remove");
+        removeButton.setText("Remove");
+        removeButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                removeButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -167,13 +187,13 @@ public class FriendRequestWindow extends javax.swing.JFrame {
                         .addGap(74, 74, 74)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jButton5))
+                                .addComponent(blockButton, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(removeButton))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel4)
                                 .addGap(96, 96, 96))
-                            .addComponent(jScrollPane4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jScrollPane4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
@@ -231,8 +251,8 @@ public class FriendRequestWindow extends javax.swing.JFrame {
                         .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(12, 12, 12)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jButton4)
-                            .addComponent(jButton5))
+                            .addComponent(blockButton)
+                            .addComponent(removeButton))
                         .addContainerGap(33, Short.MAX_VALUE))))
         );
 
@@ -240,26 +260,37 @@ public class FriendRequestWindow extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void sendFriendRequestButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sendFriendRequestButtonActionPerformed
-        int index = friendRequestList.getSelectedIndex();
-        if (index == -1) {
-            JOptionPane.showMessageDialog(this, "Choose user", "Error", JOptionPane.ERROR_MESSAGE);
-        } else {
-            User u = users.get(index);
-            FriendRequestDatabase.saveFriendRequest(Functionalities.currentUser.getUserId(), u.getUserId()); //get static user
-            //listModel1 = (DefaultListModel<String>) friendRequestList.getModel();
-            //listModel1.removeElementAt(index);
-            
-            
-            
-  
-        }
+     ArrayList<User> everyone = UsersDatabase.readUsers();
 
+        String selectedRequest = friendRequestList.getSelectedValue();
+        if (selectedRequest != null) {
+            for (User u : everyone) {
+                if (selectedRequest.equals(u.getUsername())) {
+                    FriendRequestDatabase.saveFriendRequest(Functionalities.currentUser.getUserId(), u.getUserId()); //get static user
+                }
+            }
+            listModel1 = (DefaultListModel<String>) friendRequestList.getModel();
+            listModel1.removeElement(selectedRequest);
+        }
     }//GEN-LAST:event_sendFriendRequestButtonActionPerformed
 
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton4ActionPerformed
+    private void blockButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_blockButtonActionPerformed
+        ArrayList<User> everyone = UsersDatabase.readUsers();
+
+        String selectedRequest = allFriends.getSelectedValue();
+        if (selectedRequest != null) {
+            for (User u : everyone) {
+                if (selectedRequest.equals(u.getUsername())) {
+                    FriendRequestManagement.blockUser(u.getUserId());
+                    FriendDatabase.removeFriendFromFile(u.getUserId());
+                }
+            }
+            listModel2 = (DefaultListModel<String>) allFriends.getModel();
+            listModel2.removeElement(selectedRequest);
+        }
+
+    }//GEN-LAST:event_blockButtonActionPerformed
 
     private void searchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchButtonActionPerformed
         users = FriendRequestManagement.search(usernameTextField.getText());
@@ -313,6 +344,23 @@ public class FriendRequestWindow extends javax.swing.JFrame {
         signupLoginWindow.setVisible(true);
     }//GEN-LAST:event_formWindowClosed
 
+    private void removeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeButtonActionPerformed
+        // TODO add your handling code here:
+         ArrayList<User> everyone = UsersDatabase.readUsers();
+
+        String selectedRequest = allFriends.getSelectedValue();
+        if (selectedRequest != null) {
+            for (User u : everyone) {
+                if (selectedRequest.equals(u.getUsername())) {
+                    FriendDatabase.removeFriendFromFile(u.getUserId());
+                }
+            }
+            listModel2 = (DefaultListModel<String>) allFriends.getModel();
+            listModel2.removeElement(selectedRequest);
+        }
+
+    }//GEN-LAST:event_removeButtonActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -350,10 +398,9 @@ public class FriendRequestWindow extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton acceptButton;
-    private javax.swing.JList<String> allFreinds;
+    private javax.swing.JList<String> allFriends;
+    private javax.swing.JButton blockButton;
     private javax.swing.JList<String> friendRequestList;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -365,6 +412,7 @@ public class FriendRequestWindow extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JList<String> manageRequestsList;
     private javax.swing.JButton rejectButton;
+    private javax.swing.JButton removeButton;
     private javax.swing.JButton requestSuggested;
     private javax.swing.JButton searchButton;
     private javax.swing.JButton sendFriendRequestButton;

@@ -31,27 +31,31 @@ public class FriendRequestManagement {
         return result;
     }
 
-    public static void blockUser(int userId, int blockedUserId) {
-        try {
+        
+    public static void blockUser(int blockedUserId) {
+    try {
+        JSONArray blockedUsers = new JSONArray();
+        if (Files.exists(Paths.get("blockedUsers.json"))) {
             String json = new String(Files.readAllBytes(Paths.get("blockedUsers.json")));
-            JSONArray blockedUsers = new JSONArray(json);
-
-            JSONObject newBlock = new JSONObject();
-            newBlock.put("userId", userId);
-            newBlock.put("blockedUserId", blockedUserId);
-            blockedUsers.put(newBlock);
-
-            Files.write(Paths.get("blockedUsers.json"), blockedUsers.toString().getBytes());
-            System.out.println("User blocked!");
-
-        } catch (IOException e) {
-            e.printStackTrace();
+            blockedUsers = new JSONArray(json);
         }
+
+        JSONObject newBlock = new JSONObject();
+        newBlock.put("userId", Functionalities.currentUser.getUserId());
+        newBlock.put("blockedUserId", blockedUserId);
+
+        blockedUsers.put(newBlock);
+
+        Files.write(Paths.get("blockedUsers.json"), blockedUsers.toString(2).getBytes()); // Pretty-print with indentation
+
+    } catch (IOException e) {
+        e.printStackTrace();
     }
+}
 
 
-    
-public static void acceptFriendRequest(int senderId, int receiverId) {
+
+    public static void acceptFriendRequest(int senderId, int receiverId) {
     try {
         String friendRequestJson = new String(Files.readAllBytes(Paths.get("friendRequest.json")));
         JSONArray friendRequests = new JSONArray(friendRequestJson);
