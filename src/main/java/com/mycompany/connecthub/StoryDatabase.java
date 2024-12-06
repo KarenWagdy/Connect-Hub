@@ -102,8 +102,7 @@ public class StoryDatabase {
         ArrayList<Story> updated = new ArrayList<>();
         for (Story s : stories) {
             Duration duration = Duration.between(s.getTimeStamp(), LocalDateTime.now());
-            long hrs = duration.toHours();
-            if (hrs < 24) {
+            if (duration.toHours() < 24) {
                 updated.add(s);
             }
         }

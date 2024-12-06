@@ -12,26 +12,30 @@ import javax.swing.ImageIcon;
  * @author Alex
  */
 public class ViewStories extends javax.swing.JFrame {
-Story s;
+
+    Story s;
+
     /**
      * Creates new form ViewStories
      */
     public ViewStories(Story s) {
         initComponents();
-        this.s=s;
+        this.s = s;
         showStory();
     }
-     public  void showStory(){
+
+    public void showStory() {
         viewContent.setText(s.getContent());
         viewDate.setText(s.getTimeStamp().toString());
-        ImageIcon image=new ImageIcon(s.getImagePath());
-        Image img=image.getImage();
+        ImageIcon image = new ImageIcon(s.getImagePath());
+        Image img = image.getImage();
         Image scaledImage = img.getScaledInstance(300, 200, Image.SCALE_SMOOTH);
         ImageIcon scaledIcon = new ImageIcon(scaledImage);
-        viewPhoto.setIcon(scaledIcon); 
-       // StoryDatabase sd = null;
+        viewPhoto.setIcon(scaledIcon);
+        // StoryDatabase sd = null;
         //sd.deleteStories();
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -49,6 +53,11 @@ Story s;
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("View Stories");
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                formWindowClosed(evt);
+            }
+        });
 
         jLabel1.setText("Content");
 
@@ -101,10 +110,13 @@ Story s;
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
+        NewsFeed newsfeed = new NewsFeed();
+        newsfeed.setVisible(true);    }//GEN-LAST:event_formWindowClosed
+
     /**
      * @param args the command line arguments
      */
-   
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;

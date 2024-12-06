@@ -7,7 +7,7 @@ package com.mycompany.connecthub;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
 import java.util.ArrayList;
-
+import javax.swing.ImageIcon;
 
 /**
  *
@@ -21,8 +21,35 @@ public class User {
     private String password;
     private LocalDate dateOfBirth;
     private String status;
+    private String profilePicture;
+    private String coverPicture;
+    private String bio;
 
-    public User(String email, String username, String password, LocalDate dateOfBirth, boolean isHashed) {
+    public String getProfilePicture() {
+        return profilePicture;
+    }
+
+    public void setProfilePicture(String profilePicture) {
+        this.profilePicture = profilePicture;
+    }
+
+    public String getCoverPicture() {
+        return coverPicture;
+    }
+
+    public void setCoverPicture(String coverPicture) {
+        this.coverPicture = coverPicture;
+    }
+
+    public String getBio() {
+        return bio;
+    }
+
+    public void setBio(String bio) {
+        this.bio = bio;
+    }
+
+    public User(String email, String username, String password, LocalDate dateOfBirth, boolean isHashed, String profilePicture, String coverPicture, String bio) {
         this.userId = getMaxId() + 1;
         this.email = email;
         this.username = username;
@@ -37,6 +64,9 @@ public class User {
         }
         this.dateOfBirth = dateOfBirth;
         this.setStatus("offline");
+        this.profilePicture = profilePicture;
+        this.coverPicture = coverPicture;
+        this.bio = bio;
     }
 
     public static int getMaxId() {
@@ -91,7 +121,7 @@ public class User {
     public String getStatus() {
         return status;
     }
-    
+
     @Override
     public String toString() {
         return username;

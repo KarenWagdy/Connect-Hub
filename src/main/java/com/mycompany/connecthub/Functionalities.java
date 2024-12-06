@@ -104,7 +104,7 @@ public class Functionalities {
             return 5; //invalid date of birth
         }
 
-        User user = new User(email, userName, password, dateOfBirth, true);
+        User user = new User(email, userName, password, dateOfBirth, true, "null", "null", "null");
         UsersDatabase.usersArray.add(user);
         UsersDatabase.saveUsers(UsersDatabase.usersArray);
 

@@ -53,7 +53,11 @@ public class UsersDatabase {
                 LocalDate dateOfBirth = LocalDate.parse(user.getString("dateOfBirth"), formatter);
                 String password = user.getString("password");
                 String status = user.getString("status");
-                usersArray.add(new User(email, username, password, dateOfBirth, false));
+                String profilePicture = user.getString("profilePicture");
+                String coverPicture = user.getString("coverPicture");
+                String bio = user.getString("bio");
+
+                usersArray.add(new User(email, username, password, dateOfBirth, false, profilePicture, coverPicture, bio));
             }
 
         } catch (IOException e) {
@@ -73,6 +77,10 @@ public class UsersDatabase {
             obj.put("status", i.getStatus());
 
             obj.put("password", i.getPassword());
+
+            obj.put("profilePicture", i.getProfilePicture());
+            obj.put("coverPicture", i.getCoverPicture());
+            obj.put("bio", i.getBio());
 
             usersArray.put(obj);
 

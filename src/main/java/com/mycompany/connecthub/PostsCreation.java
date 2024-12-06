@@ -5,7 +5,6 @@
 package com.mycompany.connecthub;
 
 import java.io.File;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import javax.swing.ImageIcon;
@@ -16,17 +15,16 @@ import javax.swing.JFileChooser;
  * @author Alex
  */
 public class PostsCreation extends javax.swing.JFrame {
-   
-  File f1;
-   
+    
+    File f1;
+
     /**
      * Creates new form PostsCreation
      */
-  
     public PostsCreation() {
         
         initComponents();
-      
+        
     }
 
     /**
@@ -122,40 +120,38 @@ public class PostsCreation extends javax.swing.JFrame {
     private void postButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_postButtonActionPerformed
         Post p;
         String xInput = postText.getText();
-        Factory f=new Factory();
+        Factory f = new Factory();
         //check if file exists to set image path with file path or withnull
-        if(f1!=null){
-             p=(Post) f.setContent("Post", Functionalities.currentUser.getUserId(), xInput,f1.getAbsolutePath(), LocalDateTime.now());
+        if (f1 != null) {
+            p = (Post) f.setContent("Post", Functionalities.currentUser.getUserId(), xInput, f1.getAbsolutePath(), LocalDateTime.now());
+        } else {
+            p = (Post) f.setContent("Post", Functionalities.currentUser.getUserId(), xInput, "null", LocalDateTime.now());            
         }
+        ArrayList<Post> Posts = PostDatabase.readPosts();
+        Posts.add(p);
+        PostDatabase.savePosts(Posts);        
+        this.setVisible(false);
+        NewsFeed newsfeed = new NewsFeed();
+        newsfeed.setVisible(true);
         
-        else{
-            p=(Post) f.setContent("Post", Functionalities.currentUser.getUserId(), xInput,"null", LocalDateTime.now()); 
-        }
-      ArrayList<Post> Posts = PostDatabase.readPosts();
-      Posts.add(p);
-      PostDatabase.savePosts(Posts); 
-       NewsFeed newsfeed=new NewsFeed();
-       newsfeed.setVisible(true);
-       
     }//GEN-LAST:event_postButtonActionPerformed
 //a button to add image to the post
     private void addimageButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addimageButtonActionPerformed
-       JFileChooser file = new JFileChooser();
-        int value=file.showOpenDialog(this);
-        if(value==JFileChooser.APPROVE_OPTION)
-        {  f1 = file.getSelectedFile();
-              PostDatabase p = PostDatabase.getInstance();
-        ImageIcon scaledIcon = p.choosePostImage(f1, Functionalities.currentUser);
-
-        
-        postLabel.setIcon(scaledIcon);
+        JFileChooser file = new JFileChooser();
+        int value = file.showOpenDialog(this);
+        if (value == JFileChooser.APPROVE_OPTION) {
+            f1 = file.getSelectedFile();
+            PostDatabase p = PostDatabase.getInstance();
+            ImageIcon scaledIcon = p.choosePostImage(f1, Functionalities.currentUser);
+            
+            postLabel.setIcon(scaledIcon);
         }
     }//GEN-LAST:event_addimageButtonActionPerformed
 
     /**
      * @param args the command line arguments
      */
-   public static void main(String args[]) {
+    public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
