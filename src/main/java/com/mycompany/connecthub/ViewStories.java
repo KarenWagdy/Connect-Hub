@@ -9,29 +9,29 @@ import javax.swing.ImageIcon;
 
 /**
  *
- * @author X1
+ * @author Alex
  */
-public class ViewPosts extends javax.swing.JFrame {
-             Post p;
+public class ViewStories extends javax.swing.JFrame {
+Story s;
     /**
-     * Creates new form ViewPosts
+     * Creates new form ViewStories
      */
-    public ViewPosts(Post p) {
+    public ViewStories(Story s) {
         initComponents();
-        this.p=p;
-        showPost();
-        
+        this.s=s;
+        showStory();
     }
-    public void showPost(){
-        viewContent.setText(p.getContent());
-        viewDate.setText(p.getTimeStamp().toString());
-        ImageIcon image=new ImageIcon(p.getImagePath());
+     public  void showStory(){
+        viewContent.setText(s.getContent());
+        viewDate.setText(s.getTimeStamp().toString());
+        ImageIcon image=new ImageIcon(s.getImagePath());
         Image img=image.getImage();
         Image scaledImage = img.getScaledInstance(300, 200, Image.SCALE_SMOOTH);
         ImageIcon scaledIcon = new ImageIcon(scaledImage);
-        viewPhoto.setIcon(scaledIcon);       
+        viewPhoto.setIcon(scaledIcon); 
+       // StoryDatabase sd = null;
+        //sd.deleteStories();
     }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -48,7 +48,7 @@ public class ViewPosts extends javax.swing.JFrame {
         viewContent = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Post Details");
+        setTitle("View Stories");
 
         jLabel1.setText("Content");
 
@@ -77,7 +77,7 @@ public class ViewPosts extends javax.swing.JFrame {
                     .addComponent(viewPhoto, javax.swing.GroupLayout.DEFAULT_SIZE, 232, Short.MAX_VALUE)
                     .addComponent(viewContent, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(viewDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(127, Short.MAX_VALUE))
+                .addContainerGap(74, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -86,7 +86,7 @@ public class ViewPosts extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel2)
                     .addComponent(viewDate, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jLabel1)
@@ -104,7 +104,7 @@ public class ViewPosts extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-  
+   
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
