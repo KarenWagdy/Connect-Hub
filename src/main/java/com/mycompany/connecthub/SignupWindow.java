@@ -56,6 +56,7 @@ public class SignupWindow extends javax.swing.JFrame {
         });
 
         signupButton2.setBackground(new java.awt.Color(0, 153, 255));
+        signupButton2.setForeground(new java.awt.Color(255, 255, 255));
         signupButton2.setText("Sign Up");
         signupButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -64,18 +65,22 @@ public class SignupWindow extends javax.swing.JFrame {
         });
 
         jLabel2.setBackground(new java.awt.Color(51, 153, 255));
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("Email");
         jLabel2.setOpaque(true);
 
         jLabel3.setBackground(new java.awt.Color(0, 153, 255));
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText("Username");
         jLabel3.setOpaque(true);
 
         jLabel4.setBackground(new java.awt.Color(0, 153, 255));
+        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setText("Password");
         jLabel4.setOpaque(true);
 
         jLabel5.setBackground(new java.awt.Color(0, 153, 255));
+        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setText("Date of Birth");
         jLabel5.setOpaque(true);
 

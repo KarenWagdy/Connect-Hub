@@ -98,33 +98,29 @@ public class LoginWindow extends javax.swing.JFrame {
 
     private void loginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginButtonActionPerformed
         // TODO add your handling code here:
-        String email =emailField.getText();
+        String email = emailField.getText();
         String password = passwordField.getText();
-        
-        if ( email.isEmpty() || password.isEmpty() ) {
-        JOptionPane.showMessageDialog(this, "All fields are required. Please fill them in.", "Error", JOptionPane.ERROR_MESSAGE);
-        return; //if any field is empty show the user an error message 
-    }
-    int flag = Functionalities.login( email, password);
-    
-    if(flag==1)
-    {
-       JOptionPane.showMessageDialog(this, "Successfully Loggedin.", "Success", JOptionPane.INFORMATION_MESSAGE);
-       this.setVisible(false);
-       //set visisble true to news feed
-      // NewsFeed newsfeed=new NewsFeed();
-      // newsfeed.setVisible(true);
-        
-      FriendRequestWindow frw = new FriendRequestWindow();
-      frw.setVisible(true);
 
-    }
-    else if(flag==2)
-    {
-       JOptionPane.showMessageDialog(this, "Incorrect Email or Password", "Error", JOptionPane.ERROR_MESSAGE);
+        if (email.isEmpty() || password.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "All fields are required. Please fill them in.", "Error", JOptionPane.ERROR_MESSAGE);
+            return; //if any field is empty show the user an error message 
+        }
+        int flag = Functionalities.login(email, password);
 
-    }
-    
+        if (flag == 1) {
+            JOptionPane.showMessageDialog(this, "Successfully Loggedin.", "Success", JOptionPane.INFORMATION_MESSAGE);
+            this.setVisible(false);
+            //set visisble true to news feed
+            NewsFeed newsfeed = new NewsFeed();
+            newsfeed.setVisible(true);
+
+            //FriendRequestWindow frw = new FriendRequestWindow();
+            //frw.setVisible(true);
+        } else if (flag == 2) {
+            JOptionPane.showMessageDialog(this, "Incorrect Email or Password", "Error", JOptionPane.ERROR_MESSAGE);
+
+        }
+
     }//GEN-LAST:event_loginButtonActionPerformed
 
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
@@ -136,7 +132,6 @@ public class LoginWindow extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-   
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField emailField;

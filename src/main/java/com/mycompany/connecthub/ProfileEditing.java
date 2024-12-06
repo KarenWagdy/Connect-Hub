@@ -8,16 +8,13 @@ package com.mycompany.connecthub;
  *
  * @author X1
  */
-import static com.mycompany.connecthub.Functionalities.passwordHashing;
-import static com.mycompany.connecthub.UsersDatabase.usersArray;
+
 import java.awt.Image;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.security.NoSuchAlgorithmException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -26,45 +23,70 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class ProfileEditing {
-     public ImageIcon changePFP(File f,User u)
-    {
+
+    /*public ImageIcon changePFP(File f) {
         ImageIcon profilePicture = new ImageIcon(f.getAbsolutePath());
         Image pfp = profilePicture.getImage();
         Image scaledPFP = pfp.getScaledInstance(300, 200, Image.SCALE_SMOOTH);
         ImageIcon scaledIcon = new ImageIcon(scaledPFP);
-       // u.setpfp(f.getAbsoluteFile());
+        
+        ArrayList<User> pfpChange = UsersDatabase.readUsers();
+        Functionalities.currentUser.setProfilePicture(f.getAbsolutePath());
+        
+        
+        UsersDatabase.saveUsers(pfpChange);
+        
         return scaledIcon;
+    }*/
+    
+    public ImageIcon changePFP(File f) {
+    ImageIcon profilePicture = new ImageIcon(f.getAbsolutePath());
+    Image pfp = profilePicture.getImage();
+    Image scaledPFP = pfp.getScaledInstance(300, 200, Image.SCALE_SMOOTH);
+    ImageIcon scaledIcon = new ImageIcon(scaledPFP);
+    
+    // Read the users from the JSON file
+    ArrayList<User> pfpChange = UsersDatabase.readUsers();
+    
+    // Find and update the current user's profile picture
+    for (User user : pfpChange) {
+        if (user.getUserId() == Functionalities.currentUser.getUserId()) {
+            user.setProfilePicture(f.getAbsolutePath());
+            break; // Exit the loop once the user is updated
+        }
     }
     
-    public ImageIcon changeCoverPhoto(File f,User u)
-    {
+    // Save the updated users back to the JSON file
+    UsersDatabase.saveUsers(pfpChange);
+    
+    return scaledIcon;
+}
+
+    public ImageIcon changeCoverPhoto(File f) {
         ImageIcon coverPicture = new ImageIcon(f.getAbsolutePath());
         Image coverPic = coverPicture.getImage();
         Image scaledCoverPicture = coverPic.getScaledInstance(700, 200, Image.SCALE_SMOOTH);
         ImageIcon scaledIcon = new ImageIcon(scaledCoverPicture);
-        //u.setCoverPhoto(f.getAbsoluteFile());
+        Functionalities.currentUser.setCoverPicture(f.getAbsolutePath());
         return scaledIcon;
     }
-    
-    public void changePassword(String password,User u)
-    {
-        
-        u.setPassword(password);
+
+    public void changePassword(String password) {
+
+        Functionalities.currentUser.setPassword(password);
     }
-    
-    public void changeBio(String bio,User u)
-    {
-       // u.setBio(bio);
+
+    public void changeBio(String bio) {
+        Functionalities.currentUser.setBio(bio);
     }
-    
+
     static ArrayList<Post> postsArray = new ArrayList<>();
-    
-    public static ArrayList<Post> readPosts() 
-    {
+
+    public static ArrayList<Post> readPosts() {
         postsArray.clear();
-         
+
         try {
-            
+
             String jsonLines = new String(Files.readAllBytes(Paths.get("Posts.json")));
             JSONArray Posts = new JSONArray(jsonLines);
 
@@ -75,12 +97,12 @@ public class ProfileEditing {
                 JSONObject post = Posts.getJSONObject(i);
                 int contentId = post.getInt("contentId");
                 int authortId = post.getInt("authorId");
-                String content=post.getString("content");
-                String imagePath=post.getString("image");
+                String content = post.getString("content");
+                String imagePath = post.getString("image");
                 LocalDateTime timeStamp = LocalDateTime.parse(post.getString("timestamp"), formatter);
-               
-                postsArray.add(new Post( authortId, content,imagePath,timeStamp));
-                
+
+                postsArray.add(new Post(authortId, content, imagePath, timeStamp));
+
             }
 
         } catch (IOException e) {
@@ -88,9 +110,7 @@ public class ProfileEditing {
         }
         return postsArray;
     }
-    
- 
-    
+
     public static void savePosts(ArrayList<Post> post) {
         JSONArray postsArray = new JSONArray();
         for (Post i : post) {
@@ -101,7 +121,7 @@ public class ProfileEditing {
             obj.put("image", i.getImagePath());
             obj.put("timestamp", i.getTimeStamp());
             postsArray.put(obj);
-      
+
         }
         try {
             FileWriter file = new FileWriter("Posts.json");
@@ -111,25 +131,19 @@ public class ProfileEditing {
             System.out.println("Error");
         }
     }
-    
-    public static ArrayList<Post> readPostsforUser(int userId)
-    {
-       ArrayList<Post> Allposts=readPosts(); 
-       ArrayList<Post>userPosts=new ArrayList<>();
-       for(Post post:Allposts)
-       {
-           if(post.getAuthorId()==userId)
-           {
-               userPosts.add(post);
-           }
-       }
-       return userPosts;
+
+    public static ArrayList<Post> readPostsforUser(int userId) {
+        ArrayList<Post> Allposts = readPosts();
+        ArrayList<Post> userPosts = new ArrayList<>();
+        for (Post post : Allposts) {
+            if (post.getAuthorId() == userId) {
+                userPosts.add(post);
+            }
+        }
+        return userPosts;
     }
-    
-    
-    
- 
-   /* public static void main(String args[])
+
+    /* public static void main(String args[])
     {
         ArrayList<Post> postsArray = new ArrayList<>();
        Post p1=  new Post(1,2,"HII","IMAGE 1.PNG",LocalDateTime.now());
@@ -152,6 +166,4 @@ public class ProfileEditing {
         
         
     }*/
-
-    
 }

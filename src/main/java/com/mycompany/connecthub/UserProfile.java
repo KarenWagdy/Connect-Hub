@@ -101,6 +101,11 @@ public class UserProfile extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("user profile");
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                formWindowClosed(evt);
+            }
+        });
 
         coverJLabel.setBackground(new java.awt.Color(255, 255, 255));
         coverJLabel.setOpaque(true);
@@ -208,8 +213,8 @@ public class UserProfile extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(bioText, javax.swing.GroupLayout.PREFERRED_SIZE, 432, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(41, 41, 41)
-                                .addComponent(changeBio)
-                                .addGap(0, 35, Short.MAX_VALUE)))))
+                                .addComponent(changeBio)))
+                        .addGap(0, 35, Short.MAX_VALUE)))
                 .addGap(40, 40, 40))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -290,7 +295,7 @@ public class UserProfile extends javax.swing.JFrame {
         { File f = file.getSelectedFile();
         
         ProfileEditing p = new ProfileEditing();
-        ImageIcon scaledIcon = p.changeCoverPhoto(f, Functionalities.currentUser);
+        ImageIcon scaledIcon = p.changeCoverPhoto(f);
 
         coverJLabel.setIcon(scaledIcon);
         }
@@ -303,7 +308,7 @@ public class UserProfile extends javax.swing.JFrame {
      
         ProfileEditing pf = new ProfileEditing();
         if (Functionalities.isValidPassword(password)) {
-            pf.changePassword(password, Functionalities.currentUser);
+            pf.changePassword(password);
         } else {
             JOptionPane.showMessageDialog(this, "Please Enter a valid password", "Warning", JOptionPane.WARNING_MESSAGE);
         }
@@ -324,7 +329,7 @@ public class UserProfile extends javax.swing.JFrame {
         { File f = file.getSelectedFile();
        
         ProfileEditing p = new ProfileEditing();
-        ImageIcon scaledIcon = p.changePFP(f, Functionalities.currentUser);
+        ImageIcon scaledIcon = p.changePFP(f);
         pfpJLabel.setIcon(scaledIcon);
         }
 
@@ -338,6 +343,7 @@ public class UserProfile extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Choose post");
         } else {
             Post post = p.get(index);
+            this.setVisible(false);
             ViewPosts view = new ViewPosts(post);
             view.setVisible(true);
         }
@@ -350,10 +356,9 @@ public class UserProfile extends javax.swing.JFrame {
         //change bio of current user
          Bio= JOptionPane.showInputDialog("Enter Bio.");
         ProfileEditing p = new ProfileEditing();
-        p.changeBio(Bio, Functionalities.currentUser);
+        p.changeBio(Bio);
         bioText.setText(Bio);
-        
-        
+   
         
     }//GEN-LAST:event_changeBioActionPerformed
 
@@ -363,10 +368,16 @@ public class UserProfile extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Choose story");
         } else {
             Story story = stories.get(index);
+            this.setVisible(false);
             ViewStories view = new ViewStories(story);
             view.setVisible(true);
         }
     }//GEN-LAST:event_viewStoriesActionPerformed
+
+    private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
+        NewsFeed newsfeed = new NewsFeed();
+        newsfeed.setVisible(true);
+    }//GEN-LAST:event_formWindowClosed
 
     /**
      * @param args the command line arguments

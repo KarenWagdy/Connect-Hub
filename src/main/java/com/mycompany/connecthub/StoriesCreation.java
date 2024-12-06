@@ -16,8 +16,9 @@ import javax.swing.JFileChooser;
  * @author Alex
  */
 public class StoriesCreation extends javax.swing.JFrame {
-  
-  File f1;
+    
+    File f1;
+
     /**
      * Creates new form StoriesCreation
      */
@@ -43,6 +44,11 @@ public class StoriesCreation extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Adding Stories");
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                formWindowClosed(evt);
+            }
+        });
 
         storyText.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -120,13 +126,13 @@ public class StoriesCreation extends javax.swing.JFrame {
     private void addimageButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addimageButtonActionPerformed
         //select file to add image to the story
         JFileChooser file = new JFileChooser();
-        int value=file.showOpenDialog(this);
-        if(value==JFileChooser.APPROVE_OPTION)
-        {  f1 = file.getSelectedFile();
+        int value = file.showOpenDialog(this);
+        if (value == JFileChooser.APPROVE_OPTION) {
+            f1 = file.getSelectedFile();
             StoryDatabase s = StoryDatabase.getInstance();
             
             ImageIcon scaledIcon = s.chooseStoryImage(f1, Functionalities.currentUser);
-
+            
             storyLabel.setIcon(scaledIcon);
         }
     }//GEN-LAST:event_addimageButtonActionPerformed
@@ -134,22 +140,26 @@ public class StoriesCreation extends javax.swing.JFrame {
     private void storyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_storyButtonActionPerformed
         Story s;
         String xInput = storyText.getText();
-        Factory f=new Factory();
+        Factory f = new Factory();
         //check if file exists to set image path with file path or withnull
-        if(f1!=null){
-            s=(Story) f.setContent("Story", Functionalities.currentUser.getUserId(), xInput,f1.getAbsolutePath(), LocalDateTime.now());
-        }
-
-        else{
-            s=(Story) f.setContent("Story", Functionalities.currentUser.getUserId(), xInput,"null", LocalDateTime.now());
+        if (f1 != null) {
+            s = (Story) f.setContent("Story", Functionalities.currentUser.getUserId(), xInput, f1.getAbsolutePath(), LocalDateTime.now());
+        } else {
+            s = (Story) f.setContent("Story", Functionalities.currentUser.getUserId(), xInput, "null", LocalDateTime.now());
         }
         ArrayList<Story> stories = StoryDatabase.readStories();
         stories.add(s);
         StoryDatabase.saveStories(stories);
-        NewsFeed newsfeed=new NewsFeed();
-       newsfeed.setVisible(true);
+        this.setVisible(false);
+        NewsFeed newsfeed = new NewsFeed();
+        newsfeed.setVisible(true);
 
     }//GEN-LAST:event_storyButtonActionPerformed
+
+    private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
+        NewsFeed newsfeed = new NewsFeed();
+        newsfeed.setVisible(true);
+    }//GEN-LAST:event_formWindowClosed
 
     /**
      * @param args the command line arguments
