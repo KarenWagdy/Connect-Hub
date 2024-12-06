@@ -38,20 +38,26 @@ public class NewsFeed extends javax.swing.JFrame {
         DefaultListModel<String> listModel = new DefaultListModel<>();
         
         for (Post post : posts) {
+           // if(FriendDatabase.isFriends(Functionalities.currentUser.getUserId())){
             listModel.addElement(post.getContent());
+            //}
         }
         postsList.setModel(listModel);
     }
+     
       public void LoadFriends() {
         //view friends in FriendList
         DefaultListModel<String> listModel = new DefaultListModel<>();
 
         for (User friend : friends) {
+           // if(FriendDatabase.isFriends(Functionalities.currentUser.getUserId())){
             listModel.addElement(friend.getUsername());
+            //}
         }
         friendsList.setModel(listModel);
 
     }
+      
     public void LoadFriendsStories() {
         StoryDatabase.deleteStories();
 
@@ -61,8 +67,9 @@ public class NewsFeed extends javax.swing.JFrame {
         DefaultListModel<String> listModel = new DefaultListModel<>();
         StoryDatabase.deleteStories();
         for (Story story : stories) {
+            //if(FriendDatabase.isFriends(Functionalities.currentUser.getUserId())){
             listModel.addElement(story.getContent());
-            
+            //}
         }
         storiesList.setModel(listModel);
     }
@@ -89,9 +96,15 @@ public class NewsFeed extends javax.swing.JFrame {
         viewProfileButton = new javax.swing.JButton();
         deleteButton = new javax.swing.JButton();
         viewFriends = new javax.swing.JButton();
+        manageFriendsButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("NewsFeed");
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                formWindowClosed(evt);
+            }
+        });
 
         createPostButton.setBackground(new java.awt.Color(51, 153, 255));
         createPostButton.setText("Create Post");
@@ -163,6 +176,19 @@ public class NewsFeed extends javax.swing.JFrame {
 
         viewFriends.setBackground(new java.awt.Color(51, 153, 255));
         viewFriends.setText("View Friends");
+        viewFriends.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                viewFriendsActionPerformed(evt);
+            }
+        });
+
+        manageFriendsButton.setBackground(new java.awt.Color(51, 153, 255));
+        manageFriendsButton.setText("Manage friends");
+        manageFriendsButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                manageFriendsButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -200,20 +226,20 @@ public class NewsFeed extends javax.swing.JFrame {
                         .addComponent(viewProfileButton)
                         .addGap(30, 30, 30)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(197, 197, 197))
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(deleteButton)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(refreshButton)
-                                .addGap(153, 153, 153))))
+                                .addGap(27, 27, 27)
+                                .addComponent(manageFriendsButton))))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(154, 154, 154)
                         .addComponent(viewStoriesButton))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(175, 175, 175)
-                        .addComponent(jLabel2))))
+                        .addComponent(jLabel2)))
+                .addGap(64, 64, 64))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -244,7 +270,8 @@ public class NewsFeed extends javax.swing.JFrame {
                             .addComponent(deleteButton)
                             .addComponent(viewProfileButton)
                             .addComponent(createStoriesButton)
-                            .addComponent(createPostButton))
+                            .addComponent(createPostButton)
+                            .addComponent(manageFriendsButton))
                         .addGap(67, 67, 67))))
         );
 
@@ -294,10 +321,19 @@ public class NewsFeed extends javax.swing.JFrame {
     }//GEN-LAST:event_viewStoriesButtonActionPerformed
 
     private void refreshButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshButtonActionPerformed
+   
     DefaultListModel<String> model1 = (DefaultListModel<String>) postsList.getModel();
     DefaultListModel<String> model2 = (DefaultListModel<String>) storiesList.getModel();
     DefaultListModel<String> model3 = (DefaultListModel<String>) friendsList.getModel();
-   
+    if (model1.getSize() > 0) {
+        model1.removeAllElements(); //Clear from postslist
+    } if (model2.getSize() > 0) {
+        model2.removeAllElements(); //Clear from storiesslist
+    }
+    if (model3.getSize() > 0) {
+        model3.removeAllElements(); //Clear from friendslist
+    }
+
     
     // Reload posts and stories and friends
     LoadFriendsPosts();
@@ -323,6 +359,20 @@ public class NewsFeed extends javax.swing.JFrame {
 
         
     }//GEN-LAST:event_deleteButtonActionPerformed
+
+    private void viewFriendsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewFriendsActionPerformed
+        
+    }//GEN-LAST:event_viewFriendsActionPerformed
+
+    private void manageFriendsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_manageFriendsButtonActionPerformed
+        FriendRequestWindow frw = new FriendRequestWindow();
+        frw.setVisible(true);
+    }//GEN-LAST:event_manageFriendsButtonActionPerformed
+
+    private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
+        SignupLoginWindow signupLoginWindow = SignupLoginWindow.getInstance();
+        signupLoginWindow.setVisible(true);
+    }//GEN-LAST:event_formWindowClosed
 
     /**
      * @param args the command line arguments
@@ -370,6 +420,7 @@ public class NewsFeed extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JButton manageFriendsButton;
     private javax.swing.JList<String> postsList;
     private javax.swing.JButton refreshButton;
     private javax.swing.JList<String> storiesList;
