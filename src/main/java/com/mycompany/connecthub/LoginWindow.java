@@ -112,8 +112,11 @@ public class LoginWindow extends javax.swing.JFrame {
        JOptionPane.showMessageDialog(this, "Successfully Loggedin.", "Success", JOptionPane.INFORMATION_MESSAGE);
        this.setVisible(false);
        //set visisble true to news feed
-       FriendRequestWindow frw = new FriendRequestWindow();
-       frw.setVisible(true);
+       NewsFeed newsfeed=new NewsFeed();
+       newsfeed.setVisible(true);
+        
+      // FriendRequestWindow frw = new FriendRequestWindow();
+      // frw.setVisible(true);
 
     }
     else if(flag==2)
@@ -121,8 +124,7 @@ public class LoginWindow extends javax.swing.JFrame {
        JOptionPane.showMessageDialog(this, "Incorrect Email or Password", "Error", JOptionPane.ERROR_MESSAGE);
 
     }
-
-        
+    
     }//GEN-LAST:event_loginButtonActionPerformed
 
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed

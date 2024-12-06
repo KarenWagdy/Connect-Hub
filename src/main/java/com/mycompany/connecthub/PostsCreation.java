@@ -134,6 +134,8 @@ public class PostsCreation extends javax.swing.JFrame {
       ArrayList<Post> Posts = PostDatabase.readPosts();
       Posts.add(p);
       PostDatabase.savePosts(Posts); 
+       NewsFeed newsfeed=new NewsFeed();
+       newsfeed.setVisible(true);
        
     }//GEN-LAST:event_postButtonActionPerformed
 //a button to add image to the post
