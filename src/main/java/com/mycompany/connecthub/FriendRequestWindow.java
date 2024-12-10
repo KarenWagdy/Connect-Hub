@@ -110,10 +110,6 @@ public class FriendRequestWindow extends javax.swing.JFrame {
         removeButton = new javax.swing.JButton();
         showSuggestedButton = new javax.swing.JButton();
         showFriendListButton = new javax.swing.JButton();
-        viewProfileButton = new javax.swing.JButton();
-        viewFriendProfileButton = new javax.swing.JButton();
-        viewFriendProfileButton1 = new javax.swing.JButton();
-        blockButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Friend Management");
@@ -225,42 +221,6 @@ public class FriendRequestWindow extends javax.swing.JFrame {
             }
         });
 
-        viewProfileButton.setBackground(new java.awt.Color(51, 153, 255));
-        viewProfileButton.setForeground(new java.awt.Color(255, 255, 255));
-        viewProfileButton.setText("View profile");
-        viewProfileButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                viewProfileButtonActionPerformed(evt);
-            }
-        });
-
-        viewFriendProfileButton.setBackground(new java.awt.Color(51, 153, 255));
-        viewFriendProfileButton.setForeground(new java.awt.Color(255, 255, 255));
-        viewFriendProfileButton.setText("View profile");
-        viewFriendProfileButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                viewFriendProfileButtonActionPerformed(evt);
-            }
-        });
-
-        viewFriendProfileButton1.setBackground(new java.awt.Color(51, 153, 255));
-        viewFriendProfileButton1.setForeground(new java.awt.Color(255, 255, 255));
-        viewFriendProfileButton1.setText("View profile");
-        viewFriendProfileButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                viewFriendProfileButton1ActionPerformed(evt);
-            }
-        });
-
-        blockButton1.setBackground(new java.awt.Color(51, 153, 255));
-        blockButton1.setForeground(new java.awt.Color(255, 255, 255));
-        blockButton1.setText("Block");
-        blockButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                blockButton1ActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -268,62 +228,46 @@ public class FriendRequestWindow extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(78, 78, 78)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
+                    .addComponent(requestSuggested)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(requestSuggested)
-                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(viewProfileButton)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addComponent(jLabel3)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(showSuggestedButton))))
-                        .addGap(118, 118, 118)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                    .addGap(9, 9, 9)
-                                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(showFriendListButton, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(blockButton, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(usernameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(removeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                    .addComponent(usernameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(searchButton))
-                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(searchButton))
+                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(sendFriendRequestButton)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(sendFriendRequestButton, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel3)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(blockButton1)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 78, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addComponent(acceptButton, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(rejectButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(78, 78, 78))))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(showSuggestedButton))
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 81, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(viewFriendProfileButton)
-                        .addGap(107, 107, 107))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(viewFriendProfileButton1)
-                        .addGap(116, 116, 116))))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(showFriendListButton, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(layout.createSequentialGroup()
+                            .addGap(2, 2, 2)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(acceptButton, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(rejectButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(blockButton, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(removeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(78, 78, 78))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -337,8 +281,14 @@ public class FriendRequestWindow extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(acceptButton)
-                            .addComponent(rejectButton)))
-                    .addGroup(layout.createSequentialGroup()
+                            .addComponent(rejectButton))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel4)
+                            .addComponent(showFriendListButton))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -348,37 +298,19 @@ public class FriendRequestWindow extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(sendFriendRequestButton)
-                            .addComponent(blockButton1))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(viewFriendProfileButton1)
-                    .addComponent(viewProfileButton))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel4)
-                            .addComponent(showFriendListButton))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(blockButton)
-                            .addComponent(removeButton)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(1, 1, 1)
+                        .addComponent(sendFriendRequestButton)
+                        .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(showSuggestedButton)
                             .addComponent(jLabel3))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(requestSuggested)))
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(viewFriendProfileButton)
-                .addContainerGap(22, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(requestSuggested)
+                    .addComponent(blockButton)
+                    .addComponent(removeButton))
+                .addContainerGap(24, Short.MAX_VALUE))
         );
 
         pack();
@@ -513,80 +445,6 @@ public class FriendRequestWindow extends javax.swing.JFrame {
          loadFriends();
     }//GEN-LAST:event_showFriendListButtonActionPerformed
 
-    private void viewProfileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewProfileButtonActionPerformed
-        // TODO add your handling code here:
-        ArrayList<User> everyone = UsersDatabase.readUsers();
-         ViewFriendProfileWindow view;
-
-        String selectedUser = friendRequestList.getSelectedValue();
-        if (selectedUser != null) {
-            for (User u : everyone) {
-                if(selectedUser.equals(u.getUsername()))
-                {   view=new ViewFriendProfileWindow(u.getUsername());
-                  view.setVisible(true);
-                }
-            } 
-    }//GEN-LAST:event_viewProfileButtonActionPerformed
-   else{
-            JOptionPane.showMessageDialog(this, "Please Choose a user");
-        }
-    }
-    private void viewFriendProfileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewFriendProfileButtonActionPerformed
-        // TODO add your handling code here:
-        ArrayList<User> everyone = new ArrayList<>(UsersDatabase.readUsers());
-ViewFriendProfileWindow view;
-
-String selectedUser = allFriends.getSelectedValue();
-if (selectedUser != null) {
-    for (User u : everyone) {
-        if (selectedUser.equals(u.getUsername())) {
-            view = new ViewFriendProfileWindow(u.getUsername());
-            view.setVisible(true);
-        }
-    }
-} else {
-    JOptionPane.showMessageDialog(this, "Please Choose a user");
-}  
-    }//GEN-LAST:event_viewFriendProfileButtonActionPerformed
-
-    private void viewFriendProfileButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewFriendProfileButton1ActionPerformed
-        // TODO add your handling code here:
-    ArrayList<User> everyone = new ArrayList<>(UsersDatabase.readUsers());
-ViewFriendProfileWindow view;
-
-String selectedUser = allFriends.getSelectedValue();
-if (selectedUser != null) {
-    for (User u : everyone) {
-        if (selectedUser.equals(u.getUsername())) {
-            view = new ViewFriendProfileWindow(u.getUsername());
-            view.setVisible(true);
-        }
-    }
-} else {
-    JOptionPane.showMessageDialog(this, "Please Choose a user");
-}
-    }//GEN-LAST:event_viewFriendProfileButton1ActionPerformed
-
-    private void blockButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_blockButton1ActionPerformed
-        // TODO add your handling code here:
-         ArrayList<User> everyone = UsersDatabase.readUsers();
-
-        String selectedRequest = friendRequestList.getSelectedValue();
-        if (selectedRequest != null) {
-            for (User u : everyone) {
-                if (selectedRequest.equals(u.getUsername())) {
-                    FriendRequestManagement.blockUser(u.getUserId());
-                   // FriendDatabase.removeFriendFromFile(u.getUserId());
-                }
-            }
-            listModel2 = (DefaultListModel<String>) friendRequestList.getModel();
-            listModel2.removeElement(selectedRequest);
-        }
-    }//GEN-LAST:event_blockButton1ActionPerformed
-    
-            
-    
-    
     /**
      * @param args the command line arguments
      */
@@ -595,7 +453,6 @@ if (selectedUser != null) {
     private javax.swing.JButton acceptButton;
     private javax.swing.JList<String> allFriends;
     private javax.swing.JButton blockButton;
-    private javax.swing.JButton blockButton1;
     private javax.swing.JList<String> friendRequestList;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -615,8 +472,5 @@ if (selectedUser != null) {
     private javax.swing.JButton showSuggestedButton;
     private javax.swing.JList<String> suggestionsList;
     private javax.swing.JTextField usernameTextField;
-    private javax.swing.JButton viewFriendProfileButton;
-    private javax.swing.JButton viewFriendProfileButton1;
-    private javax.swing.JButton viewProfileButton;
     // End of variables declaration//GEN-END:variables
 }
