@@ -533,42 +533,38 @@ public class FriendRequestWindow extends javax.swing.JFrame {
     }
     private void viewFriendProfileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewFriendProfileButtonActionPerformed
         // TODO add your handling code here:
-        ArrayList<User> everyone = UsersDatabase.readUsers();
-         ViewFriendProfileWindow view;
+        ArrayList<User> everyone = new ArrayList<>(UsersDatabase.readUsers());
+ViewFriendProfileWindow view;
 
-        String selectedUser = allFriends.getSelectedValue();
-        if (selectedUser != null) {
-            for (User u : everyone) {
-                if(selectedUser.equals(u.getUsername()))
-                {   view=new ViewFriendProfileWindow(u.getUsername());
-                  view.setVisible(true);
-                }
-            } 
-    }                                                 
-   else{
-            JOptionPane.showMessageDialog(this, "Please Choose a user");
+String selectedUser = allFriends.getSelectedValue();
+if (selectedUser != null) {
+    for (User u : everyone) {
+        if (selectedUser.equals(u.getUsername())) {
+            view = new ViewFriendProfileWindow(u.getUsername());
+            view.setVisible(true);
         }
-        
-        
+    }
+} else {
+    JOptionPane.showMessageDialog(this, "Please Choose a user");
+}  
     }//GEN-LAST:event_viewFriendProfileButtonActionPerformed
 
     private void viewFriendProfileButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewFriendProfileButton1ActionPerformed
         // TODO add your handling code here:
-        ArrayList<User> everyone = UsersDatabase.readUsers();
-         ViewFriendProfileWindow view;
+    ArrayList<User> everyone = new ArrayList<>(UsersDatabase.readUsers());
+ViewFriendProfileWindow view;
 
-        String selectedUser = manageRequestsList.getSelectedValue();
-        if (selectedUser != null) {
-            for (User u : everyone) {
-                if(selectedUser.equals(u.getUsername()))
-                {   view=new ViewFriendProfileWindow(u.getUsername());
-                  view.setVisible(true);
-                }
-            } 
-    }                                                 
-   else{
-            JOptionPane.showMessageDialog(this, "Please Choose a user");
+String selectedUser = allFriends.getSelectedValue();
+if (selectedUser != null) {
+    for (User u : everyone) {
+        if (selectedUser.equals(u.getUsername())) {
+            view = new ViewFriendProfileWindow(u.getUsername());
+            view.setVisible(true);
         }
+    }
+} else {
+    JOptionPane.showMessageDialog(this, "Please Choose a user");
+}
     }//GEN-LAST:event_viewFriendProfileButton1ActionPerformed
 
     private void blockButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_blockButton1ActionPerformed

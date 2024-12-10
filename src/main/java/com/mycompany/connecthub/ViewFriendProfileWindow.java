@@ -43,16 +43,9 @@ public class ViewFriendProfileWindow extends javax.swing.JFrame {
     }
     
     public void LoadName()
-     {
-         String Name=null;
-         for(int i=0;i<users.size();i++)
-         {
-             if(users.get(i).getUserId()==viewedUser.getUserId())
-             {
-                  Name=users.get(i).getUsername();
-             }
-         }
-         NameLabel.setText(Name);
+     {   
+             String Name=viewedUser.getUsername();
+             NameLabel.setText(Name);
 }
     
     public void LoadPosts() {
@@ -84,6 +77,7 @@ public class ViewFriendProfileWindow extends javax.swing.JFrame {
             
         }
         storiesList.setModel(listModel);
+        
     }
      
      public void Loadpfp()
