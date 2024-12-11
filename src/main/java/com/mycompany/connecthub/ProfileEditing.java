@@ -34,10 +34,10 @@ public class ProfileEditing {
     ImageIcon scaledIcon = new ImageIcon(scaledPFP);
     
     ArrayList<User> pfpChange = UsersDatabase.readUsers();
-    
-    for (User user : pfpChange) {
-        if (user.getUserId() == Functionalities.currentUser.getUserId()) {
-            user.setProfilePicture(f.getAbsolutePath());
+    Functionalities.currentUser.setProfilePicture(f.getAbsolutePath());
+    for (int i = 0; i < pfpChange.size(); i++) {
+        if (pfpChange.get(i).getUserId() == Functionalities.currentUser.getUserId()) {
+            pfpChange.set(i, Functionalities.currentUser); 
             break; 
         }
     }
@@ -56,13 +56,13 @@ public class ProfileEditing {
     
     ArrayList<User> coverChange = UsersDatabase.readUsers();
     
-    for (User user : coverChange) {
-        if (user.getUserId() == Functionalities.currentUser.getUserId()) {
-            user.setCoverPicture(f.getAbsolutePath());
-            break;
+    Functionalities.currentUser.setCoverPicture(f.getAbsolutePath());
+    for (int i = 0; i < coverChange.size(); i++) {
+        if (coverChange.get(i).getUserId() == Functionalities.currentUser.getUserId()) {
+            coverChange.set(i, Functionalities.currentUser); 
+            break; 
         }
-    }
-    
+    }    
     UsersDatabase.saveUsers(coverChange);
     
     return scaledIcon;

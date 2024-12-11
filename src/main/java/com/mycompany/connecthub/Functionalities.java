@@ -144,7 +144,7 @@ public class Functionalities {
     public static int getUserId(String username) {
         ArrayList<User> users = UsersDatabase.readUsers();
         for (int i = 0; i < users.size(); i++) {
-            if (users.get(i).getUsername() == username) {
+            if (users.get(i).getUsername().equals(username)) {
                 return users.get(i).getUserId();
             }
         }
@@ -154,7 +154,7 @@ public class Functionalities {
     public static User getUser(String username) {
         ArrayList<User> users = UsersDatabase.readUsers();
         for (int i = 0; i < users.size(); i++) {
-            if (users.get(i).getUsername() == username) {
+            if (users.get(i).getUsername().equals(username) ) {
                 return users.get(i);
             }
         }
