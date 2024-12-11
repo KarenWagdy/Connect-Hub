@@ -515,7 +515,7 @@ public class FriendRequestWindow extends javax.swing.JFrame {
 
     private void viewProfileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewProfileButtonActionPerformed
         // TODO add your handling code here:
-        ArrayList<User> everyone = UsersDatabase.readUsers();
+        ArrayList<User> everyone = new ArrayList<>(UsersDatabase.readUsers());
          ViewFriendProfileWindow view;
 
         String selectedUser = friendRequestList.getSelectedValue();

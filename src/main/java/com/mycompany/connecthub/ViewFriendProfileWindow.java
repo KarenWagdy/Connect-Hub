@@ -32,7 +32,7 @@ public class ViewFriendProfileWindow extends javax.swing.JFrame {
         friends=FriendDatabase.readFriends(viewedUser.getUserId());
         stories=StoryDatabase.readStoriesforUser(viewedUser.getUserId());
         users=UsersDatabase.readUsers();
-        LoadPosts();
+         LoadPosts();
          LoadFriends();
          LoadStories();
          Loadpfp();
@@ -55,7 +55,7 @@ public class ViewFriendProfileWindow extends javax.swing.JFrame {
         for (Post post : posts) {
             listModel.addElement(post.getContent());
         }
-        postsList.setModel(listModel);
+         postsList.setModel(listModel);
     }
 
     public void LoadFriends() {
@@ -65,7 +65,7 @@ public class ViewFriendProfileWindow extends javax.swing.JFrame {
         for (User friend : friends) {
             listModel.addElement(friend.getUsername() + " ("+friend.getStatus()+") ");
         }
-        FriendsList.setModel(listModel);
+         FriendsList.setModel(listModel);
 
     }
      public void LoadStories() {
