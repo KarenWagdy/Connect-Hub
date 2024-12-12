@@ -4,6 +4,7 @@
  */
 package com.mycompany.connecthub;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
@@ -382,12 +383,15 @@ public class FriendRequestWindow extends javax.swing.JFrame {
 
     private void sendFriendRequestButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sendFriendRequestButtonActionPerformed
      ArrayList<User> everyone = UsersDatabase.readUsers();
-
+     ArrayList<Notification>notifications=FriendRequestNotificationDatabase.readFriendReqNotifications();
         String selectedRequest = friendRequestList.getSelectedValue();
         if (selectedRequest != null) {
             for (User u : everyone) {
                 if (selectedRequest.equals(u.getUsername())) {
                     FriendRequestDatabase.saveFriendRequest(Functionalities.currentUser.getUserId(), u.getUserId()); //get static user
+                    FriendRequestNotification notification=FriendRequestNotificationDatabase.sendNotification(u.getUserId());//recieverId
+                    notifications.add(notification);
+                    FriendRequestNotificationDatabase.saveFriendReqNotifications(notifications);
                 }
             }
             listModel1 = (DefaultListModel<String>) friendRequestList.getModel();
