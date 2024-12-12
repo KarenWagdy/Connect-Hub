@@ -11,29 +11,51 @@ import java.util.ArrayList;
  * @author nouri
  */
 public class Group {
-    private User primaryAdmin;
+    private int groupId = 1 ;
+    private String primaryAdmin;
     private ArrayList<User> admins ;
     private ArrayList<User> members;
     private String name;
     private String description;
     private String groupPhoto;
 
-    public Group( ArrayList<User> admins, ArrayList<User> members, String name, String description, String groupPhoto) {
-        this.primaryAdmin = Functionalities.currentUser;
+    public Group(ArrayList<User> admins, ArrayList<User> members, String primaryAdmin,String name, String description, String groupPhoto) {
+        this.groupId=getMaxGroupId()+1;
+        this.primaryAdmin = primaryAdmin;
         this.admins = admins;
         this.members = members;
         this.name = name;
         this.description = description;
         this.groupPhoto = groupPhoto;
     }
+    public static int getMaxGroupId() {
+        ArrayList<Group> group = GroupDatabase.groupsArray;
+        if (group.isEmpty()) {
+            return 0;
+        } else {
+            return group.get(group.size() - 1).getGroupId();
+        }
+    }
 
-    public User getPrimaryAdmin() {
+    public int getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(int groupId) {
+        this.groupId = groupId;
+    }
+
+    public String getPrimaryAdmin() {
         return primaryAdmin;
     }
 
-    public void setPrimaryAdmin(User primaryAdmin) {
+    public void setPrimaryAdmin(String primaryAdmin) {
         this.primaryAdmin = primaryAdmin;
     }
+    
+    
+
+   
 
     public ArrayList<User> getAdmins() {
         return admins;
