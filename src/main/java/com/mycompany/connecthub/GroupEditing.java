@@ -23,6 +23,7 @@ import org.json.JSONObject;
  * @author nouri
  */
 public class GroupEditing {
+
     /*
     public ImageIcon changeGroupPFP(File f) {
     ImageIcon profilePicture = new ImageIcon(f.getAbsolutePath());
@@ -162,7 +163,7 @@ public class GroupEditing {
         }
         return userPosts;
     }*/
-    public static ArrayList<Object> search(String name) {
+ /* public static ArrayList<Object> search(String name) {
     name = name.toLowerCase();
     
     // Fetch suggested users and groups
@@ -187,17 +188,66 @@ public class GroupEditing {
     }
     
     return result;
-}
+}*/
+    public static ArrayList<Object> search(String name) {
+        name = name.toLowerCase();
 
-    
-    public static int validateGroupName(String name){
+        // Fetch suggested users and groups
+        ArrayList<User> users = UsersDatabase.readUsers();
+        ArrayList<Group> groups = GroupDatabase.readGroups();
+
+        ArrayList<Object> result = new ArrayList<>();
+
+        // Read pending membership requests
+        ArrayList<Integer> pendingGroupIds = new ArrayList<>();
+        try {
+            String jsonLines = new String(Files.readAllBytes(Paths.get("membershipRequest.json")));
+            JSONArray membershipRequests = new JSONArray(jsonLines);
+
+            for (int i = 0; i < membershipRequests.length(); i++) {
+                JSONObject request = membershipRequests.getJSONObject(i);
+                int userId = request.getInt("userId");
+                int groupId = request.getInt("groupId");
+                String status = request.getString("status");
+
+                // If there is a pending request from the current user
+                if (userId == Functionalities.currentUser.getUserId() && "Pending".equalsIgnoreCase(status)) {
+                    pendingGroupIds.add(groupId);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Error reading membership requests.");
+        }
+
+        // Search users
+        for (User user : users) {
+            if (user.getUsername().toLowerCase().contains(name)
+                    && !user.getUsername().equalsIgnoreCase(Functionalities.currentUser.getUsername())) {
+                result.add(user);
+            }
+        }
+
+        // Search groups, excluding groups with pending membership requests
+        for (Group group : groups) {
+            if (group.getName().toLowerCase().contains(name)
+                    && !pendingGroupIds.contains(group.getGroupId())) {
+                result.add(group);
+            }
+        }
+
+        return result;
+    }
+
+    public static int validateGroupName(String name) {
         ArrayList<Group> groups = GroupDatabase.readGroups();
         for (Group g : groups) {
             if (g.getName().equalsIgnoreCase(name)) {
                 return 1; // name already exists
-            } 
+            }
         }
         return 2; //valid group name
     }
-    
+   
+
 }

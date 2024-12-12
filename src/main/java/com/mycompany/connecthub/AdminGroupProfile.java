@@ -14,11 +14,16 @@ import javax.swing.JFileChooser;
  */
 public class AdminGroupProfile extends javax.swing.JFrame {
 
+    Group group;
     /**
      * Creates new form GroupProfile
      */
-    public AdminGroupProfile() {
+    public AdminGroupProfile(Group group) 
+    {   
         initComponents();
+        this.group=group;
+        groupNameLabel.setText(group.getName());
+        descriptionLabel.setText(group.getDescription());
     }
 
     /**
@@ -57,7 +62,13 @@ public class AdminGroupProfile extends javax.swing.JFrame {
         jButton9 = new javax.swing.JButton();
         changePhotoButton = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Admin group profile");
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                formWindowClosed(evt);
+            }
+        });
 
         groupPhotoLabel.setBackground(new java.awt.Color(255, 255, 255));
         groupPhotoLabel.setOpaque(true);
@@ -199,15 +210,15 @@ public class AdminGroupProfile extends javax.swing.JFrame {
                                         .addComponent(groupNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(groupPhotoLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(changePhotoButton)
-                                        .addGap(28, 28, 28))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                     .addGroup(layout.createSequentialGroup()
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(jScrollPane4)
                                             .addGroup(layout.createSequentialGroup()
                                                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addGap(0, 0, Short.MAX_VALUE))
+                                                .addGap(0, 10, Short.MAX_VALUE))
                                             .addComponent(jScrollPane2)
                                             .addComponent(jScrollPane5))
                                         .addGap(42, 42, 42))))
@@ -221,7 +232,6 @@ public class AdminGroupProfile extends javax.swing.JFrame {
                                     .addComponent(jButton5)
                                     .addComponent(jButton8)
                                     .addComponent(jButton9))))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton6)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton7)
@@ -252,49 +262,22 @@ public class AdminGroupProfile extends javax.swing.JFrame {
         if (value == JFileChooser.APPROVE_OPTION) {
             File f = file.getSelectedFile();
             String newPath = f.getAbsolutePath();
-            //currentGroup.setGroupPhoto(newPhotoPath);
+            this.group.setGroupPhoto(newPath);
             ProfileEditing p = new ProfileEditing();
             ImageIcon scaledIcon = p.changePFP(f);
-            //photoLabel.setIcon(scaledIcon);
+            groupPhotoLabel.setIcon(scaledIcon);
         }
     }//GEN-LAST:event_changePhotoButtonActionPerformed
+
+    private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
+   GroupManagementWindow groupManagementWindow = new GroupManagementWindow();
+   groupManagementWindow.setVisible(true);
+    }//GEN-LAST:event_formWindowClosed
 
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(AdminGroupProfile.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(AdminGroupProfile.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(AdminGroupProfile.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(AdminGroupProfile.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new AdminGroupProfile().setVisible(true);
-            }
-        });
-    }
-
+   
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JList<String> adminsList;
     private javax.swing.JButton changePhotoButton;
