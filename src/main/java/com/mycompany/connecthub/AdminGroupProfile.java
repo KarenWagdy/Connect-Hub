@@ -20,6 +20,7 @@ public class AdminGroupProfile extends javax.swing.JFrame {
     Group group;
     ArrayList<Group> groups;
     ArrayList<User> requests;
+    ArrayList<GroupPost> groupPost;
 
     /**
      * Creates new form GroupProfile
@@ -32,9 +33,20 @@ public class AdminGroupProfile extends javax.swing.JFrame {
         descriptionLabel.setText(group.getDescription());
         Loadpfp();
         requests = MembershipRequestDatabase.getGroupMembershipRequests(group.getGroupId());
+        groupPost=GroupPostDatabase.readPostsforGroup(group.getGroupId());
         loadMembershipRequests();
+        LoadGroupPosts();
     }
 
+    public void LoadGroupPosts() {
+        //view posts in postsList
+        DefaultListModel<String> listModel = new DefaultListModel<>();
+        
+        for (GroupPost post : groupPost) {
+            listModel.addElement(post.getContent());
+        }
+        postsList.setModel(listModel);
+    }
     public void Loadpfp() {
         String filepath = null;
         for (int i = 0; i < groups.size(); i++) {
@@ -91,9 +103,9 @@ public class AdminGroupProfile extends javax.swing.JFrame {
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
-        jButton6 = new javax.swing.JButton();
-        jButton7 = new javax.swing.JButton();
+        addPostButton = new javax.swing.JButton();
+        editPostButton = new javax.swing.JButton();
+        deletePostButton = new javax.swing.JButton();
         approveMemberButton = new javax.swing.JButton();
         declineMemberButton = new javax.swing.JButton();
         changePhotoButton = new javax.swing.JButton();
@@ -141,14 +153,19 @@ public class AdminGroupProfile extends javax.swing.JFrame {
 
         jButton4.setText("Remove");
 
-        jButton5.setText("Add");
-
-        jButton6.setText("Edit");
-
-        jButton7.setText("Delete");
-        jButton7.addActionListener(new java.awt.event.ActionListener() {
+        addPostButton.setText("Add");
+        addPostButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton7ActionPerformed(evt);
+                addPostButtonActionPerformed(evt);
+            }
+        });
+
+        editPostButton.setText("Edit");
+
+        deletePostButton.setText("Delete");
+        deletePostButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deletePostButtonActionPerformed(evt);
             }
         });
 
@@ -199,8 +216,8 @@ public class AdminGroupProfile extends javax.swing.JFrame {
                                 .addComponent(jButton3)))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(deletePostButton, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(editPostButton, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                     .addGroup(layout.createSequentialGroup()
@@ -218,7 +235,7 @@ public class AdminGroupProfile extends javax.swing.JFrame {
                                             .addComponent(jLabel5)))
                                     .addGroup(layout.createSequentialGroup()
                                         .addGap(30, 30, 30)
-                                        .addComponent(jButton5, javax.swing.GroupLayout.DEFAULT_SIZE, 148, Short.MAX_VALUE)))))
+                                        .addComponent(addPostButton, javax.swing.GroupLayout.DEFAULT_SIZE, 148, Short.MAX_VALUE)))))
                         .addGap(37, 37, 37)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jLabel4)
@@ -263,7 +280,7 @@ public class AdminGroupProfile extends javax.swing.JFrame {
                                             .addComponent(jScrollPane2)
                                             .addComponent(jScrollPane5))
                                         .addGap(7, 7, 7)
-                                        .addComponent(jButton5)
+                                        .addComponent(addPostButton)
                                         .addGap(12, 12, 12))))
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(0, 0, Short.MAX_VALUE)
@@ -274,9 +291,9 @@ public class AdminGroupProfile extends javax.swing.JFrame {
                                     .addComponent(jButton4)
                                     .addComponent(approveMemberButton)
                                     .addComponent(declineMemberButton))))
-                        .addComponent(jButton6)
+                        .addComponent(editPostButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton7)
+                        .addComponent(deletePostButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(212, 212, 212)
@@ -289,9 +306,9 @@ public class AdminGroupProfile extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+    private void deletePostButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deletePostButtonActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton7ActionPerformed
+    }//GEN-LAST:event_deletePostButtonActionPerformed
 
     private void declineMemberButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_declineMemberButtonActionPerformed
         String selectedRequest = membershipRequestsList.getSelectedValue();
@@ -363,26 +380,32 @@ public class AdminGroupProfile extends javax.swing.JFrame {
             }
         }    }//GEN-LAST:event_approveMemberButtonActionPerformed
 
+    private void addPostButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addPostButtonActionPerformed
+    GroupPostsCreationWindow groupPostsCreationWindow = new GroupPostsCreationWindow(group);
+    groupPostsCreationWindow.setVisible(true);
+    this.setVisible(false);
+    }//GEN-LAST:event_addPostButtonActionPerformed
+
     /**
      * @param args the command line arguments
      */
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton addPostButton;
     private javax.swing.JList<String> adminsList;
     private javax.swing.JButton approveMemberButton;
     private javax.swing.JButton changePhotoButton;
     private javax.swing.JButton declineMemberButton;
     private javax.swing.JButton deleteGroupButton;
+    private javax.swing.JButton deletePostButton;
     private javax.swing.JLabel descriptionLabel;
+    private javax.swing.JButton editPostButton;
     private javax.swing.JLabel groupNameLabel;
     private javax.swing.JLabel groupPhotoLabel;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButton7;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;

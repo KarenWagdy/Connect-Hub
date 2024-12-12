@@ -6,6 +6,7 @@ package com.mycompany.connecthub;
 
 import java.awt.Image;
 import java.util.ArrayList;
+import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 
 /**
@@ -16,6 +17,7 @@ public class UserGroupProfile extends javax.swing.JFrame {
 
     Group group;
     ArrayList<Group> groups;
+    ArrayList<GroupPost> groupPost;
 
     /**
      * Creates new form UserGroupProfile
@@ -26,8 +28,20 @@ public class UserGroupProfile extends javax.swing.JFrame {
         groupNameLabel.setText(group.getName());
         descriptionLabel.setText(group.getDescription());
         groups = GroupDatabase.readGroups();
+        groupPost=GroupPostDatabase.readPostsforGroup(group.getGroupId());
         Loadpfp();
+        LoadGroupPosts();
 
+    }
+    
+    public void LoadGroupPosts() {
+        //view posts in postsList
+        DefaultListModel<String> listModel = new DefaultListModel<>();
+        
+        for (GroupPost post : groupPost) {
+            listModel.addElement(post.getContent());
+        }
+        postsList.setModel(listModel);
     }
 
     public void Loadpfp() {
@@ -60,7 +74,6 @@ public class UserGroupProfile extends javax.swing.JFrame {
         groupPhotoLabel = new javax.swing.JLabel();
         groupNameLabel = new javax.swing.JLabel();
         descriptionLabel = new javax.swing.JLabel();
-        jButton10 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         postsList = new javax.swing.JList<>();
         jLabel5 = new javax.swing.JLabel();
@@ -83,13 +96,16 @@ public class UserGroupProfile extends javax.swing.JFrame {
         descriptionLabel.setBackground(new java.awt.Color(255, 255, 255));
         descriptionLabel.setOpaque(true);
 
-        jButton10.setText("Leave Group");
-
         jScrollPane1.setViewportView(postsList);
 
         jLabel5.setText("Posts");
 
         jButton5.setText("Add");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -100,14 +116,13 @@ public class UserGroupProfile extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(groupNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(groupPhotoLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(descriptionLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton10, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(descriptionLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jButton5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel5))
-                .addContainerGap(81, Short.MAX_VALUE))
+                .addContainerGap(62, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -124,11 +139,9 @@ public class UserGroupProfile extends javax.swing.JFrame {
                         .addComponent(groupNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(groupPhotoLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 30, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(descriptionLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(31, 31, 31)
-                .addComponent(jButton10)
-                .addGap(27, 27, 27))
+                .addGap(24, 24, 24))
         );
 
         pack();
@@ -139,6 +152,12 @@ public class UserGroupProfile extends javax.swing.JFrame {
         groupManagementWindow.setVisible(true);
     }//GEN-LAST:event_formWindowClosed
 
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        GroupPostsCreationWindow groupPostsCreationWindow = new GroupPostsCreationWindow(group);
+        groupPostsCreationWindow.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_jButton5ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -147,7 +166,6 @@ public class UserGroupProfile extends javax.swing.JFrame {
     private javax.swing.JLabel descriptionLabel;
     private javax.swing.JLabel groupNameLabel;
     private javax.swing.JLabel groupPhotoLabel;
-    private javax.swing.JButton jButton10;
     private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JScrollPane jScrollPane1;
