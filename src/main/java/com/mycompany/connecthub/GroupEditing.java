@@ -23,85 +23,29 @@ import org.json.JSONObject;
  * @author nouri
  */
 public class GroupEditing {
-
-    /*
-    public ImageIcon changeGroupPFP(File f) {
+    
+    public ImageIcon changePFP(File f,Group g) {
     ImageIcon profilePicture = new ImageIcon(f.getAbsolutePath());
     Image pfp = profilePicture.getImage();
     Image scaledPFP = pfp.getScaledInstance(300, 200, Image.SCALE_SMOOTH);
     ImageIcon scaledIcon = new ImageIcon(scaledPFP);
     
     ArrayList<Group> pfpChange = GroupDatabase.readGroups();
-    
-    for (Group group : pfpChange) {
-        if (group.getUserId() == Functionalities.currentUser.getUserId()) {
-            user.setProfilePicture(f.getAbsolutePath());
+    g.setGroupPhoto(f.getAbsolutePath());
+    for (int i = 0; i < pfpChange.size(); i++) {
+        if (pfpChange.get(i).getGroupId() == g.getGroupId()) {
+            pfpChange.set(i, g); 
             break; 
         }
     }
-    
-    UsersDatabase.saveUsers(pfpChange);
-    
+    GroupDatabase.saveGroups(pfpChange);
+                
     return scaledIcon;
 }
 
-    public ImageIcon changeCoverPhoto(File f) {
-   
-      ImageIcon coverPicture = new ImageIcon(f.getAbsolutePath());
-    Image cover = coverPicture.getImage();
-    Image scaledCF = cover.getScaledInstance(300, 200, Image.SCALE_SMOOTH);
-    ImageIcon scaledIcon = new ImageIcon(scaledCF);
+
+    /*
     
-    ArrayList<User> coverChange = UsersDatabase.readUsers();
-    
-    for (User user : coverChange) {
-        if (user.getUserId() == Functionalities.currentUser.getUserId()) {
-            user.setCoverPicture(f.getAbsolutePath());
-            break;
-        }
-    }
-    
-    UsersDatabase.saveUsers(coverChange);
-    
-    return scaledIcon;
-    }
-
-    public void changePassword(String password) {
-        try {
-            Functionalities.currentUser.setPassword(Functionalities.passwordHashing(password));
-        } catch (NoSuchAlgorithmException ex) {
-            ex.printStackTrace();
-        }
-    
-    ArrayList<User> userBio = UsersDatabase.readUsers();
-
-    for (int i = 0; i < userBio.size(); i++) {
-        if (userBio.get(i).getUserId()==(Functionalities.currentUser.getUserId())) {
-            userBio.set(i, Functionalities.currentUser);  
-            break;
-        }
-    }
-
-    UsersDatabase.saveUsers(userBio);
-
-    }
-
-    public void changeBio(String bio) {
-       
- ArrayList<User> userBio = UsersDatabase.readUsers();
-    
-    Functionalities.currentUser.setBio(bio);
-
-    for (int i = 0; i < userBio.size(); i++) {
-        if (userBio.get(i).getUserId()==(Functionalities.currentUser.getUserId())) {
-            userBio.set(i, Functionalities.currentUser); 
-            break;
-        }
-    }
-
-    UsersDatabase.saveUsers(userBio);
-    }
-
     static ArrayList<Post> postsArray = new ArrayList<>();
 
     public static ArrayList<Post> readPosts() {
@@ -163,42 +107,14 @@ public class GroupEditing {
         }
         return userPosts;
     }*/
- /* public static ArrayList<Object> search(String name) {
-    name = name.toLowerCase();
-    
-    // Fetch suggested users and groups
-    ArrayList<User> users =UsersDatabase.readUsers();
-    ArrayList<Group> groups =GroupDatabase.readGroups() ;
-    
-    ArrayList<Object> result = new ArrayList<>();
-    
-    // Search users
-    for (User user : users) {
-        if (user.getUsername().toLowerCase().contains(name) && 
-            !user.getUsername().equalsIgnoreCase(Functionalities.currentUser.getUsername())) {
-            result.add(user);
-        }
-    }
-    
-    // Search groups
-    for (Group group : groups) {
-        if (group.getName().toLowerCase().contains(name)) {
-            result.add(group);
-        }
-    }
-    
-    return result;
-}*/
     public static ArrayList<Object> search(String name) {
         name = name.toLowerCase();
 
-        // Fetch suggested users and groups
         ArrayList<User> users = UsersDatabase.readUsers();
         ArrayList<Group> groups = GroupDatabase.readGroups();
 
         ArrayList<Object> result = new ArrayList<>();
 
-        // Read pending membership requests
         ArrayList<Integer> pendingGroupIds = new ArrayList<>();
         try {
             String jsonLines = new String(Files.readAllBytes(Paths.get("membershipRequest.json")));
@@ -210,7 +126,6 @@ public class GroupEditing {
                 int groupId = request.getInt("groupId");
                 String status = request.getString("status");
 
-                // If there is a pending request from the current user
                 if (userId == Functionalities.currentUser.getUserId() && "Pending".equalsIgnoreCase(status)) {
                     pendingGroupIds.add(groupId);
                 }
@@ -220,7 +135,6 @@ public class GroupEditing {
             System.out.println("Error reading membership requests.");
         }
 
-        // Search users
         for (User user : users) {
             if (user.getUsername().toLowerCase().contains(name)
                     && !user.getUsername().equalsIgnoreCase(Functionalities.currentUser.getUsername())) {
@@ -228,7 +142,6 @@ public class GroupEditing {
             }
         }
 
-        // Search groups, excluding groups with pending membership requests
         for (Group group : groups) {
             if (group.getName().toLowerCase().contains(name)
                     && !pendingGroupIds.contains(group.getGroupId())) {
@@ -243,10 +156,10 @@ public class GroupEditing {
         ArrayList<Group> groups = GroupDatabase.readGroups();
         for (Group g : groups) {
             if (g.getName().equalsIgnoreCase(name)) {
-                return 1; // name already exists
+                return 1; 
             }
         }
-        return 2; //valid group name
+        return 2; 
     }
    
 

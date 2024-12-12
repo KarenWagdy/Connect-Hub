@@ -29,7 +29,7 @@ public class GroupManagementWindow extends javax.swing.JFrame {
         }
 
         loadAllGroups();
-        loadAllSuggestedGroups();
+        //loadAllSuggestedGroups();
         joinGroupButton.setVisible(false);
         leaveGroupButton.setVisible(false);
         viewGroupButton.setVisible(false);
@@ -62,7 +62,7 @@ public class GroupManagementWindow extends javax.swing.JFrame {
         groupsList.setModel(listModel2);
 
     }
-    public void loadAllSuggestedGroups() {
+    /*public void loadAllSuggestedGroups() {
         listModel3 = new DefaultListModel<>();
         ArrayList<Group> suggested = GroupDatabase.suggestGroups();
 
@@ -72,7 +72,7 @@ public class GroupManagementWindow extends javax.swing.JFrame {
 
         groupsSuggestionsList.setModel(listModel3);
 
-    }
+    }*/
     
 
     /**
@@ -84,9 +84,6 @@ public class GroupManagementWindow extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        groupsSuggestionsList = new javax.swing.JList<>();
         jScrollPane2 = new javax.swing.JScrollPane();
         groupsList = new javax.swing.JList<>();
         jLabel2 = new javax.swing.JLabel();
@@ -106,10 +103,6 @@ public class GroupManagementWindow extends javax.swing.JFrame {
                 formWindowClosed(evt);
             }
         });
-
-        jLabel1.setText("Group Suggestions");
-
-        jScrollPane1.setViewportView(groupsSuggestionsList);
 
         jScrollPane2.setViewportView(groupsList);
 
@@ -176,11 +169,7 @@ public class GroupManagementWindow extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(37, 37, 37)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(22, 22, 22))
+                .addGap(34, 34, 34))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -189,15 +178,12 @@ public class GroupManagementWindow extends javax.swing.JFrame {
                 .addComponent(searchTextField)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
                     .addComponent(jLabel2)
                     .addComponent(nameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(searchGroupButton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 166, Short.MAX_VALUE)
-                        .addComponent(jScrollPane1))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(joinGroupButton)
@@ -339,20 +325,7 @@ public class GroupManagementWindow extends javax.swing.JFrame {
         if (selectedRequest != null) {
             for (Group g : allGroups) {
                 if (selectedRequest.equals(g.getName() + " (group) ")) {
-                    // Save leaving group action in the database or data structure
                     GroupDatabase.leaveGroup(g.getGroupId());
-                    //g.getMembers().remove(Functionalities.currentUser);
-                    //GroupDatabase.saveGroups(allGroups);
-
-                    // Get the list model reference
-                    //DefaultListModel<String> listModel1 = (DefaultListModel<String>) groupsAndUsersList.getModel();
-                    // Remove the selected group from the list model
-                    //listModel1.removeElement(selectedRequest);
-                    // Notify the UI about the change
-                    //groupsAndUsersList.setModel(listModel1);
-                    //groupsAndUsersList.updateUI();
-                    DefaultListModel<String> listModel1 = (DefaultListModel<String>) groupsAndUsersList.getModel();
-                    groupsAndUsersList.setModel(listModel1);
                     return;
 
                     // Clear selection to maintain a clean view
@@ -414,10 +387,7 @@ public class GroupManagementWindow extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JList<String> groupsAndUsersList;
     private javax.swing.JList<String> groupsList;
-    private javax.swing.JList<String> groupsSuggestionsList;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JButton joinGroupButton;

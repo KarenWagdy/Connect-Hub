@@ -34,11 +34,9 @@ public class MembershipRequestDatabase {
 
     public static void updateMembershipRequest(int userId, int groupId) {
         try {
-            // Read the JSON file
             String jsonLines = new String(Files.readAllBytes(Paths.get("membershipRequest.json")));
             JSONArray membershipRequests = new JSONArray(jsonLines);
 
-            // Find and remove the matching request
             for (int i = 0; i < membershipRequests.length(); i++) {
                 JSONObject request = membershipRequests.getJSONObject(i);
                 if (request.getInt("userId") == userId && request.getInt("groupId") == groupId) {
@@ -47,7 +45,6 @@ public class MembershipRequestDatabase {
                 }
             }
 
-            // Write the updated JSON array back to the file
             Files.write(Paths.get("membershipRequest.json"), membershipRequests.toString(2).getBytes()); // Pretty-printed JSON
 
         } catch (IOException e) {
@@ -58,7 +55,6 @@ public class MembershipRequestDatabase {
     public static void saveMembershipRequest(int userId, int groupId) {
         JSONArray membershipRequestArray;
 
-        // Read existing membership requests or initialize a new array
         try {
             File file = new File("membershipRequest.json");
             if (file.exists()) {
@@ -72,19 +68,16 @@ public class MembershipRequestDatabase {
             return;
         }
 
-        // Create a new membership request object
         JSONObject newMembershipRequest = new JSONObject();
         newMembershipRequest.put("userId", userId);
         newMembershipRequest.put("groupId", groupId);
         newMembershipRequest.put("status", "Pending");
 
-        // Add the new request to the array
         membershipRequestArray.put(newMembershipRequest);
 
-        // Write the updated array back to the file
         try {
             FileWriter fileWriter = new FileWriter("membershipRequest.json");
-            fileWriter.write(membershipRequestArray.toString(2)); // Indented for better readability
+            fileWriter.write(membershipRequestArray.toString(2)); 
             fileWriter.close();
         } catch (IOException e) {
             System.out.println("Error writing to file.");
@@ -95,7 +88,6 @@ public class MembershipRequestDatabase {
         ArrayList<Group> userGroupRequests = new ArrayList<>();
 
         try {
-            // Read and parse the JSON file
             String jsonLines = new String(Files.readAllBytes(Paths.get("membershipRequest.json")));
             JSONArray membershipRequestJson = new JSONArray(jsonLines);
 
@@ -105,10 +97,8 @@ public class MembershipRequestDatabase {
                 int groupId = request.getInt("groupId");
                 String status = request.getString("status");
 
-                // Check if the user is associated with the membership request and the status is "Pending"
                 if (requestUserId == userId && "Pending".equalsIgnoreCase(status)) {
-                    // Retrieve the group information based on the groupId
-                    Group group = getGroup(groupId); // Assuming Functionalities.getGroup(groupId) exists
+                    Group group = getGroup(groupId); 
                     if (group != null) {
                         userGroupRequests.add(group);
                     }
@@ -133,13 +123,11 @@ public class MembershipRequestDatabase {
 
     public static void acceptMembershipRequest(int userId, int groupId) {
         try {
-            // Read the membership request JSON file
             String jsonLines = new String(Files.readAllBytes(Paths.get("membershipRequest.json")));
             JSONArray membershipRequests = new JSONArray(jsonLines);
 
             boolean requestFound = false;
 
-            // Find and remove the matching membership request
             for (int i = 0; i < membershipRequests.length(); i++) {
                 JSONObject request = membershipRequests.getJSONObject(i);
                 if (request.getInt("userId") == userId && request.getInt("groupId") == groupId) {
@@ -154,12 +142,10 @@ public class MembershipRequestDatabase {
                 return;
             }
 
-            // Save the updated membership requests back to the file
             try (FileWriter fileWriter = new FileWriter("membershipRequest.json")) {
                 fileWriter.write(membershipRequests.toString(2));
             }
 
-            // Read the group data JSON file
             File groupFile = new File("groups.json");
             JSONArray groups = new JSONArray();
 
@@ -168,18 +154,16 @@ public class MembershipRequestDatabase {
                 groups = new JSONArray(groupJsonLines);
             }
 
-            // Add the user to the group's member list
             for (int i = 0; i < groups.length(); i++) {
                 JSONObject group = groups.getJSONObject(i);
                 if (group.getInt("groupId") == groupId) {
                     JSONArray members = group.getJSONArray("members");
-                    User user = Functionalities.getUser(userId); // Assuming you have a way to get User by userId
+                    User user = Functionalities.getUser(userId); 
                     members.put(user.getUsername());
                     break;
                 }
             }
 
-            // Save the updated group data back to the file
             try (FileWriter fileWriter = new FileWriter("groups.json")) {
                 fileWriter.write(groups.toString(2));
             }
@@ -192,28 +176,50 @@ public class MembershipRequestDatabase {
         }
     }
 
+    public static ArrayList<User> getGroupMembershipRequests(int groupId) {
+        ArrayList<User> groupRequests = new ArrayList<>();
+
+        try {
+            String jsonLines = new String(Files.readAllBytes(Paths.get("membershipRequest.json")));
+            JSONArray membershipRequestJson = new JSONArray(jsonLines);
+
+            for (int i = 0; i < membershipRequestJson.length(); i++) {
+                JSONObject request = membershipRequestJson.getJSONObject(i);
+                int requestGroupId = request.getInt("groupId");
+                int userId = request.getInt("userId");
+                String status = request.getString("status");
+
+                if (requestGroupId == groupId && "Pending".equalsIgnoreCase(status)) {
+                    User user = Functionalities.getUser(userId); 
+                    if (user != null) {
+                        groupRequests.add(user);
+                    }
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return groupRequests;
+    }
+
     public static void rejectMembershipRequest(int userId, int groupId) {
         try {
-            // Read the membership request JSON file
             String jsonLines = new String(Files.readAllBytes(Paths.get("membershipRequest.json")));
             JSONArray membershipRequests = new JSONArray(jsonLines);
 
-            // Create a new JSON array for the updated membership requests
             JSONArray updatedRequests = new JSONArray();
 
-            // Iterate through the membership requests
             for (int i = 0; i < membershipRequests.length(); i++) {
                 JSONObject request = membershipRequests.getJSONObject(i);
                 int requestUserId = request.getInt("userId");
                 int requestGroupId = request.getInt("groupId");
 
-                // Exclude the request matching the userId and groupId
                 if (!(requestUserId == userId && requestGroupId == groupId)) {
                     updatedRequests.put(request);
                 }
             }
 
-            // Write the updated requests back to the file
             Files.write(Paths.get("membershipRequest.json"), updatedRequests.toString(2).getBytes());
 
             System.out.println("Membership request rejected successfully!");
@@ -221,6 +227,28 @@ public class MembershipRequestDatabase {
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println("Error while rejecting membership request.");
+        }
+    }
+
+    public static void removeMembershipRequestFromFile(int groupId, int userId) {
+        try {
+            String jsonLines = new String(Files.readAllBytes(Paths.get("membershipRequest.json")));
+            JSONArray membershipRequests = new JSONArray(jsonLines);
+            JSONArray updatedRequests = new JSONArray();
+
+            for (int i = 0; i < membershipRequests.length(); i++) {
+                JSONObject request = membershipRequests.getJSONObject(i);
+                int requestGroupId = request.getInt("groupId");
+                int requestUserId = request.getInt("userId");
+
+                if (!(requestGroupId == groupId && requestUserId == userId)) {
+                    updatedRequests.put(request);
+                }
+            }
+
+            Files.write(Paths.get("membershipRequest.json"), updatedRequests.toString().getBytes());
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

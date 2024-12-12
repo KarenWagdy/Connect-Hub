@@ -4,7 +4,10 @@
  */
 package com.mycompany.connecthub;
 
+import java.awt.Image;
 import java.io.File;
+import java.util.ArrayList;
+import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 
@@ -15,15 +18,48 @@ import javax.swing.JFileChooser;
 public class AdminGroupProfile extends javax.swing.JFrame {
 
     Group group;
+    ArrayList<Group> groups;
+    ArrayList<User> requests;
+
     /**
      * Creates new form GroupProfile
      */
-    public AdminGroupProfile(Group group) 
-    {   
+    public AdminGroupProfile(Group group) {
         initComponents();
-        this.group=group;
+        this.group = group;
+        groups = GroupDatabase.readGroups();
         groupNameLabel.setText(group.getName());
         descriptionLabel.setText(group.getDescription());
+        Loadpfp();
+        requests = MembershipRequestDatabase.getGroupMembershipRequests(group.getGroupId());
+        loadMembershipRequests();
+    }
+
+    public void Loadpfp() {
+        String filepath = null;
+        for (int i = 0; i < groups.size(); i++) {
+            if (groups.get(i).getGroupId() == group.getGroupId()) {
+                filepath = groups.get(i).getGroupPhoto();
+            }
+        }
+
+        if (filepath != null) {
+            ImageIcon profilePicture = new ImageIcon(filepath);
+            Image pfp = profilePicture.getImage();
+            Image scaledPFP = pfp.getScaledInstance(300, 200, Image.SCALE_SMOOTH);
+            ImageIcon scaledIcon = new ImageIcon(scaledPFP);
+            groupPhotoLabel.setIcon(scaledIcon);
+        }
+
+    }
+
+    public void loadMembershipRequests() {
+        DefaultListModel<String> model = new DefaultListModel<>();
+        for (User user : requests) {
+            model.addElement(user.getUsername());
+        }
+
+        membershipRequestsList.setModel(model);
     }
 
     /**
@@ -58,8 +94,8 @@ public class AdminGroupProfile extends javax.swing.JFrame {
         jButton5 = new javax.swing.JButton();
         jButton6 = new javax.swing.JButton();
         jButton7 = new javax.swing.JButton();
-        jButton8 = new javax.swing.JButton();
-        jButton9 = new javax.swing.JButton();
+        approveMemberButton = new javax.swing.JButton();
+        declineMemberButton = new javax.swing.JButton();
         changePhotoButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -116,12 +152,17 @@ public class AdminGroupProfile extends javax.swing.JFrame {
             }
         });
 
-        jButton8.setText("Approve");
-
-        jButton9.setText("Decline");
-        jButton9.addActionListener(new java.awt.event.ActionListener() {
+        approveMemberButton.setText("Approve");
+        approveMemberButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton9ActionPerformed(evt);
+                approveMemberButtonActionPerformed(evt);
+            }
+        });
+
+        declineMemberButton.setText("Decline");
+        declineMemberButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                declineMemberButtonActionPerformed(evt);
             }
         });
 
@@ -182,9 +223,9 @@ public class AdminGroupProfile extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jLabel4)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jButton8)
+                                .addComponent(approveMemberButton)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton9))
+                                .addComponent(declineMemberButton))
                             .addComponent(jScrollPane4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                         .addGap(54, 54, 54))
                     .addGroup(layout.createSequentialGroup()
@@ -221,7 +262,9 @@ public class AdminGroupProfile extends javax.swing.JFrame {
                                                 .addGap(0, 10, Short.MAX_VALUE))
                                             .addComponent(jScrollPane2)
                                             .addComponent(jScrollPane5))
-                                        .addGap(42, 42, 42))))
+                                        .addGap(7, 7, 7)
+                                        .addComponent(jButton5)
+                                        .addGap(12, 12, 12))))
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(0, 0, Short.MAX_VALUE)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -229,9 +272,8 @@ public class AdminGroupProfile extends javax.swing.JFrame {
                                     .addComponent(jButton2)
                                     .addComponent(jButton3)
                                     .addComponent(jButton4)
-                                    .addComponent(jButton5)
-                                    .addComponent(jButton8)
-                                    .addComponent(jButton9))))
+                                    .addComponent(approveMemberButton)
+                                    .addComponent(declineMemberButton))))
                         .addComponent(jButton6)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton7)
@@ -251,36 +293,85 @@ public class AdminGroupProfile extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton7ActionPerformed
 
-    private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton9ActionPerformed
+    private void declineMemberButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_declineMemberButtonActionPerformed
+        String selectedRequest = membershipRequestsList.getSelectedValue();
+        if (selectedRequest != null) {
+            ArrayList<User> allUsers = UsersDatabase.readUsers();
+            ArrayList<Group> allGroups = GroupDatabase.readGroups();
+
+            for (Group group : allGroups) {
+                if (group.getName().equals(this.group.getName())) { 
+                    for (User user : allUsers) {
+                        if (selectedRequest.equals(user.getUsername())) {
+                            
+                            MembershipRequestDatabase.removeMembershipRequestFromFile(group.getGroupId(), user.getUserId());
+
+                            DefaultListModel<String> listModel = (DefaultListModel<String>) membershipRequestsList.getModel();
+                            listModel.removeElement(selectedRequest);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+    }//GEN-LAST:event_declineMemberButtonActionPerformed
 
     private void changePhotoButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changePhotoButtonActionPerformed
-                                                     
+
         JFileChooser file = new JFileChooser();
         int value = file.showOpenDialog(this);
         if (value == JFileChooser.APPROVE_OPTION) {
             File f = file.getSelectedFile();
-            String newPath = f.getAbsolutePath();
-            this.group.setGroupPhoto(newPath);
-            ProfileEditing p = new ProfileEditing();
-            ImageIcon scaledIcon = p.changePFP(f);
+            //String newPath = f.getAbsolutePath();
+            //this.group.setGroupPhoto(newPath);
+            GroupEditing g = new GroupEditing();
+            ImageIcon scaledIcon = g.changePFP(f, group);
             groupPhotoLabel.setIcon(scaledIcon);
         }
+
     }//GEN-LAST:event_changePhotoButtonActionPerformed
 
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
-   GroupManagementWindow groupManagementWindow = new GroupManagementWindow();
-   groupManagementWindow.setVisible(true);
+        GroupManagementWindow groupManagementWindow = new GroupManagementWindow();
+        groupManagementWindow.setVisible(true);
     }//GEN-LAST:event_formWindowClosed
+
+    private void approveMemberButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_approveMemberButtonActionPerformed
+        ArrayList<Group> allGroups = GroupDatabase.readGroups();
+
+        String selectedRequest = membershipRequestsList.getSelectedValue();
+        if (selectedRequest != null) {
+            for (Group group : allGroups) {
+                if (group.getName().equals(this.group.getName())) { // Assuming managedGroupName is the group being managed
+                    ArrayList<User> allUsers = UsersDatabase.readUsers();
+
+                    for (User user : allUsers) {
+                        if (selectedRequest.equals(user.getUsername())) {
+                            group.getMembers().add(user);
+
+                            GroupDatabase.saveGroups(allGroups);
+
+                            MembershipRequestDatabase.removeMembershipRequestFromFile(group.getGroupId(), user.getUserId());
+
+                            DefaultListModel<String> listModel = (DefaultListModel<String>) membershipRequestsList.getModel();
+                            listModel.removeElement(selectedRequest);
+                            break;
+                        }
+                    }
+                }
+            }
+        }    }//GEN-LAST:event_approveMemberButtonActionPerformed
 
     /**
      * @param args the command line arguments
      */
-   
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JList<String> adminsList;
+    private javax.swing.JButton approveMemberButton;
     private javax.swing.JButton changePhotoButton;
+    private javax.swing.JButton declineMemberButton;
     private javax.swing.JButton deleteGroupButton;
     private javax.swing.JLabel descriptionLabel;
     private javax.swing.JLabel groupNameLabel;
@@ -292,8 +383,6 @@ public class AdminGroupProfile extends javax.swing.JFrame {
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
-    private javax.swing.JButton jButton8;
-    private javax.swing.JButton jButton9;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;

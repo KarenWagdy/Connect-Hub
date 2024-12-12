@@ -4,13 +4,9 @@
  */
 package com.mycompany.connecthub;
 
-import static com.mycompany.connecthub.FriendDatabase.FriendsArray;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import org.json.JSONArray;
@@ -115,9 +111,8 @@ public class GroupDatabase {
         try {
             String jsonLines = new String(Files.readAllBytes(Paths.get("groups.json")));
             JSONArray groupsArray = new JSONArray(jsonLines);
-            String currentUsername = Functionalities.getUser(userId).getUsername(); // Get username once
+            String currentUsername = Functionalities.getUser(userId).getUsername();
             System.out.println(currentUsername);
-
 
             for (int i = 0; i < groupsArray.length(); i++) {
                 JSONObject groupJson = groupsArray.getJSONObject(i);
@@ -160,9 +155,8 @@ public class GroupDatabase {
         return userGroups;
     }
 
-    public static void leaveGroup(int groupId) {
+    /*public static void leaveGroup(int groupId) {
         try {
-            // Read the JSON file containing groups
             String jsonLines = new String(Files.readAllBytes(Paths.get("Groups.json")));
             JSONArray groups = new JSONArray(jsonLines);
 
@@ -179,20 +173,18 @@ public class GroupDatabase {
 
                     int currentUserId = Functionalities.currentUser.getUserId();
 
-                    // Check if the current user is the primary admin
                     if (Functionalities.currentUser.getUsername().equals(primaryAdmin)) {
                         JOptionPane.showMessageDialog(null, "Primary admins cannot leave the group", "Error", JOptionPane.ERROR_MESSAGE);
-                        updatedGroups.put(group); // Add the group back unchanged
-                        continue; // Skip to the next group
+                        updatedGroups.put(group); 
+                        continue; 
                     }
 
                     boolean isMember = false;
 
-                    // Check if the current user is an admin or a member
                     for (int j = 0; j < admins.length(); j++) {
                         if (admins.getInt(j) == currentUserId) {
                             isMember = true;
-                            admins.remove(j); // Remove the admin
+                            admins.remove(j); 
                             break;
                         }
                     }
@@ -200,23 +192,21 @@ public class GroupDatabase {
                     for (int j = 0; j < members.length(); j++) {
                         if (members.getInt(j) == currentUserId) {
                             isMember = true;
-                            members.remove(j); // Remove the member
+                            members.remove(j); 
                             break;
                         }
                     }
 
                     if (!isMember) {
                         JOptionPane.showMessageDialog(null, "Non-members cannot leave the group", "Error", JOptionPane.ERROR_MESSAGE);
-                        updatedGroups.put(group); // Add the group back unchanged
-                        continue; // Skip to the next group
+                        updatedGroups.put(group); 
+                        continue; 
                     }
 
-                    // Update the group with modified admins and members
                     group.put("admins", admins);
                     group.put("members", members);
                     updatedGroups.put(group);
 
-                    // Notify the user about success
                     if (admins.toList().contains(currentUserId)) {
                         JOptionPane.showMessageDialog(null, "Successfully left the group as an admin", "Success", JOptionPane.INFORMATION_MESSAGE);
                     } else {
@@ -224,13 +214,147 @@ public class GroupDatabase {
                     }
 
                 } else {
-                    // Add all other groups unchanged
                     updatedGroups.put(group);
                 }
             }
 
-            // Save the updated groups back to the file
             Files.write(Paths.get("Groups.json"), updatedGroups.toString(2).getBytes());
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Error while leaving the group.");
+        }
+    }*/
+ /*public static void leaveGroup(int groupId) {
+        try {
+            String jsonLines = new String(Files.readAllBytes(Paths.get("groups.json")));
+            JSONArray groupsArray = new JSONArray(jsonLines);
+            JSONArray updatedGroupsArray = new JSONArray();
+
+            boolean userRemoved = false;
+
+            for (int i = 0; i < groupsArray.length(); i++) {
+                JSONObject groupJson = groupsArray.getJSONObject(i);
+                int currentGroupId = groupJson.getInt("groupId");
+
+                if (currentGroupId == groupId) {
+                    User currentUser = Functionalities.currentUser;
+
+                    JSONArray adminsJsonArray = groupJson.getJSONArray("admins");
+                    JSONArray updatedAdmins = new JSONArray();
+                    for (int j = 0; j < adminsJsonArray.length(); j++) {
+                        if (!adminsJsonArray.getString(j).equals(currentUser.getUsername())) {
+                            updatedAdmins.put(adminsJsonArray.getString(j));
+                        } else {
+                            userRemoved = true;
+                        }
+                    }
+                    groupJson.put("admins", updatedAdmins);
+
+                    JSONArray membersJsonArray = groupJson.getJSONArray("members");
+                    JSONArray updatedMembers = new JSONArray();
+                    for (int j = 0; j < membersJsonArray.length(); j++) {
+                        if (!membersJsonArray.getString(j).equals(currentUser.getUsername())) {
+                            updatedMembers.put(membersJsonArray.getString(j));
+                        } else {
+                            userRemoved = true;
+                        }
+                    }
+                    groupJson.put("members", updatedMembers);
+
+                    String primaryAdmin = groupJson.getString("primaryAdmin");
+                    if (primaryAdmin.equals(currentUser.getUsername())) {
+                        if (updatedAdmins.length() > 0) {
+                            groupJson.put("primaryAdmin", updatedAdmins.getString(0)); // Assign a new primary admin
+                        } else if (updatedMembers.length() > 0) {
+                            groupJson.put("primaryAdmin", updatedMembers.getString(0)); // Promote a member to primary admin
+                        } else {
+                            continue;
+                        }
+                        userRemoved = true;
+                    }
+                }
+
+                updatedGroupsArray.put(groupJson);
+            }
+
+            Files.write(Paths.get("groups.json"), updatedGroupsArray.toString().getBytes());
+
+            if (userRemoved) {
+                System.out.println("You have successfully left the group.");
+            } else {
+                System.out.println("You are not a part of this group.");
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Error while leaving the group.");
+        }
+    }*/
+    public static void leaveGroup(int groupId) {
+        try {
+            String jsonLines = new String(Files.readAllBytes(Paths.get("groups.json")));
+            JSONArray groupsArray = new JSONArray(jsonLines);
+            JSONArray updatedGroupsArray = new JSONArray();
+
+            boolean userRemoved = false;
+
+            for (int i = 0; i < groupsArray.length(); i++) {
+                JSONObject groupJson = groupsArray.getJSONObject(i);
+                int currentGroupId = groupJson.getInt("groupId");
+
+                if (currentGroupId == groupId) {
+                    User currentUser = Functionalities.currentUser;
+
+                    // Update admins
+                    JSONArray adminsJsonArray = groupJson.getJSONArray("admins");
+                    JSONArray updatedAdmins = new JSONArray();
+                    for (int j = 0; j < adminsJsonArray.length(); j++) {
+                        if (!adminsJsonArray.getString(j).equals(currentUser.getUsername())) {
+                            updatedAdmins.put(adminsJsonArray.getString(j));
+                        } else {
+                            userRemoved = true;
+                        }
+                    }
+                    groupJson.put("admins", updatedAdmins);
+
+                    // Update members
+                    JSONArray membersJsonArray = groupJson.getJSONArray("members");
+                    JSONArray updatedMembers = new JSONArray();
+                    for (int j = 0; j < membersJsonArray.length(); j++) {
+                        if (!membersJsonArray.getString(j).equals(currentUser.getUsername())) {
+                            updatedMembers.put(membersJsonArray.getString(j));
+                        } else {
+                            userRemoved = true;
+                        }
+                    }
+                    groupJson.put("members", updatedMembers);
+
+                    // Update primary admin if necessary
+                    String primaryAdmin = groupJson.getString("primaryAdmin");
+                    if (primaryAdmin.equals(currentUser.getUsername())) {
+                        if (updatedAdmins.length() > 0) {
+                            groupJson.put("primaryAdmin", updatedAdmins.getString(0)); // Assign a new primary admin
+                        } else if (updatedMembers.length() > 0) {
+                            groupJson.put("primaryAdmin", updatedMembers.getString(0)); // Promote a member to primary admin
+                        } else {
+                            continue; // Skip saving the group if it has no members/admins
+                        }
+                        userRemoved = true;
+                    }
+                }
+
+                updatedGroupsArray.put(groupJson);
+            }
+
+            // Write the updated JSON array to the file in a pretty format
+            Files.write(Paths.get("groups.json"), updatedGroupsArray.toString(4).getBytes());
+
+            if (userRemoved) {
+                System.out.println("You have successfully left the group.");
+            } else {
+                System.out.println("You are not a part of this group.");
+            }
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -239,28 +363,27 @@ public class GroupDatabase {
     }
 
     public static ArrayList<Group> suggestGroups() {
-        ArrayList<Group> allGroups = GroupDatabase.readGroups(); // Read all groups from database
+        ArrayList<Group> allGroups = GroupDatabase.readGroups();
         ArrayList<Group> suggestions = new ArrayList<>();
 
         try {
             ArrayList<Integer> userGroupIds = new ArrayList<>();
+            ArrayList<Integer> pendingGroupIds = new ArrayList<>();
 
-            // Read groups.json and identify groups the user is a part of
             if (Files.exists(Paths.get("groups.json"))) {
                 String groupsJson = new String(Files.readAllBytes(Paths.get("groups.json")));
                 JSONArray groupsArray = new JSONArray(groupsJson);
 
                 for (int i = 0; i < groupsArray.length(); i++) {
                     JSONObject groupJson = groupsArray.getJSONObject(i);
-                    
+
                     String primaryAdmin = groupJson.getString("primaryAdmin");
                     JSONArray adminsJsonArray = groupJson.getJSONArray("admins");
                     JSONArray membersJsonArray = groupJson.getJSONArray("members");
 
-                    // Check if user is already an admin or a member of the group
                     boolean isUserAdmin = adminsJsonArray.toList().contains(Functionalities.currentUser.getUsername());
                     boolean isUserMember = membersJsonArray.toList().contains(Functionalities.currentUser.getUsername());
-                    boolean isUserPrimaryAdmin= primaryAdmin.equals(Functionalities.currentUser.getUsername());
+                    boolean isUserPrimaryAdmin = primaryAdmin.equals(Functionalities.currentUser.getUsername());
 
                     if (isUserAdmin || isUserMember || isUserPrimaryAdmin) {
                         userGroupIds.add(groupJson.getInt("groupId"));
@@ -268,9 +391,24 @@ public class GroupDatabase {
                 }
             }
 
-            // Filter out groups where the user is already a member or admin
+            if (Files.exists(Paths.get("membershipRequest.json"))) {
+                String requestsJson = new String(Files.readAllBytes(Paths.get("membershipRequest.json")));
+                JSONArray requestsArray = new JSONArray(requestsJson);
+
+                for (int i = 0; i < requestsArray.length(); i++) {
+                    JSONObject requestJson = requestsArray.getJSONObject(i);
+                    int userId = requestJson.getInt("userId");
+                    int groupId = requestJson.getInt("groupId");
+                    String status = requestJson.getString("status");
+
+                    if (userId == Functionalities.currentUser.getUserId() && "Pending".equalsIgnoreCase(status)) {
+                        pendingGroupIds.add(groupId);
+                    }
+                }
+            }
+
             for (Group group : allGroups) {
-                if (!userGroupIds.contains(group.getGroupId())) {
+                if (!userGroupIds.contains(group.getGroupId()) && !pendingGroupIds.contains(group.getGroupId())) {
                     suggestions.add(group);
                 }
             }
