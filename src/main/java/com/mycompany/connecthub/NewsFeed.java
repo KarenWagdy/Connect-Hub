@@ -511,6 +511,13 @@ public class NewsFeed extends javax.swing.JFrame {
                 listModel1.remove(index);
                 notifications.remove(index);
                 FriendRequestNotificationDatabase.saveFriendReqNotifications(notifications);
+            } 
+            if(n instanceof GroupActivitiesNotification){
+                Group group=GroupDatabase.getGroup(((GroupActivitiesNotification) n).getGroupId());
+                UserGroupProfile groupProfile=new UserGroupProfile(group);
+                groupProfile.setVisible(true);
+                GroupActivitiesNotificationDatabase.saveGroupNotifications(notifications);
+                
             }
             
         }

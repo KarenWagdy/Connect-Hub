@@ -24,6 +24,7 @@ public class User {
     private String profilePicture;
     private String coverPicture;
     private String bio;
+    private ArrayList<User> friends;
 
     public String getProfilePicture() {
         return profilePicture;
@@ -67,6 +68,7 @@ public class User {
         this.profilePicture = profilePicture;
         this.coverPicture = coverPicture;
         this.bio = bio;
+        friends=FriendDatabase.readFriends(userId);
     }
 
     public static int getMaxId() {

@@ -431,5 +431,15 @@ public class GroupDatabase {
 
         JOptionPane.showMessageDialog(null, "Group created successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
     }
+    
+     public static Group getGroup(int groupId) {
+        ArrayList<Group> groups = DatabaseFacade.readGroups();
+        for (int i = 0; i < groups.size(); i++) {
+            if (groups.get(i).getGroupId()== groupId) {
+                return groups.get(i);
+            }
+        }
+        return null;
+    }
 
 }
