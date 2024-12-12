@@ -92,6 +92,19 @@ public class GroupActivitiesNotificationDatabase {
 
         }
     }
+    public static GroupActivitiesNotification sendNotification(int recieverId,int groupId)
+    {
+        Group group=GroupDatabase.getGroup(groupId);
+        
+        GroupActivitiesNotification notification = new GroupActivitiesNotification(
+                    Functionalities.currentUser.getUsername() + "Added you to "+group.getName()+ "group",
+                    "GroupActivity",
+                    LocalDateTime.now(),
+                    recieverId,  // Receiver's ID
+                    Functionalities.currentUser.getUserId()  // Sender's ID
+                );
+        return notification;
+    }
 }
 
 
