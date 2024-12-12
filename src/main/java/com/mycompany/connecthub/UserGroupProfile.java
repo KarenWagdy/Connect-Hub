@@ -4,6 +4,10 @@
  */
 package com.mycompany.connecthub;
 
+import java.awt.Image;
+import java.util.ArrayList;
+import javax.swing.ImageIcon;
+
 /**
  *
  * @author nouri
@@ -11,14 +15,37 @@ package com.mycompany.connecthub;
 public class UserGroupProfile extends javax.swing.JFrame {
 
     Group group;
+    ArrayList<Group> groups;
+
     /**
      * Creates new form UserGroupProfile
      */
     public UserGroupProfile(Group group) {
         initComponents();
-        this.group=group;
+        this.group = group;
         groupNameLabel.setText(group.getName());
         descriptionLabel.setText(group.getDescription());
+        groups = GroupDatabase.readGroups();
+        Loadpfp();
+
+    }
+
+    public void Loadpfp() {
+        String filepath = null;
+        for (int i = 0; i < groups.size(); i++) {
+            if (groups.get(i).getGroupId() == group.getGroupId()) {
+                filepath = groups.get(i).getGroupPhoto();
+            }
+        }
+
+        if (filepath != null) {
+            ImageIcon profilePicture = new ImageIcon(filepath);
+            Image pfp = profilePicture.getImage();
+            Image scaledPFP = pfp.getScaledInstance(300, 200, Image.SCALE_SMOOTH);
+            ImageIcon scaledIcon = new ImageIcon(scaledPFP);
+            groupPhotoLabel.setIcon(scaledIcon);
+        }
+
     }
 
     /**
@@ -115,7 +142,6 @@ public class UserGroupProfile extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel descriptionLabel;
