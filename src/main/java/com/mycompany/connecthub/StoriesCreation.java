@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -139,6 +140,11 @@ public class StoriesCreation extends javax.swing.JFrame {
         Story s;
         String xInput = storyText.getText();
         Factory f = new Factory();
+        if(f1==null && xInput.equals("") )
+        {
+            JOptionPane.showMessageDialog(this,"you can not upload an empty Story");
+        }
+        else{
         //check if file exists to set image path with file path or withnull
         if (f1 != null) {
             s = (Story) f.setContent("Story", Functionalities.currentUser.getUserId(), xInput, f1.getAbsolutePath(), LocalDateTime.now());
@@ -151,7 +157,7 @@ public class StoriesCreation extends javax.swing.JFrame {
         this.setVisible(false);
         NewsFeed newsfeed = new NewsFeed();
         newsfeed.setVisible(true);
-
+        }
     }//GEN-LAST:event_storyButtonActionPerformed
 
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed

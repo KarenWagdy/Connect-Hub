@@ -1,0 +1,97 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package com.mycompany.connecthub;
+
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+/**
+ *
+ * @author X1
+ */
+
+public class GroupActivitiesNotificationDatabase {
+    
+    
+        private static GroupActivitiesNotificationDatabase GRnotificationsDatabase=null;
+    
+    private GroupActivitiesNotificationDatabase()
+    {
+        
+    }
+    
+    public static GroupActivitiesNotificationDatabase getInstance() {
+        if (GRnotificationsDatabase == null) {
+            GRnotificationsDatabase = new GroupActivitiesNotificationDatabase();
+        }
+        return GRnotificationsDatabase;  // if notification JSon File database is null make an object of it else return the same object
+    }
+    
+     static ArrayList<Notification> GRnotificationsArray = new ArrayList<>();
+    
+    public static ArrayList<Notification> readGroupNotifications() {
+        GRnotificationsArray.clear();
+
+        try {
+            String jsonLines = new String(Files.readAllBytes(Paths.get("GroupActivitiesnotifications.json")));
+            JSONArray notifications = new JSONArray(jsonLines);
+
+            DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
+            for (int i = 0; i < notifications.length(); i++) {
+                JSONObject notification = notifications.getJSONObject(i);
+                int id  = notification.getInt("notificationId");
+                String message = notification.getString("message");
+                String type = notification.getString("type");
+                LocalDateTime time = LocalDateTime.parse(notification.getString("time"), formatter);
+                int recieverId = notification.getInt("RecieverId");
+                int groupId=notification.getInt("GroupId");
+
+                GRnotificationsArray.add(new GroupActivitiesNotification (message, type, time,recieverId , groupId));
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return GRnotificationsArray;
+    }
+    
+    public static void saveGroupNotifications(ArrayList<Notification> notifications) {
+        JSONArray notificationsArray = new JSONArray();
+        for (Notification i : notifications) {
+            JSONObject obj = new JSONObject();
+            obj.put("notificationId", i.getId());
+            obj.put("message", i.getMessage());
+            obj.put("type", i.getType());
+            obj.put("time", i.getTime());
+            
+            
+          //if (i instanceof GroupActivitiesNotification) {
+            GroupActivitiesNotification GRnotification = (GroupActivitiesNotification) i;
+            obj.put("GroupId", GRnotification.getGroupId());
+            obj.put("RecieverId",GRnotification.getReceiverId());
+
+            
+       // }
+            notificationsArray.put(obj);
+
+        }
+        try {
+            FileWriter file = new FileWriter("GroupActivitiesnotifications.json");
+            file.write(notificationsArray.toString(4));
+            file.close();
+        } catch (IOException e) {
+
+        }
+    }
+}
+
+

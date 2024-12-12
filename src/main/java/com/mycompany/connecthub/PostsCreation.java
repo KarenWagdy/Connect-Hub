@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -120,6 +121,11 @@ public class PostsCreation extends javax.swing.JFrame {
         Post p;
         String xInput = postText.getText();
         Factory f = new Factory();
+        if(f1==null && xInput.equals("") )
+        {
+            JOptionPane.showMessageDialog(this,"you can not upload an empty post");
+        }
+        else{
         //check if file exists to set image path with file path or withnull
         if (f1 != null) {
             p = (Post) f.setContent("Post", Functionalities.currentUser.getUserId(), xInput, f1.getAbsolutePath(), LocalDateTime.now());
@@ -132,6 +138,7 @@ public class PostsCreation extends javax.swing.JFrame {
         this.setVisible(false);
         NewsFeed newsfeed = new NewsFeed();
         newsfeed.setVisible(true);
+        }
         
     }//GEN-LAST:event_postButtonActionPerformed
 //a button to add image to the post
