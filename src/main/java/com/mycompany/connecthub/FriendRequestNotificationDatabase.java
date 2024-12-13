@@ -36,9 +36,9 @@ public class FriendRequestNotificationDatabase {
         return FRnotificationsDatabase;  // if notification JSon File database is null make an object of it else return the same object
     }
     
-    static ArrayList<Notification> notificationsArray = new ArrayList<>();
+    static ArrayList<FriendRequestNotification> notificationsArray = new ArrayList<>();
     
-    public static ArrayList<Notification> readFriendReqNotifications() {
+    public static ArrayList<FriendRequestNotification> readFriendReqNotifications() {
         notificationsArray.clear();
 
         try {
@@ -64,9 +64,9 @@ public class FriendRequestNotificationDatabase {
         return notificationsArray;
     }
     
-    public static void saveFriendReqNotifications(ArrayList<Notification> notifications) {
+    public static void saveFriendReqNotifications(ArrayList<FriendRequestNotification> notifications) {
         JSONArray notificationsArray = new JSONArray();
-        for (Notification i : notifications) {
+        for (FriendRequestNotification i : notifications) {
             JSONObject obj = new JSONObject();
             obj.put("notificationId", i.getId());
             obj.put("message", i.getMessage());
@@ -74,11 +74,10 @@ public class FriendRequestNotificationDatabase {
             obj.put("time", i.getTime());
             
             
-            
           //if (i instanceof FriendRequestNotification) {
-            FriendRequestNotification friendRequest = (FriendRequestNotification) i;
-            obj.put("senderId", friendRequest.getSenderId());
-            obj.put("RecieverId",friendRequest.getReceiverId());
+            //FriendRequestNotification friendRequest = (FriendRequestNotification) i;
+            obj.put("senderId", i.getSenderId());
+            obj.put("RecieverId",i.getReceiverId());
             
        // }
             notificationsArray.put(obj);
@@ -93,9 +92,9 @@ public class FriendRequestNotificationDatabase {
         }
     }
     
-    public static ArrayList<Notification> readFriendReqNotificationsForUser(int userId)
+    public static ArrayList<FriendRequestNotification> readFriendReqNotificationsForUser(int userId)
     {
-        ArrayList<Notification> notifications=new ArrayList<>();
+        ArrayList<FriendRequestNotification> notifications=new ArrayList<>();
         
         try {
             String jsonLines = new String(Files.readAllBytes(Paths.get("FriendRequestnotifications.json")));
@@ -112,7 +111,7 @@ public class FriendRequestNotificationDatabase {
                 int senderId=notification.getInt("senderId");
                 
                 if ( receiverId == userId) {
-                        Notification n=getFriendReqNotification(id);
+                        FriendRequestNotification n=getFriendReqNotification(id);
                         notifications.add(n);
                 } 
             }
@@ -124,9 +123,9 @@ public class FriendRequestNotificationDatabase {
     }
     
     //method that takes notificationId and returns notification
-    public static Notification getFriendReqNotification( int id)
+    public static FriendRequestNotification getFriendReqNotification( int id)
     {    
-         ArrayList<Notification> notifications = FriendRequestNotificationDatabase.readFriendReqNotifications();
+         ArrayList<FriendRequestNotification> notifications = FriendRequestNotificationDatabase.readFriendReqNotifications();
         for (int i = 0; i < notifications.size(); i++) {
             if (notifications.get(i).getId() == id) {
                 return notifications.get(i);

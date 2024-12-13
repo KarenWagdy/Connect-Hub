@@ -128,7 +128,7 @@ public class GroupPostsCreationWindow extends javax.swing.JFrame {
 
     private void postButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_postButtonActionPerformed
         GroupPost p;
-        ArrayList<Notification> postNotification=AddPostNotificationDatabase.readGroupPostsNotifications(); 
+        ArrayList<AddPostNotification> postNotification=AddPostNotificationDatabase.readGroupPostsNotifications(); 
         
         String xInput = postText.getText();
         if (f1 == null && xInput.equals("")) {

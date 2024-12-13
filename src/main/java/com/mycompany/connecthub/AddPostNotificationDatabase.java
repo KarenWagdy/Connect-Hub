@@ -35,9 +35,9 @@ public class AddPostNotificationDatabase {
         return AddPnotificationsDatabase;  // if notification JSon File database is null make an object of it else return the same object
     }
     
-     static ArrayList<Notification> addPostsnotificationsArray = new ArrayList<>();
+     static ArrayList<AddPostNotification> addPostsnotificationsArray = new ArrayList<>();
     
-    public static ArrayList<Notification> readGroupPostsNotifications() {
+    public static ArrayList<AddPostNotification> readGroupPostsNotifications() {
         addPostsnotificationsArray.clear();
 
         try {
@@ -72,9 +72,9 @@ public class AddPostNotificationDatabase {
         return addPostsnotificationsArray;
     }
     
-    public static void saveGroupPostsNotifications(ArrayList<Notification> notifications) {
+    public static void saveGroupPostsNotifications(ArrayList<AddPostNotification> notifications) {
     JSONArray notificationsArray = new JSONArray();
-    for (Notification i : notifications) {
+    for (AddPostNotification i : notifications) {
         JSONObject obj = new JSONObject();
         obj.put("notificationId", i.getId());
         obj.put("message", i.getMessage());
@@ -82,11 +82,11 @@ public class AddPostNotificationDatabase {
         obj.put("time", i.getTime());
 
         // Cast Notification to AddPostNotification
-        AddPostNotification addPostNotification = (AddPostNotification) i;
-        obj.put("GroupId", addPostNotification.getGroupId());
+        //AddPostNotification addPostNotification = (AddPostNotification) i;
+        obj.put("GroupId", i.getGroupId());
 
         // Get group and initialize receiver IDs list
-        Group group = GroupDatabase.getGroup(addPostNotification.getGroupId());
+        Group group = GroupDatabase.getGroup(i.getGroupId());
         ArrayList<Integer> receiversId = new ArrayList<>();
 
         // Add primary admin ID
@@ -173,9 +173,9 @@ public class AddPostNotificationDatabase {
     }*/
     
     
-    public static ArrayList<Notification> readPostNotificationsForUser(int userId)
+    public static ArrayList<AddPostNotification> readPostNotificationsForUser(int userId)
     {
-        ArrayList<Notification> notifications=new ArrayList<>();
+        ArrayList<AddPostNotification> notifications=new ArrayList<>();
          ArrayList<Integer> receiverIds = new ArrayList<>();
           
         
@@ -202,7 +202,7 @@ public class AddPostNotificationDatabase {
             int groupId=notification.getInt("GroupId");
             for (int z = 0; z < receiverIds.size(); z++) {
                 if (receiverIds.get(z) == userId) {
-                    Notification n = getPostNotification(id);
+                    AddPostNotification n = getPostNotification(id);
                     if (n != null) {
                         notifications.add(n);
                     } else {
@@ -227,9 +227,9 @@ public class AddPostNotificationDatabase {
 
         return notifications;
     }
-     public static Notification getPostNotification( int id)
+     public static AddPostNotification getPostNotification( int id)
     {    
-         ArrayList<Notification> notifications = AddPostNotificationDatabase.readGroupPostsNotifications();
+         ArrayList<AddPostNotification> notifications = AddPostNotificationDatabase.readGroupPostsNotifications();
         for (int i = 0; i < notifications.size(); i++) {
             if (notifications.get(i).getId() == id) {
                 return notifications.get(i);

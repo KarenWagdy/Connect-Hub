@@ -37,9 +37,9 @@ public class GroupActivitiesNotificationDatabase {
         return GRnotificationsDatabase;  // if notification JSon File database is null make an object of it else return the same object
     }
     
-     static ArrayList<Notification> GRnotificationsArray = new ArrayList<>();
+     static ArrayList<GroupActivitiesNotification> GRnotificationsArray = new ArrayList<>();
     
-    public static ArrayList<Notification> readGroupNotifications() {
+    public static ArrayList<GroupActivitiesNotification> readGroupNotifications() {
         GRnotificationsArray.clear();
 
         try {
@@ -65,9 +65,11 @@ public class GroupActivitiesNotificationDatabase {
         return GRnotificationsArray;
     }
     
-    public static void saveGroupNotifications(ArrayList<Notification> notifications) {
+    
+    
+    public static void saveGroupNotifications(ArrayList<GroupActivitiesNotification> notifications) {
         JSONArray notificationsArray = new JSONArray();
-        for (Notification i : notifications) {
+        for (GroupActivitiesNotification i : notifications) {
             JSONObject obj = new JSONObject();
             obj.put("notificationId", i.getId());
             obj.put("message", i.getMessage());
@@ -76,9 +78,9 @@ public class GroupActivitiesNotificationDatabase {
             
             
           //if (i instanceof GroupActivitiesNotification) {
-            GroupActivitiesNotification GRnotification = (GroupActivitiesNotification) i;
-            obj.put("GroupId", GRnotification.getGroupId());
-            obj.put("RecieverId",GRnotification.getReceiverId());
+            //GroupActivitiesNotification GRnotification = (GroupActivitiesNotification) i;
+            obj.put("GroupId", i.getGroupId());
+            obj.put("RecieverId",i.getReceiverId());
 
             
        // }
@@ -94,9 +96,9 @@ public class GroupActivitiesNotificationDatabase {
         }
     }
     
-    public static ArrayList<Notification> readGroupNotificationsForUser(int userId)
+    public static ArrayList<GroupActivitiesNotification> readGroupNotificationsForUser(int userId)
     {
-        ArrayList<Notification> notifications=new ArrayList<>();
+        ArrayList<GroupActivitiesNotification> notifications=new ArrayList<>();
         
         try {
             String jsonLines = new String(Files.readAllBytes(Paths.get("GroupActivitiesnotifications.json")));
@@ -113,7 +115,7 @@ public class GroupActivitiesNotificationDatabase {
                 int receiverId = notification.getInt("RecieverId");
                 int groupId=notification.getInt("GroupId");
                 if ( receiverId == userId) {
-                        Notification n=getGroupNotification(id);
+                        GroupActivitiesNotification n=getGroupNotification(id);
                         notifications.add(n);
                 } 
             }
@@ -124,9 +126,9 @@ public class GroupActivitiesNotificationDatabase {
         return notifications;
     }
     
-     public static Notification getGroupNotification( int id)
+     public static GroupActivitiesNotification getGroupNotification( int id)
     {    
-         ArrayList<Notification> notifications = GroupActivitiesNotificationDatabase.readGroupNotifications();
+         ArrayList<GroupActivitiesNotification> notifications = GroupActivitiesNotificationDatabase.readGroupNotifications();
         for (int i = 0; i < notifications.size(); i++) {
             if (notifications.get(i).getId() == id) {
                 return notifications.get(i);

@@ -30,10 +30,10 @@ public class DatabaseFacade {
          return FriendDatabase.getInstance().readFriendsFile();
     }
       
-       public static ArrayList<Notification> readFriendReqNotifications() {
+       public static ArrayList<FriendRequestNotification> readFriendReqNotifications() {
          return FriendRequestNotificationDatabase.getInstance().readFriendReqNotifications();
     }
-        public static ArrayList<Notification> readGroupActivitiesNotifications() {
+        public static ArrayList<GroupActivitiesNotification> readGroupActivitiesNotifications() {
          return GroupActivitiesNotificationDatabase.getInstance().readGroupNotifications();
     }
         

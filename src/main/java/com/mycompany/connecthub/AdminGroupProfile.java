@@ -489,7 +489,7 @@ public class AdminGroupProfile extends javax.swing.JFrame {
 
     private void approveMemberButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_approveMemberButtonActionPerformed
         ArrayList<Group> allGroups = GroupDatabase.readGroups();
-        ArrayList<Notification> notifications = GroupActivitiesNotificationDatabase.readGroupNotifications();
+        ArrayList<GroupActivitiesNotification> notifications = GroupActivitiesNotificationDatabase.readGroupNotifications();
         String selectedRequest = membershipRequestsList.getSelectedValue();
         if (selectedRequest != null) {
             for (Group group : allGroups) {

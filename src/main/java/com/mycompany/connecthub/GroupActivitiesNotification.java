@@ -29,9 +29,13 @@ public class GroupActivitiesNotification extends Notification{
         this.id =id;
          
      }    
+
+    public int getId() {
+        return id;
+    }
     
     public static int getMaxId() {
-        ArrayList<Notification> notifications = GroupActivitiesNotificationDatabase.GRnotificationsArray;
+        ArrayList<GroupActivitiesNotification> notifications = GroupActivitiesNotificationDatabase.GRnotificationsArray;
         if (notifications.isEmpty()) {
             return 0;
         } else {
