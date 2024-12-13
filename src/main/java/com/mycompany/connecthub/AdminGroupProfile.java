@@ -22,6 +22,8 @@ public class AdminGroupProfile extends javax.swing.JFrame {
     ArrayList<Group> groups;
     ArrayList<User> requests;
     ArrayList<GroupPost> groupPost;
+    ArrayList<User> members;
+    ArrayList<User> admins;
 
     /**
      * Creates new form GroupProfile
@@ -314,7 +316,31 @@ public class AdminGroupProfile extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void deletePostButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deletePostButtonActionPerformed
-        // TODO add your handling code here:
+        int selectedIndex = postsList.getSelectedIndex();
+        if (selectedIndex == -1) {
+            JOptionPane.showMessageDialog(this, "Please select a post to delete");
+            return;
+        }
+
+        ArrayList<GroupPost> groupPosts = GroupPostDatabase.readGroupPosts();
+
+        int confirmation = JOptionPane.showConfirmDialog(this, "Are you sure you want to delete this post?","Confirm Delete",JOptionPane.YES_NO_OPTION);
+
+        if (confirmation == JOptionPane.YES_OPTION) {
+            groupPosts.remove(selectedIndex);
+            GroupPostDatabase.savePostsForGroup(groupPosts);
+
+            DefaultListModel<String> listModel = (DefaultListModel<String>) postsList.getModel();
+            listModel.remove(selectedIndex);
+            postsList.setModel(listModel);
+
+            JOptionPane.showMessageDialog(this, "Post deleted successfully");
+
+            AdminGroupProfile adminGroupProfile = new AdminGroupProfile(group);
+            adminGroupProfile.setVisible(true);
+            this.setVisible(false);
+
+        }
     }//GEN-LAST:event_deletePostButtonActionPerformed
 
     private void declineMemberButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_declineMemberButtonActionPerformed
@@ -404,9 +430,11 @@ public class AdminGroupProfile extends javax.swing.JFrame {
 
             EditGroupPostWindow editWindow = new EditGroupPostWindow(selectedPost, group);
             editWindow.setVisible(true);
+            this.setVisible(false);
         } else {
             JOptionPane.showMessageDialog(this, "Please select a post to edit.");
         }
+
     }//GEN-LAST:event_editPostButtonActionPerformed
 
     /**

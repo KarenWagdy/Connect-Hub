@@ -58,6 +58,11 @@ public class EditGroupPostWindow extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Edit post");
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                formWindowClosed(evt);
+            }
+        });
 
         editButton.setBackground(new java.awt.Color(51, 153, 255));
         editButton.setForeground(new java.awt.Color(255, 255, 255));
@@ -226,6 +231,11 @@ public class EditGroupPostWindow extends javax.swing.JFrame {
             postLabel.setIcon(scaledIcon);
         }
     }//GEN-LAST:event_addimageButtonActionPerformed
+
+    private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
+        AdminGroupProfile adminGroupProfile = new AdminGroupProfile(group);
+        adminGroupProfile.setVisible(true);
+    }//GEN-LAST:event_formWindowClosed
 
     /**
      * @param args the command line arguments
