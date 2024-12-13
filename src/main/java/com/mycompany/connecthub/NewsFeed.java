@@ -535,18 +535,23 @@ public class NewsFeed extends javax.swing.JFrame {
                 UserGroupProfile groupProfile=new UserGroupProfile(group);
                 groupProfile.setVisible(true);
                 GroupActivitiesNotificationDatabase.saveGroupNotifications(AllNotifications);
+                this.setVisible(false);
                 
             }
             if(n instanceof AddPostNotification){
-                Group group=GroupDatabase.getGroup(((GroupActivitiesNotification) n).getGroupId());
+                Group group=GroupDatabase.getGroup(((AddPostNotification) n).getGroupId());
                 if(Functionalities.currentUser.getUsername().equals(group.getPrimaryAdmin())){
+                    AddPostNotificationDatabase.saveGroupPostsNotifications(AllNotifications);
                     AdminGroupProfile adminProfile=new AdminGroupProfile(group);
                     adminProfile.setVisible(true);
-                    AddPostNotificationDatabase.saveGroupPostsNotifications(AllNotifications);
+                    this.setVisible(false);
+                    
                 }else{
+                  AddPostNotificationDatabase.saveGroupPostsNotifications(AllNotifications);
                 UserGroupProfile groupProfile=new UserGroupProfile(group);
                 groupProfile.setVisible(true);
-                GroupActivitiesNotificationDatabase.saveGroupNotifications(AllNotifications);
+                this.setVisible(false);
+                
                 }
             }
             

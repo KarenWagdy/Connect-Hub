@@ -26,7 +26,7 @@ public class AddPostNotification extends Notification{
     }
     
      public static int getMaxId() {
-        ArrayList<Notification> notifications = GroupActivitiesNotificationDatabase.GRnotificationsArray;
+        ArrayList<Notification> notifications = AddPostNotificationDatabase.addPostsnotificationsArray;
         if (notifications.isEmpty()) {
             return 0;
         } else {
@@ -45,6 +45,11 @@ public class AddPostNotification extends Notification{
     public ArrayList<Integer> getReceiverIds() {
         return receiverIds;
     }
+
+    public void setReceiverIds(ArrayList<Integer> receiverIds) {
+        this.receiverIds = receiverIds;
+    }
+    
 
    
 

@@ -5,13 +5,14 @@
 package com.mycompany.connecthub;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 /**
  *
  * @author X1
  */
 public abstract class Notification {
-    private int id=1;
+    private int id;
     private String message;
     private String type;
     private LocalDateTime time; 
@@ -40,10 +41,4 @@ public abstract class Notification {
         return time;
     }
 
-
-    
-    
-    
-    
-    
 }

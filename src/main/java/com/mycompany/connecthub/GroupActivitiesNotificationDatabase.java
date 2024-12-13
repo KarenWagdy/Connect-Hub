@@ -56,7 +56,7 @@ public class GroupActivitiesNotificationDatabase {
                 int recieverId = notification.getInt("RecieverId");
                 int groupId=notification.getInt("GroupId");
 
-                GRnotificationsArray.add(new GroupActivitiesNotification (message, type, time,recieverId , groupId));
+                GRnotificationsArray.add(new GroupActivitiesNotification (id,message, type, time,recieverId , groupId));
             }
 
         } catch (IOException e) {
