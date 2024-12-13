@@ -13,7 +13,7 @@ import java.util.ArrayList;
  */
 public class FriendRequestNotification extends Notification {
     private int senderId;
-    private int id;
+    private int id=1;
     private int ReceiverId;
     public FriendRequestNotification(String message, String type, LocalDateTime time, int ReceiverId, int senderId) {
         super( message, type, time);

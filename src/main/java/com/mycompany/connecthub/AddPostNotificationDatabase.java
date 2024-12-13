@@ -73,7 +73,73 @@ public class AddPostNotificationDatabase {
     }
     
     public static void saveGroupPostsNotifications(ArrayList<Notification> notifications) {
-        JSONArray notificationsArray = new JSONArray();
+    JSONArray notificationsArray = new JSONArray();
+    for (Notification i : notifications) {
+        JSONObject obj = new JSONObject();
+        obj.put("notificationId", i.getId());
+        obj.put("message", i.getMessage());
+        obj.put("type", i.getType());
+        obj.put("time", i.getTime());
+
+        // Cast Notification to AddPostNotification
+        AddPostNotification addPostNotification = (AddPostNotification) i;
+        obj.put("GroupId", addPostNotification.getGroupId());
+
+        // Get group and initialize receiver IDs list
+        Group group = GroupDatabase.getGroup(addPostNotification.getGroupId());
+        ArrayList<Integer> receiversId = new ArrayList<>();
+
+        // Add primary admin ID
+        User primaryAdmin = Functionalities.getUser(group.getPrimaryAdmin());
+        if (primaryAdmin != null) {
+            if(primaryAdmin.getUserId()!=Functionalities.currentUser.getUserId())
+            receiversId.add(primaryAdmin.getUserId());
+        }
+
+        // Add group member IDs
+        for (User member : group.getMembers()) {
+            if (!receiversId.contains(member.getUserId())) {  // Avoid duplicates
+                if(member.getUserId()!=Functionalities.currentUser.getUserId())
+                { receiversId.add(member.getUserId());}
+            }
+        }
+
+        // Add group admin IDs
+        for (User admin : group.getAdmins()) {
+            if (!receiversId.contains(admin.getUserId())) {  // Avoid duplicates
+               if(admin.getUserId()!=Functionalities.currentUser.getUserId())
+                receiversId.add(admin.getUserId());
+            }
+        }
+
+        // Add receiversId to JSON object
+        obj.put("receiversId", new JSONArray(receiversId));
+
+        // Add object to notifications array
+        notificationsArray.put(obj);
+    }
+
+    // Write JSON array to file
+    try (FileWriter file = new FileWriter("AddPostsnotifications.json")) {
+        file.write(notificationsArray.toString(4)); // Pretty print with indentation
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+}
+
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+    
+   /*     JSONArray notificationsArray = new JSONArray();
         for (Notification i : notifications) {
             JSONObject obj = new JSONObject();
             obj.put("notificationId", i.getId());
@@ -104,7 +170,9 @@ public class AddPostNotificationDatabase {
         } catch (IOException e) {
 
         }
-    }
+    }*/
+    
+    
     public static ArrayList<Notification> readPostNotificationsForUser(int userId)
     {
         ArrayList<Notification> notifications=new ArrayList<>();
@@ -176,7 +244,7 @@ public class AddPostNotificationDatabase {
         Group group=GroupDatabase.getGroup(groupId);
         
         AddPostNotification notification = new AddPostNotification(
-                    Functionalities.currentUser.getUsername() + "Posted on "+group.getName()+ "group",
+                    Functionalities.currentUser.getUsername() + " Posted on "+group.getName()+ " group",
                     "AddPost",
                     LocalDateTime.now(),
                     groupId,

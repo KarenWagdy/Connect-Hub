@@ -185,20 +185,34 @@ public class GroupPostsCreationWindow extends javax.swing.JFrame {
                 }
             }
             ArrayList<Integer> receiverIds=new ArrayList<>();
+             User PrimaryAdmin=Functionalities.getUser(group.getPrimaryAdmin());
+             if (PrimaryAdmin.getUserId()!=Functionalities.currentUser.getUserId()) {
+                     receiverIds.add(PrimaryAdmin.getUserId());
+                       }
+
+// Add members, excluding current user
+            for (User user : group.getMembers()) {
+    if (user.getUserId()!=(Functionalities.currentUser.getUserId())) {
+        receiverIds.add(user.getUserId());
+                 }
+                    }
+             
+             
+           /*  receiverIds.add(PrimaryAdmin.getUserId());
            for (User user : group.getMembers())
            {
-               receiverIds.add(user.getUserId());
-           }
+               if(user.getUserId()!=Functionalities.currentUser.getUserId())
+               { receiverIds.add(user.getUserId());}
+           }*/
            for (User user : group.getAdmins())
            {
                receiverIds.add(user.getUserId());
            }
            
-           receiverIds.add(Functionalities.getUserId(group.getPrimaryAdmin()));
-           
-           
+          System.out.println("Receiver IDs: " + receiverIds);
             //for (User user : group.getMembers()){
-                Notification userNotification= AddPostNotificationDatabase.sendPostNotification(receiverIds, group.getGroupId());
+                 AddPostNotification userNotification= AddPostNotificationDatabase.sendPostNotification(receiverIds, group.getGroupId());
+                 userNotification.setReceiverIds(receiverIds);
                 postNotification.add(userNotification);
                 AddPostNotificationDatabase.saveGroupPostsNotifications(postNotification);
         }

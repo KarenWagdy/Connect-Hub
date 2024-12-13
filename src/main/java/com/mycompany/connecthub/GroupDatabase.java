@@ -668,7 +668,7 @@ public class GroupDatabase {
     }
 
     public static Group getGroup(int groupId) {
-        ArrayList<Group> groups = DatabaseFacade.readGroups();
+        ArrayList<Group> groups = GroupDatabase.readGroups();
         for (int i = 0; i < groups.size(); i++) {
             if (groups.get(i).getGroupId() == groupId) {
                 return groups.get(i);
