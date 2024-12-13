@@ -356,7 +356,7 @@ public class AdminGroupProfile extends javax.swing.JFrame {
 
     private void approveMemberButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_approveMemberButtonActionPerformed
         ArrayList<Group> allGroups = GroupDatabase.readGroups();
-
+        ArrayList<Notification>notifications=GroupActivitiesNotificationDatabase.readGroupNotifications();
         String selectedRequest = membershipRequestsList.getSelectedValue();
         if (selectedRequest != null) {
             for (Group group : allGroups) {
@@ -366,10 +366,14 @@ public class AdminGroupProfile extends javax.swing.JFrame {
                     for (User user : allUsers) {
                         if (selectedRequest.equals(user.getUsername())) {
                             group.getMembers().add(user);
-
+                           
                             GroupDatabase.saveGroups(allGroups);
 
                             MembershipRequestDatabase.removeMembershipRequestFromFile(group.getGroupId(), user.getUserId());
+                            
+                            GroupActivitiesNotification notification= GroupActivitiesNotificationDatabase.sendGroupNotification(user.getUserId(), group.getGroupId());
+                            notifications.add(notification);
+                            GroupActivitiesNotificationDatabase.saveGroupNotifications(notifications);
 
                             DefaultListModel<String> listModel = (DefaultListModel<String>) membershipRequestsList.getModel();
                             listModel.removeElement(selectedRequest);
