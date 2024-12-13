@@ -165,9 +165,6 @@
     </Component>
     <Component class="javax.swing.JLabel" name="NameLabel">
       <Properties>
-        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="ff" green="ff" red="ff" type="rgb"/>
-        </Property>
         <Property name="opaque" type="boolean" value="true"/>
       </Properties>
     </Component>
