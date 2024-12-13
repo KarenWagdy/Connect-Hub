@@ -16,7 +16,9 @@ public class NewsFeed extends javax.swing.JFrame {
    ArrayList<Post> posts;
    ArrayList<User> friends;
    ArrayList<Story> stories;
-   ArrayList<Notification> notifications;
+   ArrayList<Notification> AllNotifications;
+   ArrayList<Notification> GroupNotification;
+   //ArrayList <Notification> AllNotification;
    Post p;
     /**
      * Creates new form NewsFeed
@@ -26,13 +28,15 @@ public class NewsFeed extends javax.swing.JFrame {
         stories=StoryDatabase.readStories();
         posts=PostDatabase.readPosts();
         friends=FriendDatabase.readFriends(Functionalities.currentUser.getUserId());
-        notifications=FriendRequestNotificationDatabase.readFriendReqNotificationsForUser(Functionalities.currentUser.getUserId());
-      
+        AllNotifications=FriendRequestNotificationDatabase.readFriendReqNotificationsForUser(Functionalities.currentUser.getUserId());
+        AllNotifications.addAll(GroupActivitiesNotificationDatabase.readGroupNotificationsForUser(Functionalities.currentUser.getUserId()));
+        AllNotifications.addAll(AddPostNotificationDatabase.readPostNotificationsForUser(Functionalities.currentUser.getUserId()));
         LoadFriendsPosts();
         LoadFriends();
         LoadFriendsStories();
-        LoadNotifications();
+        LoadFRNotifications();
         loadAllSuggestedGroups();
+       // LoadGroupNotifications();
 
         
     }
@@ -75,17 +79,31 @@ public class NewsFeed extends javax.swing.JFrame {
         }
         storiesList.setModel(listModel);
     }
-    public void LoadNotifications() {
+    public void LoadFRNotifications() {
         //view notifications in NotificationList
         DefaultListModel<String> listModel = new DefaultListModel<>();
 
-        for (Notification notification : notifications) {
+        for (Notification notification : AllNotifications) {
+            listModel.addElement(notification.getMessage());
+            
+        }
+        
+        NotificationList.setModel(listModel);
+
+    }
+    
+    /*public void LoadGroupNotifications() {
+        //view notifications in NotificationList
+        DefaultListModel<String> listModel = new DefaultListModel<>();
+
+        for (Notification notification : GroupNotification) {
             listModel.addElement(notification.getMessage());
             
         }
         NotificationList.setModel(listModel);
 
-    }
+    }*/
+    
     public void loadAllSuggestedGroups() {
         DefaultListModel<String> listModel = new DefaultListModel<>();
         ArrayList<Group> suggested = GroupDatabase.suggestGroups();
@@ -500,7 +518,7 @@ public class NewsFeed extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Choose a notification");
         } else {
             
-            Notification n = notifications.get(index);
+            Notification n = AllNotifications.get(index);
             if(n instanceof FriendRequestNotification)
             {
                int senderId= ((FriendRequestNotification) n).getSenderId();
@@ -509,16 +527,29 @@ public class NewsFeed extends javax.swing.JFrame {
                 w.setVisible(true);
                 listModel1 = (DefaultListModel<String>) NotificationList.getModel();
                 listModel1.remove(index);
-                notifications.remove(index);
-                FriendRequestNotificationDatabase.saveFriendReqNotifications(notifications);
+                AllNotifications.remove(index);
+                FriendRequestNotificationDatabase.saveFriendReqNotifications(AllNotifications);
             } 
             if(n instanceof GroupActivitiesNotification){
                 Group group=GroupDatabase.getGroup(((GroupActivitiesNotification) n).getGroupId());
                 UserGroupProfile groupProfile=new UserGroupProfile(group);
                 groupProfile.setVisible(true);
-                GroupActivitiesNotificationDatabase.saveGroupNotifications(notifications);
+                GroupActivitiesNotificationDatabase.saveGroupNotifications(AllNotifications);
                 
             }
+            if(n instanceof AddPostNotification){
+                Group group=GroupDatabase.getGroup(((GroupActivitiesNotification) n).getGroupId());
+                if(Functionalities.currentUser.getUsername().equals(group.getPrimaryAdmin())){
+                    AdminGroupProfile adminProfile=new AdminGroupProfile(group);
+                    adminProfile.setVisible(true);
+                    AddPostNotificationDatabase.saveGroupPostsNotifications(AllNotifications);
+                }else{
+                UserGroupProfile groupProfile=new UserGroupProfile(group);
+                groupProfile.setVisible(true);
+                GroupActivitiesNotificationDatabase.saveGroupNotifications(AllNotifications);
+                }
+            }
+            
             
         }
         

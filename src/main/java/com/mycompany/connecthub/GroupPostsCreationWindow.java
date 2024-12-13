@@ -128,6 +128,8 @@ public class GroupPostsCreationWindow extends javax.swing.JFrame {
 
     private void postButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_postButtonActionPerformed
         GroupPost p;
+        ArrayList<Notification> postNotification=AddPostNotificationDatabase.readGroupPostsNotifications(); 
+        
         String xInput = postText.getText();
         if (f1 == null && xInput.equals("")) {
             JOptionPane.showMessageDialog(this, "you can not upload an empty post");
@@ -135,10 +137,28 @@ public class GroupPostsCreationWindow extends javax.swing.JFrame {
             //check if file exists to set image path with file path or withnull
             if (f1 != null) {
                 p = new GroupPost(group.getGroupId(), Functionalities.currentUser.getUserId(), xInput, f1.getAbsolutePath(), LocalDateTime.now());
+            
             } else {
                 p = new GroupPost(group.getGroupId(), Functionalities.currentUser.getUserId(), xInput, "null", LocalDateTime.now());
 
             }
+            //sending notification to users
+            for (User user : group.getMembers()){
+                Notification n= AddPostNotificationDatabase.sendPostNotification(user.getUserId(), group.getGroupId());
+                postNotification.add(n);
+                AddPostNotificationDatabase.saveGroupPostsNotifications(postNotification);
+            } 
+           //sending notification to primary admin
+                Notification n= AddPostNotificationDatabase.sendPostNotification(Functionalities.getUserId(group.getPrimaryAdmin()), group.getGroupId());
+                postNotification.add(n);
+                AddPostNotificationDatabase.saveGroupPostsNotifications(postNotification);
+           //sending notification to admins
+            for (User user : group.getAdmins()) {
+                Notification notification= AddPostNotificationDatabase.sendPostNotification(user.getUserId(), group.getGroupId());
+                postNotification.add(notification);
+                AddPostNotificationDatabase.saveGroupPostsNotifications(postNotification);
+                }
+            
             ArrayList<GroupPost> groupPosts = GroupPostDatabase.readGroupPosts();
             groupPosts.add(p);
             GroupPostDatabase.savePostsForGroup(groupPosts);

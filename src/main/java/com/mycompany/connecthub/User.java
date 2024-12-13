@@ -68,7 +68,7 @@ public class User {
         this.profilePicture = profilePicture;
         this.coverPicture = coverPicture;
         this.bio = bio;
-        friends=FriendDatabase.readFriends(userId);
+       // friends=FriendDatabase.readFriends(userId);
     }
 
     public static int getMaxId() {

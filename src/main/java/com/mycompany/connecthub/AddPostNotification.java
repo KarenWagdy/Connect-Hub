@@ -16,9 +16,9 @@ public class AddPostNotification extends Notification{
     
     private int id=1;
     private int groupId;
-    private ArrayList<Integer> receiverIds;
+    private int receiverIds;
     
-    public AddPostNotification(String message, String type, LocalDateTime time,int groupId,ArrayList<Integer> receiverIds) {
+    public AddPostNotification(String message, String type, LocalDateTime time,int groupId,int receiverIds) {
         super(message, type, time);
         this.groupId = groupId;
         this.receiverIds=receiverIds;
@@ -42,7 +42,7 @@ public class AddPostNotification extends Notification{
         this.groupId = groupId;
     }
 
-    public ArrayList<Integer> getReceiverIds() {
+    public int getReceiverIds() {
         return receiverIds;
     }
     
