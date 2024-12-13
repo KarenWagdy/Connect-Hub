@@ -5,6 +5,7 @@
 package com.mycompany.connecthub;
 
 import static com.mycompany.connecthub.GroupActivitiesNotificationDatabase.GRnotificationsArray;
+import static com.mycompany.connecthub.GroupActivitiesNotificationDatabase.getGroupNotification;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -61,7 +62,6 @@ public class AddPostNotificationDatabase {
                 
                 int groupId=notification.getInt("GroupId");
 
-                addPostsnotificationsArray.add(new AddPostNotification (message, type, time, groupId,receiverIds));
             }
 
         } catch (IOException e) {
@@ -93,6 +93,74 @@ public class AddPostNotificationDatabase {
         } catch (IOException e) {
 
         }
+    }
+    public static ArrayList<Notification> readPostNotificationsForUser(int userId)
+    {
+        ArrayList<Notification> notifications=new ArrayList<>();
+         ArrayList<Integer> receiverIds = new ArrayList<>();
+          
+        
+        try {
+            String jsonLines = new String(Files.readAllBytes(Paths.get("AddPostsnotifications.json")));
+            JSONArray notificationJson = new JSONArray(jsonLines);
+            
+            for (int i = 0; i < notificationJson.length(); i++) {
+                
+                DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
+               JSONObject notification = notificationJson.getJSONObject(i);
+                 int id= notification.getInt("notificationId");
+                String message = notification.getString("message");
+                String type = notification.getString("type");
+                LocalDateTime time = LocalDateTime.parse(notification.getString("time"), formatter);
+                    // Retrieve receiverIds as JSONArray
+            JSONArray receiverIdsJson = notification.getJSONArray("receiverIds");
+
+            // Convert JSONArray to ArrayList<Integer>
+           
+            for (int j = 0; j < receiverIdsJson.length(); j++) {
+                receiverIds.add(receiverIdsJson.getInt(j));
+            }
+                
+                int groupId=notification.getInt("GroupId");
+                for(int z=0;z<receiverIds.size();z++){
+                if ( receiverIds.get(z) == userId) {
+                        Notification n=getPostNotification(id);
+                        notifications.add(n);
+                } 
+            }
+
+            }
+               }
+         catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return notifications;
+    }
+     public static Notification getPostNotification( int id)
+    {    
+         ArrayList<Notification> notifications = AddPostNotificationDatabase.readGroupPostsNotifications();
+        for (int i = 0; i < notifications.size(); i++) {
+            if (notifications.get(i).getId() == id) {
+                return notifications.get(i);
+            }
+        }
+        return null;
+
+    }
+     
+      public static AddPostNotification sendPostNotification(int recieverIds,int groupId)
+    {
+        Group group=GroupDatabase.getGroup(groupId);
+        
+        AddPostNotification notification = new AddPostNotification(
+                    Functionalities.currentUser.getUsername() + "Posted on "+group.getName()+ "group",
+                    "AddPost",
+                    LocalDateTime.now(),
+                    groupId,
+                    recieverIds 
+                );
+        return notification;
     }
 }
 

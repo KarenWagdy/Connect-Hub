@@ -4,6 +4,7 @@
  */
 package com.mycompany.connecthub;
 
+import static com.mycompany.connecthub.FriendRequestNotificationDatabase.getFriendReqNotification;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -92,7 +93,50 @@ public class GroupActivitiesNotificationDatabase {
 
         }
     }
-    public static GroupActivitiesNotification sendNotification(int recieverId,int groupId)
+    
+    public static ArrayList<Notification> readGroupNotificationsForUser(int userId)
+    {
+        ArrayList<Notification> notifications=new ArrayList<>();
+        
+        try {
+            String jsonLines = new String(Files.readAllBytes(Paths.get("GroupActivitiesnotifications.json")));
+            JSONArray notificationJson = new JSONArray(jsonLines);
+            
+            for (int i = 0; i < notificationJson.length(); i++) {
+                
+                DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
+               JSONObject notification = notificationJson.getJSONObject(i);
+                int id  = notification.getInt("notificationId");
+                String message = notification.getString("message");
+                String type = notification.getString("type");
+                LocalDateTime time = LocalDateTime.parse(notification.getString("time"), formatter);
+                int receiverId = notification.getInt("RecieverId");
+                int groupId=notification.getInt("GroupId");
+                if ( receiverId == userId) {
+                        Notification n=getGroupNotification(id);
+                        notifications.add(n);
+                } 
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return notifications;
+    }
+    
+     public static Notification getGroupNotification( int id)
+    {    
+         ArrayList<Notification> notifications = GroupActivitiesNotificationDatabase.readGroupNotifications();
+        for (int i = 0; i < notifications.size(); i++) {
+            if (notifications.get(i).getId() == id) {
+                return notifications.get(i);
+            }
+        }
+        return null;
+
+    }
+    
+    public static GroupActivitiesNotification sendGroupNotification(int recieverId,int groupId)
     {
         Group group=GroupDatabase.getGroup(groupId);
         
@@ -101,10 +145,12 @@ public class GroupActivitiesNotificationDatabase {
                     "GroupActivity",
                     LocalDateTime.now(),
                     recieverId,  // Receiver's ID
-                    Functionalities.currentUser.getUserId()  // Sender's ID
+                    groupId // Sender's ID
                 );
         return notification;
     }
+    
+    
 }
 
 
