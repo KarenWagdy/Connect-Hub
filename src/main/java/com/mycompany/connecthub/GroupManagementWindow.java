@@ -298,6 +298,7 @@ public class GroupManagementWindow extends javax.swing.JFrame {
                         break;
                     }
                     MembershipRequestDatabase.saveMembershipRequest(Functionalities.currentUser.getUserId(), g.getGroupId());
+                    GroupLeftDatabase.removeGroupLeft(Functionalities.currentUser.getUserId(), g.getGroupId());
                     listModel1 = (DefaultListModel<String>) groupsAndUsersList.getModel();
                     listModel1.removeElement(selectedRequest);
                     groupsAndUsersList.setModel(listModel1);
