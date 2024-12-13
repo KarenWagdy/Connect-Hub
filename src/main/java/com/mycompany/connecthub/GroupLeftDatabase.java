@@ -35,12 +35,13 @@ public class GroupLeftDatabase {
 
         try {
             FileWriter file = new FileWriter("groupsLeft.json");
-            file.write(groupsLeftArray.toString(2)); // Indent factor for pretty printing
+            file.write(groupsLeftArray.toString(2)); 
             file.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
 
     public static ArrayList<Integer> readGroupsLeft(int userId) {
         ArrayList<Integer> groupsLeftIds = new ArrayList<>();
@@ -73,15 +74,14 @@ public class GroupLeftDatabase {
         JSONArray groupsLeftArray = new JSONArray(jsonLines);
         JSONArray updatedArray = new JSONArray();
 
-        // Iterate and filter out the matching entry
+        
         for (int i = 0; i < groupsLeftArray.length(); i++) {
             JSONObject groupLeft = groupsLeftArray.getJSONObject(i);
             if (groupLeft.getInt("userId") != userId || groupLeft.getInt("groupId") != groupId) {
-                updatedArray.put(groupLeft); // Keep only non-matching entries
+                updatedArray.put(groupLeft); 
             }
         }
 
-        // Write the updated array back to the file
         FileWriter file = new FileWriter("groupsLeft.json");
         file.write(updatedArray.toString(2));
         file.close();

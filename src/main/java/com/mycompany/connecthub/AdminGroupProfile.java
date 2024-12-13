@@ -37,8 +37,12 @@ public class AdminGroupProfile extends javax.swing.JFrame {
         Loadpfp();
         requests = MembershipRequestDatabase.getGroupMembershipRequests(group.getGroupId());
         groupPost = GroupPostDatabase.readPostsforGroup(group.getGroupId());
+        members = GroupDatabase.readGroupMembers(group.getGroupId());
+        admins = GroupDatabase.readGroupAdmins(group.getGroupId());
         loadMembershipRequests();
         LoadGroupPosts();
+        loadMembers();
+        loadAdmins();
     }
 
     public void LoadGroupPosts() {
@@ -78,6 +82,24 @@ public class AdminGroupProfile extends javax.swing.JFrame {
         membershipRequestsList.setModel(model);
     }
 
+    public void loadMembers() {
+        DefaultListModel<String> model = new DefaultListModel<>();
+        for (User user : members) {
+            model.addElement(user.getUsername());
+        }
+
+        membersList.setModel(model);
+    }
+
+    public void loadAdmins() {
+        DefaultListModel<String> model = new DefaultListModel<>();
+        for (User user : admins) {
+            model.addElement(user.getUsername());
+        }
+
+        adminsList.setModel(model);
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -103,16 +125,19 @@ public class AdminGroupProfile extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        demoteAdminsButton = new javax.swing.JButton();
+        promoteMembersButton = new javax.swing.JButton();
+        removeAdminsButton = new javax.swing.JButton();
+        removeMembersButton = new javax.swing.JButton();
         addPostButton = new javax.swing.JButton();
         editPostButton = new javax.swing.JButton();
         deletePostButton = new javax.swing.JButton();
         approveMemberButton = new javax.swing.JButton();
         declineMemberButton = new javax.swing.JButton();
         changePhotoButton = new javax.swing.JButton();
+        viewPostButton = new javax.swing.JButton();
+        showMembersButton = new javax.swing.JButton();
+        showAdminsButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Admin group profile");
@@ -132,6 +157,11 @@ public class AdminGroupProfile extends javax.swing.JFrame {
         descriptionLabel.setOpaque(true);
 
         deleteGroupButton.setText("Delete Group");
+        deleteGroupButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteGroupButtonActionPerformed(evt);
+            }
+        });
 
         jScrollPane1.setViewportView(postsList);
 
@@ -149,13 +179,33 @@ public class AdminGroupProfile extends javax.swing.JFrame {
 
         jLabel5.setText("Posts");
 
-        jButton1.setText("Demote");
+        demoteAdminsButton.setText("Demote");
+        demoteAdminsButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                demoteAdminsButtonActionPerformed(evt);
+            }
+        });
 
-        jButton2.setText("Promote");
+        promoteMembersButton.setText("Promote");
+        promoteMembersButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                promoteMembersButtonActionPerformed(evt);
+            }
+        });
 
-        jButton3.setText("Remove");
+        removeAdminsButton.setText("Remove");
+        removeAdminsButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                removeAdminsButtonActionPerformed(evt);
+            }
+        });
 
-        jButton4.setText("Remove");
+        removeMembersButton.setText("Remove");
+        removeMembersButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                removeMembersButtonActionPerformed(evt);
+            }
+        });
 
         addPostButton.setText("Add");
         addPostButton.addActionListener(new java.awt.event.ActionListener() {
@@ -199,117 +249,149 @@ public class AdminGroupProfile extends javax.swing.JFrame {
             }
         });
 
+        viewPostButton.setText("View");
+        viewPostButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                viewPostButtonActionPerformed(evt);
+            }
+        });
+
+        showMembersButton.setBackground(new java.awt.Color(51, 153, 255));
+        showMembersButton.setForeground(new java.awt.Color(255, 255, 255));
+        showMembersButton.setText("Show");
+        showMembersButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                showMembersButtonActionPerformed(evt);
+            }
+        });
+
+        showAdminsButton.setBackground(new java.awt.Color(51, 153, 255));
+        showAdminsButton.setForeground(new java.awt.Color(255, 255, 255));
+        showAdminsButton.setText("Show");
+        showAdminsButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                showAdminsButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(groupNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(groupPhotoLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(changePhotoButton)
+                            .addComponent(descriptionLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(groupNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(groupPhotoLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(changePhotoButton))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel3)))
+                                .addGap(22, 22, 22)
+                                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(descriptionLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE)
-                                .addComponent(jButton1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton3)))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(deletePostButton, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(editPostButton, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jButton2)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(jButton4))
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(jLabel2)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                        .addGap(28, 28, 28)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(jLabel5)))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(30, 30, 30)
-                                        .addComponent(addPostButton, javax.swing.GroupLayout.DEFAULT_SIZE, 148, Short.MAX_VALUE)))))
-                        .addGap(37, 37, 37)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel4)
+                                        .addComponent(jLabel3)
+                                        .addGap(33, 33, 33)
+                                        .addComponent(showAdminsButton))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addComponent(demoteAdminsButton)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(removeAdminsButton)))))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(approveMemberButton)
+                                .addComponent(promoteMembersButton)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(declineMemberButton))
-                            .addComponent(jScrollPane4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                        .addGap(54, 54, 54))
+                                .addComponent(removeMembersButton))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel2)
+                                .addGap(18, 18, 18)
+                                .addComponent(showMembersButton)
+                                .addGap(4, 4, 4))
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(28, 28, 28)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(addPostButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel5)
+                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(editPostButton, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(deleteGroupButton)
-                        .addGap(0, 0, Short.MAX_VALUE))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(deletePostButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(viewPostButton, javax.swing.GroupLayout.DEFAULT_SIZE, 157, Short.MAX_VALUE))))
+                .addGap(37, 37, 37)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel4)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(approveMemberButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(declineMemberButton))
+                    .addComponent(jScrollPane4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addGap(54, 54, 54))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel3)
+                    .addComponent(jLabel4)
+                    .addComponent(jLabel5)
+                    .addComponent(showMembersButton)
+                    .addComponent(showAdminsButton))
+                .addGap(3, 3, 3)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addComponent(groupNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(groupPhotoLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(changePhotoButton)
+                        .addGap(18, 18, 18)
+                        .addComponent(descriptionLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(deleteGroupButton)
+                        .addGap(29, 29, 29))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jScrollPane2)
+                            .addComponent(jScrollPane4, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane5, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(addPostButton)
+                                .addGap(5, 5, 5)))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
+                                .addGap(7, 7, 7)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jLabel2)
-                                    .addComponent(jLabel3)
-                                    .addComponent(jLabel4)
-                                    .addComponent(jLabel5))
-                                .addGap(3, 3, 3)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(groupNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(groupPhotoLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(changePhotoButton)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jScrollPane4)
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addGap(0, 10, Short.MAX_VALUE))
-                                            .addComponent(jScrollPane2)
-                                            .addComponent(jScrollPane5))
-                                        .addGap(7, 7, 7)
-                                        .addComponent(addPostButton)
-                                        .addGap(12, 12, 12))))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jButton1)
-                                    .addComponent(jButton2)
-                                    .addComponent(jButton3)
-                                    .addComponent(jButton4)
+                                    .addComponent(demoteAdminsButton)
+                                    .addComponent(promoteMembersButton)
+                                    .addComponent(removeAdminsButton)
+                                    .addComponent(removeMembersButton)
                                     .addComponent(approveMemberButton)
-                                    .addComponent(declineMemberButton))))
-                        .addComponent(editPostButton)
+                                    .addComponent(declineMemberButton)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(editPostButton)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(deletePostButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(212, 212, 212)
-                        .addComponent(descriptionLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addComponent(deleteGroupButton)
-                .addGap(35, 35, 35))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(viewPostButton)
+                        .addGap(17, 17, 17))))
         );
 
         pack();
@@ -324,7 +406,7 @@ public class AdminGroupProfile extends javax.swing.JFrame {
 
         ArrayList<GroupPost> groupPosts = GroupPostDatabase.readGroupPosts();
 
-        int confirmation = JOptionPane.showConfirmDialog(this, "Are you sure you want to delete this post?","Confirm Delete",JOptionPane.YES_NO_OPTION);
+        int confirmation = JOptionPane.showConfirmDialog(this, "Are you sure you want to delete this post?", "Confirm Delete", JOptionPane.YES_NO_OPTION);
 
         if (confirmation == JOptionPane.YES_OPTION) {
             groupPosts.remove(selectedIndex);
@@ -393,7 +475,7 @@ public class AdminGroupProfile extends javax.swing.JFrame {
         String selectedRequest = membershipRequestsList.getSelectedValue();
         if (selectedRequest != null) {
             for (Group group : allGroups) {
-                if (group.getName().equals(this.group.getName())) { // Assuming managedGroupName is the group being managed
+                if (group.getName().equals(this.group.getName())) {
                     ArrayList<User> allUsers = UsersDatabase.readUsers();
 
                     for (User user : allUsers) {
@@ -410,6 +492,7 @@ public class AdminGroupProfile extends javax.swing.JFrame {
 
                             DefaultListModel<String> listModel = (DefaultListModel<String>) membershipRequestsList.getModel();
                             listModel.removeElement(selectedRequest);
+                            membershipRequestsList.setModel(listModel);
                             break;
                         }
                     }
@@ -437,10 +520,116 @@ public class AdminGroupProfile extends javax.swing.JFrame {
 
     }//GEN-LAST:event_editPostButtonActionPerformed
 
+    private void removeMembersButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeMembersButtonActionPerformed
+        int selectedIndex = membersList.getSelectedIndex();
+        if (selectedIndex != -1) {
+            User user = members.get(selectedIndex);
+            GroupDatabase.removeMember(group.getGroupId(), user.getUsername());
+            DefaultListModel<String> listModel = (DefaultListModel<String>) membersList.getModel();
+            listModel.removeElementAt(selectedIndex);
+            membersList.setModel(listModel);
+            
+        } else {
+            JOptionPane.showMessageDialog(this, "Please select a member to remove.");
+        }
+
+    }//GEN-LAST:event_removeMembersButtonActionPerformed
+
+    private void promoteMembersButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_promoteMembersButtonActionPerformed
+        int selectedIndex = membersList.getSelectedIndex();
+        User primaryUser = Functionalities.getUser(group.getPrimaryAdmin());
+        if (Functionalities.currentUser.getUserId() == primaryUser.getUserId()) {
+            if (selectedIndex != -1) {
+                User user = members.get(selectedIndex);
+                GroupDatabase.promoteToAdmin(group.getGroupId(), user.getUsername());
+                DefaultListModel<String> listModel = (DefaultListModel<String>) membersList.getModel();
+                listModel.removeElementAt(selectedIndex);
+                membersList.setModel(listModel);
+                
+            } else {
+                JOptionPane.showMessageDialog(this, "Please select a member to promote.");
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Only Primary Admins can promote members");
+
+        }
+    }//GEN-LAST:event_promoteMembersButtonActionPerformed
+
+    private void removeAdminsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeAdminsButtonActionPerformed
+        int selectedIndex = adminsList.getSelectedIndex();
+        User primaryUser = Functionalities.getUser(group.getPrimaryAdmin());
+        if (Functionalities.currentUser.getUserId() == primaryUser.getUserId()) {
+            if (selectedIndex != -1) {
+                User user = admins.get(selectedIndex);
+                GroupDatabase.removeAdmin(group.getGroupId(), user.getUsername());
+                DefaultListModel<String> listModel = (DefaultListModel<String>) adminsList.getModel();
+                listModel.removeElementAt(selectedIndex);
+                adminsList.setModel(listModel);
+            } else {
+                JOptionPane.showMessageDialog(this, "Please select an admin to remove.");
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Only Primary Admins can remove Admins");
+
+        }
+    }//GEN-LAST:event_removeAdminsButtonActionPerformed
+
+    private void demoteAdminsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_demoteAdminsButtonActionPerformed
+        int selectedIndex = adminsList.getSelectedIndex();
+        User primaryUser = Functionalities.getUser(group.getPrimaryAdmin());
+        if (Functionalities.currentUser.getUserId() == primaryUser.getUserId()) {
+            if (selectedIndex != -1) {
+                User user = admins.get(selectedIndex);
+                GroupDatabase.demoteAdmin(group.getGroupId(), user.getUsername());
+                DefaultListModel<String> listModel = (DefaultListModel<String>) adminsList.getModel();
+                listModel.removeElementAt(selectedIndex);
+                adminsList.setModel(listModel);
+            } else {
+                JOptionPane.showMessageDialog(this, "Please select an admin to demote.");
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Only Primary Admins can demote admins");
+        }
+
+     }//GEN-LAST:event_demoteAdminsButtonActionPerformed
+
+    private void deleteGroupButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteGroupButtonActionPerformed
+        int confirmation = JOptionPane.showConfirmDialog(this, "Are you sure you want to delete this post?", "Confirm Delete", JOptionPane.YES_NO_OPTION);
+
+        if (confirmation == JOptionPane.YES_OPTION) {
+            GroupDatabase.deleteGroup(group.getGroupId());
+            this.setVisible(false);
+            NewsFeed newsFeed = new NewsFeed();
+            newsFeed.setVisible(true);
+        }
+    }//GEN-LAST:event_deleteGroupButtonActionPerformed
+
+    private void viewPostButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewPostButtonActionPerformed
+        int index = postsList.getSelectedIndex();
+        if (index == -1) {
+            JOptionPane.showMessageDialog(this, "Choose Group Post");
+        } else {
+            GroupPost groupPosts = groupPost.get(index);
+            this.setVisible(false);
+            ViewGroupPosts view = new ViewGroupPosts(groupPosts, group);
+            view.setVisible(true);
+        }
+    }//GEN-LAST:event_viewPostButtonActionPerformed
+
+    private void showMembersButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showMembersButtonActionPerformed
+        // TODO add your handling code here:
+        members = GroupDatabase.readGroupMembers(group.getGroupId());
+        loadMembers();
+    }//GEN-LAST:event_showMembersButtonActionPerformed
+
+    private void showAdminsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showAdminsButtonActionPerformed
+        admins = GroupDatabase.readGroupAdmins(group.getGroupId());
+        loadAdmins();
+    }//GEN-LAST:event_showAdminsButtonActionPerformed
+
     /**
      * @param args the command line arguments
      */
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addPostButton;
     private javax.swing.JList<String> adminsList;
@@ -449,14 +638,11 @@ public class AdminGroupProfile extends javax.swing.JFrame {
     private javax.swing.JButton declineMemberButton;
     private javax.swing.JButton deleteGroupButton;
     private javax.swing.JButton deletePostButton;
+    private javax.swing.JButton demoteAdminsButton;
     private javax.swing.JLabel descriptionLabel;
     private javax.swing.JButton editPostButton;
     private javax.swing.JLabel groupNameLabel;
     private javax.swing.JLabel groupPhotoLabel;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -468,5 +654,11 @@ public class AdminGroupProfile extends javax.swing.JFrame {
     private javax.swing.JList<String> membersList;
     private javax.swing.JList<String> membershipRequestsList;
     private javax.swing.JList<String> postsList;
+    private javax.swing.JButton promoteMembersButton;
+    private javax.swing.JButton removeAdminsButton;
+    private javax.swing.JButton removeMembersButton;
+    private javax.swing.JButton showAdminsButton;
+    private javax.swing.JButton showMembersButton;
+    private javax.swing.JButton viewPostButton;
     // End of variables declaration//GEN-END:variables
 }

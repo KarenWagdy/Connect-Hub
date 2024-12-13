@@ -75,10 +75,8 @@ public class GroupPostDatabase {
     }
     
  
-    //save objects of type post
     public static void savePostsForGroup(ArrayList<GroupPost> post) {
         JSONArray postsArray = new JSONArray();
-        //write the attributes of post object in post.json file
         for (GroupPost i : post) {
             JSONObject obj = new JSONObject();
             obj.put("groupId", i.getGroupId());
@@ -98,7 +96,6 @@ public class GroupPostDatabase {
             System.out.println("Error");
         }
     }
-    //read all posts for specific user using userId
     public static ArrayList<GroupPost> readPostsforGroup(int groupId)
     {
        ArrayList<GroupPost> allGroupPosts=readGroupPosts(); 
@@ -112,7 +109,6 @@ public class GroupPostDatabase {
        }
        return groupPosts;
     }
-    //method to select an image from specific file and add it to the post
     public ImageIcon choosePostImage(File f,Group g)
     {
         ImageIcon postPicture = new ImageIcon(f.getAbsolutePath());

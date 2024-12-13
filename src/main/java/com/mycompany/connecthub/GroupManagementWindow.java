@@ -29,7 +29,6 @@ public class GroupManagementWindow extends javax.swing.JFrame {
         }
 
         loadAllGroups();
-        //loadAllSuggestedGroups();
         joinGroupButton.setVisible(false);
         leaveGroupButton.setVisible(false);
         viewGroupButton.setVisible(false);
@@ -62,17 +61,7 @@ public class GroupManagementWindow extends javax.swing.JFrame {
         groupsList.setModel(listModel2);
 
     }
-    /*public void loadAllSuggestedGroups() {
-        listModel3 = new DefaultListModel<>();
-        ArrayList<Group> suggested = GroupDatabase.suggestGroups();
-
-        for (Group group : suggested) {
-            listModel3.addElement(group.getName());
-        }
-
-        groupsSuggestionsList.setModel(listModel3);
-
-    }*/
+    
     
 
     /**
@@ -302,8 +291,7 @@ public class GroupManagementWindow extends javax.swing.JFrame {
                     listModel1 = (DefaultListModel<String>) groupsAndUsersList.getModel();
                     listModel1.removeElement(selectedRequest);
                     groupsAndUsersList.setModel(listModel1);
-                    //groupsAndUsersList.updateUI();
-                    //groupsAndUsersList.clearSelection();
+                    
 
                     break;
 
@@ -329,8 +317,7 @@ public class GroupManagementWindow extends javax.swing.JFrame {
                     GroupDatabase.leaveGroup(g.getGroupId());
                     return;
 
-                    // Clear selection to maintain a clean view
-                    //groupsAndUsersList.clearSelection();
+                    
                 }
             }
 

@@ -4,35 +4,46 @@
  */
 package com.mycompany.connecthub;
 
+import com.mycompany.connecthub.Functionalities;
+import com.mycompany.connecthub.User;
+import com.mycompany.connecthub.UserGroupProfile;
 import java.awt.Image;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 /**
  *
- * @author Alex
+ * @author karen
  */
-public class ViewStories extends javax.swing.JFrame {
 
-    Story s;
+public class ViewGroupPosts extends javax.swing.JFrame {
 
+    GroupPost p;
+    Group group;
     /**
-     * Creates new form ViewStories
+     * Creates new form ViewGroupPosts
      */
-    public ViewStories(Story s) {
+    public ViewGroupPosts(GroupPost p, Group group) {
         initComponents();
-        this.s = s;
-        showStory();
-    }
+        this.p=p;
+        this.group=group;
+        showgroupPost();
 
-    public void showStory() {
-        viewContent.setText(s.getContent());
-        viewDate.setText(s.getTimeStamp().toString());
-        ImageIcon image = new ImageIcon(s.getImagePath());
+    }
+    
+    public void showgroupPost() {
+        viewContent.setText(p.getContent());
+        viewDate.setText(p.getTimeStamp().toString());
+        ImageIcon image = new ImageIcon(p.getImagePath());
         Image img = image.getImage();
         Image scaledImage = img.getScaledInstance(300, 200, Image.SCALE_SMOOTH);
         ImageIcon scaledIcon = new ImageIcon(scaledImage);
         viewPhoto.setIcon(scaledIcon);
-        
     }
 
     /**
@@ -44,32 +55,32 @@ public class ViewStories extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
-        viewDate = new javax.swing.JLabel();
         viewPhoto = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
+        viewDate = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
         viewContent = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("View Stories");
+        setTitle("View Post");
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosed(java.awt.event.WindowEvent evt) {
                 formWindowClosed(evt);
             }
         });
 
-        jLabel1.setText("Content");
+        viewPhoto.setBackground(new java.awt.Color(255, 255, 255));
+        viewPhoto.setOpaque(true);
 
         viewDate.setBackground(new java.awt.Color(255, 255, 255));
         viewDate.setOpaque(true);
 
-        viewPhoto.setBackground(new java.awt.Color(255, 255, 255));
-        viewPhoto.setOpaque(true);
-
-        jLabel2.setText("Date");
+        jLabel1.setText("Content");
 
         viewContent.setBackground(new java.awt.Color(255, 255, 255));
         viewContent.setOpaque(true);
+
+        jLabel2.setText("Date");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -110,13 +121,53 @@ public class ViewStories extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
-        NewsFeed newsfeed = new NewsFeed();
-        newsfeed.setVisible(true);    }//GEN-LAST:event_formWindowClosed
+        try {
+            User currentUser = Functionalities.currentUser; 
+            int groupId = group.getGroupId(); 
+
+            String jsonLines = new String(Files.readAllBytes(Paths.get("groups.json")));
+            JSONArray groupsArray = new JSONArray(jsonLines);
+
+            for (int i = 0; i < groupsArray.length(); i++) {
+                JSONObject groupJson = groupsArray.getJSONObject(i);
+                if (groupJson.getInt("groupId") == groupId) {
+                    String primaryAdmin = groupJson.getString("primaryAdmin");
+                    JSONArray adminsArray = groupJson.getJSONArray("admins");
+                    JSONArray membersArray = groupJson.getJSONArray("members");
+
+                    if (primaryAdmin.equals(currentUser.getUsername())) {
+                        AdminGroupProfile adminWindow = new AdminGroupProfile(group);
+                        adminWindow.setVisible(true);
+                    } else if (isUserInList(currentUser.getUsername(), adminsArray)) {
+                        AdminGroupProfile adminWindow = new AdminGroupProfile(group);
+                        adminWindow.setVisible(true);
+                    } else if (isUserInList(currentUser.getUsername(), membersArray)) {
+                        UserGroupProfile userWindow = new UserGroupProfile(group);
+                        userWindow.setVisible(true);
+                    }
+                    break; 
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error while loading the group details.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private boolean isUserInList(String username, JSONArray jsonArray) {
+        for (int i = 0; i < jsonArray.length(); i++) {
+            if (jsonArray.getString(i).equals(username)) {
+                return true;
+            }
+        }
+        return false;
+    
+    }//GEN-LAST:event_formWindowClosed
 
     /**
      * @param args the command line arguments
      */
-
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

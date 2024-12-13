@@ -119,29 +119,7 @@ public class CreateGroupWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_descriptionTextFieldActionPerformed
 
     private void createGroupButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createGroupButtonActionPerformed
-        /*String name = nameTextField.getText();
-        String description = descriptionTextField.getText();
-
-        if (name.isEmpty() || description.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "All fields are required. Please fill them in.", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        } else {
-            int result = GroupEditing.validateGroupName(name);
-            
-            if (result == 1) {
-                JOptionPane.showMessageDialog(this, "Group name is already taken.", "Error", JOptionPane.ERROR_MESSAGE);
-
-            } else {
-               ArrayList<Group> groups = GroupDatabase.readGroups();
-               Group group = new Group(new ArrayList<>(), new ArrayList<>(),Functionalities.currentUser.getUsername() ,name, description, "null");
-               groups.add(group);
-               GroupDatabase.saveGroups(groups);
-              GroupDatabase.createGroup(name, description, path);
-               this.setVisible(false);
-               NewsFeed newsfeed = new NewsFeed();
-               newsfeed.setVisible(true);
-            }
-        }*/
+        
         String name = nameTextField.getText();
         String description = descriptionTextField.getText();
 
