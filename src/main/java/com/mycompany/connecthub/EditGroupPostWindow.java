@@ -130,76 +130,20 @@ public class EditGroupPostWindow extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-/*
+
     private void editButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editButtonActionPerformed
-        GroupPost p;
-        //ArrayList<Notification> postNotification=AddPostNotificationDatabase.readGroupPostsNotifications();
-
-        String xInput = postText.getText();
-        if (f1 == null && xInput.equals("")) {
-            JOptionPane.showMessageDialog(this, "You can not upload an empty post");
-        } else {
-            //check if file exists to set image path with file path or withnull
-            if (f1 != null) {
-                p = new GroupPost(group.getGroupId(), Functionalities.currentUser.getUserId(), xInput, f1.getAbsolutePath(), LocalDateTime.now());
-
-            } else {
-                p = new GroupPost(group.getGroupId(), Functionalities.currentUser.getUserId(), xInput, "null", LocalDateTime.now());
-
-            }
-            
-
-            ArrayList<GroupPost> groupPosts = GroupPostDatabase.readGroupPosts();
-            groupPosts.add(p);
-            GroupPostDatabase.savePostsForGroup(groupPosts);
-
-            if (Functionalities.currentUser.getUsername().equals(group.getPrimaryAdmin())) {
-                AdminGroupProfile adminGroupProfile = new AdminGroupProfile(group);
-                adminGroupProfile.setVisible(true);
-                this.setVisible(false);
-            } else {
-                for (User user : group.getAdmins()) {
-                    if (user.getUserId() == Functionalities.currentUser.getUserId()) {
-                        AdminGroupProfile adminGroupProfile = new AdminGroupProfile(group);
-                        adminGroupProfile.setVisible(true);
-                        this.setVisible(false);
-
-                    }
-                }
-
-                for (User user : group.getMembers()) {
-                    if (user.getUserId() == Functionalities.currentUser.getUserId()) {
-                        System.out.println("member");
-                        UserGroupProfile userGroupProfile = new UserGroupProfile(group);
-                        userGroupProfile.setVisible(true);
-                        this.setVisible(false);
-
-                    }
-                }
-            }
-        }
-    }//GEN-LAST:event_editButtonActionPerformed
-*/
-    private void editButtonActionPerformed(java.awt.event.ActionEvent evt) {
-
-        // Load all posts and get the selected one
-        //ArrayList<GroupPost> groupPosts = GroupPostDatabase.readGroupPosts();
-        //GroupPost selectedPost = groupPosts.get(selectedIndex);
-        // Get updated input
-        String updatedContent = postText.getText();
+         String updatedContent = postText.getText();
         if (updatedContent.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Post content cannot be empty");
             return;
         }
 
-        // Handle updated image (f1 holds the selected image file path)
         String updatedImagePath = (f1 != null) ? f1.getAbsolutePath() : "null";
-        // Update post details
-        ;
+        
 
         ArrayList<GroupPost> groupPosts = GroupPostDatabase.readGroupPosts();
 
-        for (GroupPost post : groupPosts) // Save the updated list back to the database
+        for (GroupPost post : groupPosts) 
         {
             if (post.getContentId() == p.getContentId()) {
                 post.setContent(updatedContent);
@@ -214,8 +158,9 @@ public class EditGroupPostWindow extends javax.swing.JFrame {
         adminGroupProfile.setVisible(true);
         this.setVisible(false);
 
-    }
+    }//GEN-LAST:event_editButtonActionPerformed
 
+    
     private void postTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_postTextActionPerformed
 
     }//GEN-LAST:event_postTextActionPerformed
