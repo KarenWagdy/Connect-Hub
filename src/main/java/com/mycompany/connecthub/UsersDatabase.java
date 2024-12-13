@@ -37,7 +37,7 @@ public class UsersDatabase {
 
     static ArrayList<User> usersArray = new ArrayList<>();
 
-    public static ArrayList<User> readUsers() {
+    /*public static ArrayList<User> readUsers() {
         usersArray.clear();
 
         try {
@@ -58,6 +58,42 @@ public class UsersDatabase {
                 String bio = user.getString("bio");
 
                 usersArray.add(new User(email, username, password, dateOfBirth, false, profilePicture, coverPicture, bio));
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return usersArray;
+    }*/
+    public static ArrayList<User> readUsers() {
+        usersArray.clear();
+
+        try {
+            String jsonLines = new String(Files.readAllBytes(Paths.get("users.json")));
+            JSONArray users = new JSONArray(jsonLines);
+
+            DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE;
+            for (int i = 0; i < users.length(); i++) {
+                JSONObject user = users.getJSONObject(i);
+                String email = user.getString("email");
+                String username = user.getString("username");
+                int id = user.getInt("userId");
+                LocalDate dateOfBirth = LocalDate.parse(user.getString("dateOfBirth"), formatter);
+                String password = user.getString("password");
+                String status = user.getString("status");
+                String profilePicture = user.getString("profilePicture");
+                String coverPicture = user.getString("coverPicture");
+                String bio = user.getString("bio");
+
+                User user1 = null;
+                if (status.equalsIgnoreCase("Online")) {
+                    user1 = new User(email, username, password, dateOfBirth, false, profilePicture, coverPicture, bio);
+                    user1.setStatus("Online");
+                    usersArray.add(user1);
+                } else {
+                    usersArray.add(new User(email, username, password, dateOfBirth, false, profilePicture, coverPicture, bio));
+
+                }
             }
 
         } catch (IOException e) {

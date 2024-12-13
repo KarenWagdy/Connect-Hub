@@ -112,7 +112,7 @@ public class Functionalities {
 
     }
 
-    public static int login(String email, String password) {
+    /*public static int login(String email, String password) {
         ArrayList<User> loginUsers = UsersDatabase.readUsers();
         for (User u : loginUsers) {
             if (u.getEmail().equalsIgnoreCase(email)) {
@@ -129,6 +129,28 @@ public class Functionalities {
             }
         }
         return 2; // incorrect pass or email
+    }*/
+    public static int login(String email, String password) {
+        ArrayList<User> loginUsers = UsersDatabase.readUsers();
+        for (User u : loginUsers) {
+            if (u.getEmail().equalsIgnoreCase(email)) {
+                try {
+                    if (u.getPassword().equals(passwordHashing(password))) {
+                        if (!"Online".equalsIgnoreCase(u.getStatus())) {
+                            u.setStatus("Online");
+                            currentUser = u;
+                            UsersDatabase.saveUsers(loginUsers);
+                        } else {
+                            currentUser = u;
+                        }
+                        return 1; // success login
+                    }
+                } catch (NoSuchAlgorithmException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        }
+        return 2; //incorrect pass or email
     }
 
     public static User getUser(int userId) {
@@ -150,11 +172,11 @@ public class Functionalities {
         }
         return 0;
     }
-    
+
     public static User getUser(String username) {
         ArrayList<User> users = UsersDatabase.readUsers();
         for (int i = 0; i < users.size(); i++) {
-            if (users.get(i).getUsername().equals(username) ) {
+            if (users.get(i).getUsername().equals(username)) {
                 return users.get(i);
             }
         }
