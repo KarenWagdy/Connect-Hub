@@ -97,6 +97,8 @@ public class GroupManagementWindow extends javax.swing.JFrame {
 
         jLabel2.setText("Groups");
 
+        joinGroupButton.setBackground(new java.awt.Color(51, 153, 255));
+        joinGroupButton.setForeground(new java.awt.Color(255, 255, 255));
         joinGroupButton.setText("Join Group");
         joinGroupButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -104,6 +106,8 @@ public class GroupManagementWindow extends javax.swing.JFrame {
             }
         });
 
+        leaveGroupButton.setBackground(new java.awt.Color(51, 153, 255));
+        leaveGroupButton.setForeground(new java.awt.Color(255, 255, 255));
         leaveGroupButton.setText("Leave Group");
         leaveGroupButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -118,6 +122,8 @@ public class GroupManagementWindow extends javax.swing.JFrame {
         });
         jScrollPane3.setViewportView(groupsAndUsersList);
 
+        searchGroupButton.setBackground(new java.awt.Color(51, 153, 255));
+        searchGroupButton.setForeground(new java.awt.Color(255, 255, 255));
         searchGroupButton.setText("Search");
         searchGroupButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -127,6 +133,8 @@ public class GroupManagementWindow extends javax.swing.JFrame {
 
         searchTextField.setText("Search Users and Groups");
 
+        viewGroupButton.setBackground(new java.awt.Color(51, 153, 255));
+        viewGroupButton.setForeground(new java.awt.Color(255, 255, 255));
         viewGroupButton.setText("View Group");
         viewGroupButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

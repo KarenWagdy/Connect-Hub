@@ -150,12 +150,12 @@ public class AdminGroupProfile extends javax.swing.JFrame {
         groupPhotoLabel.setBackground(new java.awt.Color(255, 255, 255));
         groupPhotoLabel.setOpaque(true);
 
-        groupNameLabel.setBackground(new java.awt.Color(255, 255, 255));
         groupNameLabel.setOpaque(true);
 
-        descriptionLabel.setBackground(new java.awt.Color(255, 255, 255));
         descriptionLabel.setOpaque(true);
 
+        deleteGroupButton.setBackground(new java.awt.Color(51, 153, 255));
+        deleteGroupButton.setForeground(new java.awt.Color(255, 255, 255));
         deleteGroupButton.setText("Delete Group");
         deleteGroupButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -179,6 +179,8 @@ public class AdminGroupProfile extends javax.swing.JFrame {
 
         jLabel5.setText("Posts");
 
+        demoteAdminsButton.setBackground(new java.awt.Color(51, 153, 255));
+        demoteAdminsButton.setForeground(new java.awt.Color(255, 255, 255));
         demoteAdminsButton.setText("Demote");
         demoteAdminsButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -186,6 +188,8 @@ public class AdminGroupProfile extends javax.swing.JFrame {
             }
         });
 
+        promoteMembersButton.setBackground(new java.awt.Color(51, 153, 255));
+        promoteMembersButton.setForeground(new java.awt.Color(255, 255, 255));
         promoteMembersButton.setText("Promote");
         promoteMembersButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -193,6 +197,8 @@ public class AdminGroupProfile extends javax.swing.JFrame {
             }
         });
 
+        removeAdminsButton.setBackground(new java.awt.Color(51, 153, 255));
+        removeAdminsButton.setForeground(new java.awt.Color(255, 255, 255));
         removeAdminsButton.setText("Remove");
         removeAdminsButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -200,6 +206,8 @@ public class AdminGroupProfile extends javax.swing.JFrame {
             }
         });
 
+        removeMembersButton.setBackground(new java.awt.Color(51, 153, 255));
+        removeMembersButton.setForeground(new java.awt.Color(255, 255, 255));
         removeMembersButton.setText("Remove");
         removeMembersButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -207,6 +215,8 @@ public class AdminGroupProfile extends javax.swing.JFrame {
             }
         });
 
+        addPostButton.setBackground(new java.awt.Color(51, 153, 255));
+        addPostButton.setForeground(new java.awt.Color(255, 255, 255));
         addPostButton.setText("Add");
         addPostButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -214,6 +224,8 @@ public class AdminGroupProfile extends javax.swing.JFrame {
             }
         });
 
+        editPostButton.setBackground(new java.awt.Color(51, 153, 255));
+        editPostButton.setForeground(new java.awt.Color(255, 255, 255));
         editPostButton.setText("Edit");
         editPostButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -221,6 +233,8 @@ public class AdminGroupProfile extends javax.swing.JFrame {
             }
         });
 
+        deletePostButton.setBackground(new java.awt.Color(51, 153, 255));
+        deletePostButton.setForeground(new java.awt.Color(255, 255, 255));
         deletePostButton.setText("Delete");
         deletePostButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -228,6 +242,8 @@ public class AdminGroupProfile extends javax.swing.JFrame {
             }
         });
 
+        approveMemberButton.setBackground(new java.awt.Color(51, 153, 255));
+        approveMemberButton.setForeground(new java.awt.Color(255, 255, 255));
         approveMemberButton.setText("Approve");
         approveMemberButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -235,6 +251,8 @@ public class AdminGroupProfile extends javax.swing.JFrame {
             }
         });
 
+        declineMemberButton.setBackground(new java.awt.Color(51, 153, 255));
+        declineMemberButton.setForeground(new java.awt.Color(255, 255, 255));
         declineMemberButton.setText("Decline");
         declineMemberButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -242,6 +260,8 @@ public class AdminGroupProfile extends javax.swing.JFrame {
             }
         });
 
+        changePhotoButton.setBackground(new java.awt.Color(51, 153, 255));
+        changePhotoButton.setForeground(new java.awt.Color(255, 255, 255));
         changePhotoButton.setText("Change Photo");
         changePhotoButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -249,6 +269,8 @@ public class AdminGroupProfile extends javax.swing.JFrame {
             }
         });
 
+        viewPostButton.setBackground(new java.awt.Color(51, 153, 255));
+        viewPostButton.setForeground(new java.awt.Color(255, 255, 255));
         viewPostButton.setText("View");
         viewPostButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -287,21 +309,17 @@ public class AdminGroupProfile extends javax.swing.JFrame {
                             .addComponent(groupPhotoLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(changePhotoButton)
                             .addComponent(descriptionLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(22, 22, 22)
-                                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                        .addComponent(jLabel3)
-                                        .addGap(33, 33, 33)
-                                        .addComponent(showAdminsButton))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                        .addComponent(demoteAdminsButton)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(removeAdminsButton)))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(jLabel3)
+                                .addGap(33, 33, 33)
+                                .addComponent(showAdminsButton))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(demoteAdminsButton)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(removeAdminsButton))
+                            .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addGroup(layout.createSequentialGroup()

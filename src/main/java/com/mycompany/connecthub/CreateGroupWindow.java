@@ -60,10 +60,13 @@ public class CreateGroupWindow extends javax.swing.JFrame {
             }
         });
 
+        jLabel1.setBackground(new java.awt.Color(51, 153, 255));
         jLabel1.setText("Enter group name");
 
         jLabel2.setText("Enter description");
 
+        createGroupButton.setBackground(new java.awt.Color(51, 153, 255));
+        createGroupButton.setForeground(new java.awt.Color(255, 255, 255));
         createGroupButton.setText("Create Group");
         createGroupButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
