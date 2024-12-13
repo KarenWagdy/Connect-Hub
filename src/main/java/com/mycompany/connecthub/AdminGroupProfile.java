@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -33,7 +34,7 @@ public class AdminGroupProfile extends javax.swing.JFrame {
         descriptionLabel.setText(group.getDescription());
         Loadpfp();
         requests = MembershipRequestDatabase.getGroupMembershipRequests(group.getGroupId());
-        groupPost=GroupPostDatabase.readPostsforGroup(group.getGroupId());
+        groupPost = GroupPostDatabase.readPostsforGroup(group.getGroupId());
         loadMembershipRequests();
         LoadGroupPosts();
     }
@@ -41,12 +42,13 @@ public class AdminGroupProfile extends javax.swing.JFrame {
     public void LoadGroupPosts() {
         //view posts in postsList
         DefaultListModel<String> listModel = new DefaultListModel<>();
-        
+
         for (GroupPost post : groupPost) {
             listModel.addElement(post.getContent());
         }
         postsList.setModel(listModel);
     }
+
     public void Loadpfp() {
         String filepath = null;
         for (int i = 0; i < groups.size(); i++) {
@@ -161,6 +163,11 @@ public class AdminGroupProfile extends javax.swing.JFrame {
         });
 
         editPostButton.setText("Edit");
+        editPostButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                editPostButtonActionPerformed(evt);
+            }
+        });
 
         deletePostButton.setText("Delete");
         deletePostButton.addActionListener(new java.awt.event.ActionListener() {
@@ -317,10 +324,10 @@ public class AdminGroupProfile extends javax.swing.JFrame {
             ArrayList<Group> allGroups = GroupDatabase.readGroups();
 
             for (Group group : allGroups) {
-                if (group.getName().equals(this.group.getName())) { 
+                if (group.getName().equals(this.group.getName())) {
                     for (User user : allUsers) {
                         if (selectedRequest.equals(user.getUsername())) {
-                            
+
                             MembershipRequestDatabase.removeMembershipRequestFromFile(group.getGroupId(), user.getUserId());
 
                             DefaultListModel<String> listModel = (DefaultListModel<String>) membershipRequestsList.getModel();
@@ -356,7 +363,7 @@ public class AdminGroupProfile extends javax.swing.JFrame {
 
     private void approveMemberButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_approveMemberButtonActionPerformed
         ArrayList<Group> allGroups = GroupDatabase.readGroups();
-        ArrayList<Notification>notifications=GroupActivitiesNotificationDatabase.readGroupNotifications();
+        ArrayList<Notification> notifications = GroupActivitiesNotificationDatabase.readGroupNotifications();
         String selectedRequest = membershipRequestsList.getSelectedValue();
         if (selectedRequest != null) {
             for (Group group : allGroups) {
@@ -366,12 +373,12 @@ public class AdminGroupProfile extends javax.swing.JFrame {
                     for (User user : allUsers) {
                         if (selectedRequest.equals(user.getUsername())) {
                             group.getMembers().add(user);
-                           
+
                             GroupDatabase.saveGroups(allGroups);
 
                             MembershipRequestDatabase.removeMembershipRequestFromFile(group.getGroupId(), user.getUserId());
-                            
-                            GroupActivitiesNotification notification= GroupActivitiesNotificationDatabase.sendGroupNotification(user.getUserId(), group.getGroupId());
+
+                            GroupActivitiesNotification notification = GroupActivitiesNotificationDatabase.sendGroupNotification(user.getUserId(), group.getGroupId());
                             notifications.add(notification);
                             GroupActivitiesNotificationDatabase.saveGroupNotifications(notifications);
 
@@ -385,10 +392,22 @@ public class AdminGroupProfile extends javax.swing.JFrame {
         }    }//GEN-LAST:event_approveMemberButtonActionPerformed
 
     private void addPostButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addPostButtonActionPerformed
-    GroupPostsCreationWindow groupPostsCreationWindow = new GroupPostsCreationWindow(group);
-    groupPostsCreationWindow.setVisible(true);
-    this.setVisible(false);
+        GroupPostsCreationWindow groupPostsCreationWindow = new GroupPostsCreationWindow(group);
+        groupPostsCreationWindow.setVisible(true);
+        this.setVisible(false);
     }//GEN-LAST:event_addPostButtonActionPerformed
+
+    private void editPostButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editPostButtonActionPerformed
+        int selectedIndex = postsList.getSelectedIndex();
+        if (selectedIndex != -1) {
+            GroupPost selectedPost = groupPost.get(selectedIndex);
+
+            EditGroupPostWindow editWindow = new EditGroupPostWindow(selectedPost, group);
+            editWindow.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(this, "Please select a post to edit.");
+        }
+    }//GEN-LAST:event_editPostButtonActionPerformed
 
     /**
      * @param args the command line arguments
