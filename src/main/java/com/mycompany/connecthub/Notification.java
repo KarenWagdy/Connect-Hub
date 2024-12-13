@@ -12,7 +12,7 @@ import java.util.ArrayList;
  * @author X1
  */
 public abstract class Notification {
-    private int id;
+    //private int id;
     private String message;
     private String type;
     private LocalDateTime time; 
@@ -25,10 +25,7 @@ public abstract class Notification {
         
     }
 
-    public int getId() {
-        return id;
-    }
-
+    
     public String getMessage() {
         return message;
     }

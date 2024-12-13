@@ -26,13 +26,14 @@ public class AddPostNotification extends Notification{
     }
     
      public static int getMaxId() {
-        ArrayList<Notification> notifications = AddPostNotificationDatabase.addPostsnotificationsArray;
+        ArrayList<AddPostNotification> notifications = AddPostNotificationDatabase.addPostsnotificationsArray;
         if (notifications.isEmpty()) {
             return 0;
         } else {
             return notifications.get(notifications.size() - 1).getId();
         }
     } 
+     
 
     public int getGroupId() {
         return groupId;

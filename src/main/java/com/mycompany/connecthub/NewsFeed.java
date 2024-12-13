@@ -13,85 +13,104 @@ import javax.swing.JOptionPane;
  * @author Alex
  */
 public class NewsFeed extends javax.swing.JFrame {
-   ArrayList<Post> posts;
-   ArrayList<User> friends;
-   ArrayList<Story> stories;
-   ArrayList<Notification> AllNotifications;
-   ArrayList<Notification> GroupNotification;
-   //ArrayList <Notification> AllNotification;
-   Post p;
+
+    ArrayList<Post> posts;
+    ArrayList<User> friends;
+    ArrayList<Story> stories;
+    ArrayList<Notification> AllNotifications;
+    ArrayList<GroupActivitiesNotification> GroupNotification;
+    ArrayList<FriendRequestNotification> friendRequestNotifications;
+    ArrayList<AddPostNotification> addPostNotifications;
+
+    //ArrayList <Notification> AllNotification;
+    Post p;
+
     /**
      * Creates new form NewsFeed
      */
     public NewsFeed() {
         initComponents();
-        stories=StoryDatabase.readStories();
-        posts=PostDatabase.readPosts();
-        friends=FriendDatabase.readFriends(Functionalities.currentUser.getUserId());
-        AllNotifications=FriendRequestNotificationDatabase.readFriendReqNotificationsForUser(Functionalities.currentUser.getUserId());
-        AllNotifications.addAll(GroupActivitiesNotificationDatabase.readGroupNotificationsForUser(Functionalities.currentUser.getUserId()));
-        AllNotifications.addAll(AddPostNotificationDatabase.readPostNotificationsForUser(Functionalities.currentUser.getUserId()));
+        stories = StoryDatabase.readStories();
+        posts = PostDatabase.readPosts();
+        AllNotifications = new ArrayList<>();
+        friends = FriendDatabase.readFriends(Functionalities.currentUser.getUserId());
+        friendRequestNotifications = FriendRequestNotificationDatabase.readFriendReqNotificationsForUser(Functionalities.currentUser.getUserId());
+        GroupNotification = GroupActivitiesNotificationDatabase.readGroupNotificationsForUser(Functionalities.currentUser.getUserId());
+        addPostNotifications = AddPostNotificationDatabase.readPostNotificationsForUser(Functionalities.currentUser.getUserId());
+        //AllNotifications.addAll(GroupActivitiesNotificationDatabase.readGroupNotificationsForUser(Functionalities.currentUser.getUserId()));
+        //AllNotifications.addAll(AddPostNotificationDatabase.readPostNotificationsForUser(Functionalities.currentUser.getUserId()));
         LoadFriendsPosts();
         LoadFriends();
         LoadFriendsStories();
         LoadFRNotifications();
         loadAllSuggestedGroups();
-       // LoadGroupNotifications();
-
-        
+        LoadAllNotifs();
+        //LoadGroupNotifications();
     }
 
-     public void LoadFriendsPosts() {
+    public void LoadFriendsPosts() {
         //view posts in postsList
         DefaultListModel<String> listModel = new DefaultListModel<>();
-        
+
         for (Post post : posts) {
-            if(FriendDatabase.isFriend(post.getAuthorId())){
-            listModel.addElement(post.getContent());
+            if (FriendDatabase.isFriend(post.getAuthorId())) {
+                listModel.addElement(post.getContent());
             }
         }
         postsList.setModel(listModel);
     }
-     
-      public void LoadFriends() {
+
+    public void LoadAllNotifs() {
+        AllNotifications.addAll(GroupNotification);
+        AllNotifications.addAll(friendRequestNotifications);
+        AllNotifications.addAll(addPostNotifications);
+    }
+
+    public void LoadFriends() {
         //view friends in FriendList
         DefaultListModel<String> listModel = new DefaultListModel<>();
 
         for (User friend : friends) {
-            listModel.addElement(friend.getUsername()+" ("+ friend.getStatus() + ") ");
-            
+            listModel.addElement(friend.getUsername() + " (" + friend.getStatus() + ") ");
+
         }
         friendsList.setModel(listModel);
 
     }
-      
+
     public void LoadFriendsStories() {
         StoryDatabase.deleteStories();
 
-    // Refresh the stories list
+        // Refresh the stories list
         stories = StoryDatabase.readStories();
         //view posts in postsList
         DefaultListModel<String> listModel = new DefaultListModel<>();
         for (Story story : stories) {
-            if(FriendDatabase.isFriend(story.getAuthorId())){
-            listModel.addElement(story.getContent());
+            if (FriendDatabase.isFriend(story.getAuthorId())) {
+                listModel.addElement(story.getContent());
             }
         }
         storiesList.setModel(listModel);
     }
+
     public void LoadFRNotifications() {
         //view notifications in NotificationList
         DefaultListModel<String> listModel = new DefaultListModel<>();
 
-        for (Notification notification : AllNotifications) {
+        for (GroupActivitiesNotification notification : GroupNotification) {
             listModel.addElement(notification.getMessage());
-            
         }
-        
+        for (FriendRequestNotification notification : friendRequestNotifications) {
+            listModel.addElement(notification.getMessage());
+        }
+        for (AddPostNotification notification : addPostNotifications) {
+            listModel.addElement(notification.getMessage());
+        }
+
         NotificationList.setModel(listModel);
 
     }
-    
+
     /*public void LoadGroupNotifications() {
         //view notifications in NotificationList
         DefaultListModel<String> listModel = new DefaultListModel<>();
@@ -103,7 +122,6 @@ public class NewsFeed extends javax.swing.JFrame {
         NotificationList.setModel(listModel);
 
     }*/
-    
     public void loadAllSuggestedGroups() {
         DefaultListModel<String> listModel = new DefaultListModel<>();
         ArrayList<Group> suggested = GroupDatabase.suggestGroups();
@@ -115,9 +133,7 @@ public class NewsFeed extends javax.swing.JFrame {
         groupsSuggestionsList.setModel(listModel);
 
     }
-    
-    
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -408,20 +424,20 @@ public class NewsFeed extends javax.swing.JFrame {
 
     private void createStoriesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createStoriesButtonActionPerformed
         this.setVisible(false);
-        StoriesCreation story=new StoriesCreation(); 
+        StoriesCreation story = new StoriesCreation();
         story.setVisible(true);
     }//GEN-LAST:event_createStoriesButtonActionPerformed
 
     private void createPostButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createPostButtonActionPerformed
         this.setVisible(false);
-        PostsCreation post=new PostsCreation(); 
+        PostsCreation post = new PostsCreation();
         post.setVisible(true);
-        
+
     }//GEN-LAST:event_createPostButtonActionPerformed
 
     private void viewPostsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewPostsActionPerformed
-        
-           int index = postsList.getSelectedIndex();
+
+        int index = postsList.getSelectedIndex();
         if (index == -1) {
             JOptionPane.showMessageDialog(this, "Choose post");
         } else {
@@ -430,12 +446,12 @@ public class NewsFeed extends javax.swing.JFrame {
             ViewPosts view = new ViewPosts(post);
             view.setVisible(true);
         }
-           
+
     }//GEN-LAST:event_viewPostsActionPerformed
 
     private void viewProfileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewProfileButtonActionPerformed
         this.setVisible(false);
-        UserProfile userprofile=new UserProfile();
+        UserProfile userprofile = new UserProfile();
         userprofile.setVisible(true);
     }//GEN-LAST:event_viewProfileButtonActionPerformed
 
@@ -453,20 +469,18 @@ public class NewsFeed extends javax.swing.JFrame {
     }//GEN-LAST:event_viewStoriesButtonActionPerformed
 
     private void refreshButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshButtonActionPerformed
-   
-    // Clear current lists
-    ((DefaultListModel<String>) postsList.getModel()).removeAllElements();
-    ((DefaultListModel<String>) storiesList.getModel()).removeAllElements();
-    ((DefaultListModel<String>) friendsList.getModel()).removeAllElements();
 
-    // Reload posts, stories, and friends
-    LoadFriendsPosts();
-    LoadFriendsStories();
-    LoadFriends();
+        // Clear current lists
+        ((DefaultListModel<String>) postsList.getModel()).removeAllElements();
+        ((DefaultListModel<String>) storiesList.getModel()).removeAllElements();
+        ((DefaultListModel<String>) friendsList.getModel()).removeAllElements();
+
+        // Reload posts, stories, and friends
+        LoadFriendsPosts();
+        LoadFriendsStories();
+        LoadFriends();
 
 
-    
-    
     }//GEN-LAST:event_refreshButtonActionPerformed
 
     private void manageGroupsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_manageGroupsButtonActionPerformed
@@ -476,22 +490,22 @@ public class NewsFeed extends javax.swing.JFrame {
     }//GEN-LAST:event_manageGroupsButtonActionPerformed
 
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
-        
+
     }//GEN-LAST:event_formWindowClosed
 
     private void logoutButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logoutButtonActionPerformed
-         ArrayList<User> userStatus = UsersDatabase.readUsers();
-    
-        Functionalities.currentUser.setStatus("offline");
-    for (int i = 0; i < userStatus.size(); i++) {
-        if (userStatus.get(i).getUserId()==(Functionalities.currentUser.getUserId())) {
-            userStatus.set(i, Functionalities.currentUser); 
-            break;
-        }
-    }
+        ArrayList<User> userStatus = UsersDatabase.readUsers();
 
-    UsersDatabase.saveUsers(userStatus);
-       
+        Functionalities.currentUser.setStatus("offline");
+        for (int i = 0; i < userStatus.size(); i++) {
+            if (userStatus.get(i).getUserId() == (Functionalities.currentUser.getUserId())) {
+                userStatus.set(i, Functionalities.currentUser);
+                break;
+            }
+        }
+
+        UsersDatabase.saveUsers(userStatus);
+
         this.setVisible(false);
         SignupLoginWindow slw = SignupLoginWindow.getInstance();
         slw.setVisible(true);
@@ -512,52 +526,49 @@ public class NewsFeed extends javax.swing.JFrame {
     private void viewNotificationsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewNotificationsActionPerformed
         // TODO add your handling code here:
         DefaultListModel<String> listModel1;
-         int index = NotificationList.getSelectedIndex();
-         String selectedRequest = NotificationList.getSelectedValue();
+        int index = NotificationList.getSelectedIndex();
+        String selectedRequest = NotificationList.getSelectedValue();
         if (index == -1) {
             JOptionPane.showMessageDialog(this, "Choose a notification");
         } else {
-            
+
             Notification n = AllNotifications.get(index);
-            if(n instanceof FriendRequestNotification)
-            {
-               int senderId= ((FriendRequestNotification) n).getSenderId();
-                FriendReqNotificationWindow w=new FriendReqNotificationWindow(senderId,n);
-               // this.setVisible(false);
+            if (selectedRequest.contains("friend")) {
+                int senderId = ((FriendRequestNotification) n).getSenderId();
+                FriendReqNotificationWindow w = new FriendReqNotificationWindow(senderId, n);
+                // this.setVisible(false);
                 w.setVisible(true);
                 listModel1 = (DefaultListModel<String>) NotificationList.getModel();
                 listModel1.remove(index);
-                AllNotifications.remove(index);
-                FriendRequestNotificationDatabase.saveFriendReqNotifications(AllNotifications);
-            } 
-            if(n instanceof GroupActivitiesNotification){
-                Group group=GroupDatabase.getGroup(((GroupActivitiesNotification) n).getGroupId());
-                UserGroupProfile groupProfile=new UserGroupProfile(group);
-                groupProfile.setVisible(true);
-                GroupActivitiesNotificationDatabase.saveGroupNotifications(AllNotifications);
-                this.setVisible(false);
-                
+                friendRequestNotifications.remove(index);
+                FriendRequestNotificationDatabase.saveFriendReqNotifications(friendRequestNotifications);
             }
-            if(n instanceof AddPostNotification){
-                Group group=GroupDatabase.getGroup(((AddPostNotification) n).getGroupId());
-                if(Functionalities.currentUser.getUsername().equals(group.getPrimaryAdmin())){
-                    AddPostNotificationDatabase.saveGroupPostsNotifications(AllNotifications);
-                    AdminGroupProfile adminProfile=new AdminGroupProfile(group);
+            else if (selectedRequest.contains("post")) {
+                Group group = GroupDatabase.getGroup(((AddPostNotification) n).getGroupId());
+                if (Functionalities.currentUser.getUsername().equals(group.getPrimaryAdmin())) {
+                    AddPostNotificationDatabase.saveGroupPostsNotifications(addPostNotifications);
+                    AdminGroupProfile adminProfile = new AdminGroupProfile(group);
                     adminProfile.setVisible(true);
                     this.setVisible(false);
-                    
-                }else{
-                  AddPostNotificationDatabase.saveGroupPostsNotifications(AllNotifications);
-                UserGroupProfile groupProfile=new UserGroupProfile(group);
-                groupProfile.setVisible(true);
-                this.setVisible(false);
-                
+
+                } else {
+                    AddPostNotificationDatabase.saveGroupPostsNotifications(addPostNotifications);
+                    UserGroupProfile groupProfile = new UserGroupProfile(group);
+                    groupProfile.setVisible(true);
+                    this.setVisible(false);
+
                 }
+            } else {
+                Group group = GroupDatabase.getGroup(((GroupActivitiesNotification) n).getGroupId());
+                UserGroupProfile groupProfile = new UserGroupProfile(group);
+                groupProfile.setVisible(true);
+                GroupActivitiesNotificationDatabase.saveGroupNotifications(GroupNotification);
+                this.setVisible(false);
+
             }
-            
-            
+
         }
-        
+
     }//GEN-LAST:event_viewNotificationsActionPerformed
 
     /**

@@ -35,12 +35,16 @@ public class FriendRequestNotification extends Notification {
         return senderId;
     }
 
+    public int getId() {
+        return id;
+    }
+    
     public void setSenderId(int senderId) {
         this.senderId = senderId;
     }
     
      public static int getMaxId() {
-        ArrayList<Notification> notifications = FriendRequestNotificationDatabase.notificationsArray;
+        ArrayList<FriendRequestNotification> notifications = FriendRequestNotificationDatabase.notificationsArray;
         if (notifications.isEmpty()) {
             return 0;
         } else {
