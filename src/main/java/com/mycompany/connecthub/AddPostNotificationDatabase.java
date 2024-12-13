@@ -52,7 +52,7 @@ public class AddPostNotificationDatabase {
                 String type = notification.getString("type");
                 LocalDateTime time = LocalDateTime.parse(notification.getString("time"), formatter);
                 // Retrieve receiverIds as JSONArray
-            JSONArray receiverIdsJson = notification.getJSONArray("receiverIds");
+            JSONArray receiverIdsJson = notification.getJSONArray("receiversId");
 
             // Convert JSONArray to ArrayList<Integer>
             ArrayList<Integer> receiverIds = new ArrayList<>();
@@ -62,6 +62,8 @@ public class AddPostNotificationDatabase {
                 
                 int groupId=notification.getInt("GroupId");
 
+             AddPostNotification newNotification = new AddPostNotification( message, type, time, groupId, receiverIds);
+            addPostsnotificationsArray.add(newNotification);
             }
 
         } catch (IOException e) {
@@ -81,7 +83,16 @@ public class AddPostNotificationDatabase {
           //if (i instanceof GroupActivitiesNotification) {
             AddPostNotification addPostNotification = (AddPostNotification) i;
             obj.put("GroupId", addPostNotification.getGroupId());
-            obj.put("receicersId",new JSONArray(addPostNotification.getReceiverIds()));
+            Group group=GroupDatabase.getGroup(addPostNotification.getGroupId());
+            //obj.put("receiverId",addPostNotification.getReceiverId());
+            ArrayList<Integer> receiversId=new ArrayList<>();
+            for(int z=0;z<group.getMembers().size();z++)
+            { 
+                receiversId.add(group.getMembers().get(z).getUserId());
+                    
+            }
+            
+            obj.put("receiversId",new JSONArray(receiversId));
        // }
             notificationsArray.put(obj);
 
@@ -113,21 +124,32 @@ public class AddPostNotificationDatabase {
                 String type = notification.getString("type");
                 LocalDateTime time = LocalDateTime.parse(notification.getString("time"), formatter);
                     // Retrieve receiverIds as JSONArray
-            JSONArray receiverIdsJson = notification.getJSONArray("receiverIds");
+            JSONArray receiverIdsJson = notification.getJSONArray("receiversId");
 
             // Convert JSONArray to ArrayList<Integer>
-           
+           receiverIds.clear();
             for (int j = 0; j < receiverIdsJson.length(); j++) {
                 receiverIds.add(receiverIdsJson.getInt(j));
             }
+            int groupId=notification.getInt("GroupId");
+            for (int z = 0; z < receiverIds.size(); z++) {
+                if (receiverIds.get(z) == userId) {
+                    Notification n = getPostNotification(id);
+                    if (n != null) {
+                        notifications.add(n);
+                    } else {
+                        System.err.println("Warning: Notification with ID " + id + " is null.");
+                    }
+                }
+            }
                 
-                int groupId=notification.getInt("GroupId");
-                for(int z=0;z<receiverIds.size();z++){
+                
+               /* for(int z=0;z<receiverIds.size();z++){
                 if ( receiverIds.get(z) == userId) {
                         Notification n=getPostNotification(id);
                         notifications.add(n);
                 } 
-            }
+            }*/
 
             }
                }
@@ -149,7 +171,7 @@ public class AddPostNotificationDatabase {
 
     }
      
-      public static AddPostNotification sendPostNotification(int recieverIds,int groupId)
+      public static AddPostNotification sendPostNotification(ArrayList<Integer> recieverIds,int groupId)
     {
         Group group=GroupDatabase.getGroup(groupId);
         
